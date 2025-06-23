@@ -53,6 +53,13 @@ export const getAllAnnouncementsController = async (
   try {
     const announcements = await getAllAnnouncements();
 
+    // check if all the announcements exist
+    if (!announcements) {
+      return res.status(404).json({
+        success: false,
+        message: "Announcements not found",
+      });
+    }
     res.status(200).json({
       success: true,
       message: "Announcements retrieved successfully",
