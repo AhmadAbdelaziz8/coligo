@@ -4,7 +4,7 @@ export interface IAnnouncement {
   title: string;
   content: string;
   instructor: string;
-  instructorAvatar?: string; // For profile pictures like in the UI
+  instructorAvatar?: string; 
   createdAt: Date;
   updatedAt: Date;
 }
