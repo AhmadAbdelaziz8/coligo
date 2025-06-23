@@ -8,7 +8,6 @@ const Announcement = mongoose.model<IAnnouncementDocument>(
   announcementSchema
 );
 
-// CREATE - Add new announcement
 export const createAnnouncement = async (data: {
   title: string;
   content: string;
@@ -19,7 +18,6 @@ export const createAnnouncement = async (data: {
   return await announcement.save();
 };
 
-// READ - Get all announcements
 export const getAllAnnouncements = async (): Promise<
   IAnnouncementDocument[]
 > => {
@@ -28,14 +26,12 @@ export const getAllAnnouncements = async (): Promise<
     .exec();
 };
 
-// READ - Get single announcement by ID
 export const getAnnouncementById = async (
   id: string
 ): Promise<IAnnouncementDocument | null> => {
   return await Announcement.findById(id).exec();
 };
 
-// UPDATE - Update announcement
 export const updateAnnouncement = async (
   id: string,
   data: Partial<{
@@ -46,12 +42,11 @@ export const updateAnnouncement = async (
   }>
 ): Promise<IAnnouncementDocument | null> => {
   return await Announcement.findByIdAndUpdate(id, data, {
-    new: true, // Return updated document
-    runValidators: true, // Run schema validation
+    new: true,
+    runValidators: true,
   }).exec();
 };
 
-// DELETE - Remove announcement
 export const deleteAnnouncement = async (
   id: string
 ): Promise<IAnnouncementDocument | null> => {
