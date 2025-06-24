@@ -7,17 +7,18 @@ import {
   updateAnnouncementController,
   deleteAnnouncementController,
 } from "../controllers/announcement.controller";
+import { adminMiddleware } from "../middleware/auth.middleware";
 
 const router = Router();
 
 // CREATE
-router.post("/", createAnnouncementController);
+router.post("/", adminMiddleware, createAnnouncementController);
 // READ
 router.get("/", getAllAnnouncementsController);
 router.get("/:id", getAnnouncementByIdController);
 // Update
-router.put("/:id", updateAnnouncementController);
+router.put("/:id", adminMiddleware, updateAnnouncementController);
 // Delete
-router.delete("/:id", deleteAnnouncementController);
+router.delete("/:id", adminMiddleware, deleteAnnouncementController);
 
 export default router;

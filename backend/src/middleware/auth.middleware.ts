@@ -37,13 +37,6 @@ export const authMiddleware = async (
       role: string;
     };
 
-    const user = await User.findById(decoded.userId);
-    if (!user) {
-      res.status(401).json({ message: "Unauthorized" });
-      return;
-    }
-
-    // add the user to the request object
     req.user = {
       userId: decoded.userId,
       email: decoded.email,
@@ -54,4 +47,28 @@ export const authMiddleware = async (
   } catch (error) {
     res.status(401).json({ message: "Invalid token" });
   }
+};
+
+export const adminMiddleware = (
+  req: AuthenticatedRequest,
+  res: Response,
+  next: NextFunction
+): void => {
+  if (!req.user) {
+    res.status(401).json({
+      success: false,
+      message: "Authentication required",
+    });
+    return;
+  }
+
+  if (req.user.role !== "admin") {
+    res.status(403).json({
+      success: false,
+      message: "Admin access required",
+    });
+    return;
+  }
+
+  next();
 };
