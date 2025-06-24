@@ -21,7 +21,7 @@ app.get("/", (req, res) => {
 
 // routes
 app.use("/api/quizzes", quizRoute);
-app.use("api/announcements", announcementRoute);
+app.use("/api/announcements", announcementRoute);
 // connection to the database
 connectDB();
 

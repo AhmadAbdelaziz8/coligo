@@ -3,12 +3,10 @@ import { Document } from "mongoose";
 export interface IUser {
   name: string;
   email: string;
-  passwordHash: string;
+  password: string;
   role: "student" | "admin";
   profilePicture?: string;
-
-  createdAt: Date;
-  updatedAt: Date;
+  comparePassword(candidatePassword: string): Promise<boolean>;
 }
 
 export interface IUserDocument extends IUser, Document {}

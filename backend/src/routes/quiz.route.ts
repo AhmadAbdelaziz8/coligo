@@ -15,7 +15,7 @@ router.post("/", createNewQuizController);
 router.get("/", getAllQuizzesController);
 router.get("/:id", getQuizByIdController);
 // Update
-router.post("/:id", updateQuizController);
+router.put("/:id", updateQuizController);
 // Delete
 router.delete("/:id", deleteQuizController);
 

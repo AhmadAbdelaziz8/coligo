@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { Request, Response, NextFunction } from "express";
 import {
   createAnnouncement,
   getAllAnnouncements,
@@ -10,8 +10,9 @@ import {
 // Create the announcement
 export const createAnnouncementController = async (
   req: Request,
-  res: Response
-) => {
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
   try {
     const { title, content, instructor, instructorAvatar } = req.body;
 
@@ -48,8 +49,9 @@ export const createAnnouncementController = async (
 // Get the announcements
 export const getAllAnnouncementsController = async (
   req: Request,
-  res: Response
-) => {
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
   try {
     const announcements = await getAllAnnouncements();
 
@@ -78,8 +80,9 @@ export const getAllAnnouncementsController = async (
 
 export const getAnnouncementByIdController = async (
   req: Request,
-  res: Response
-) => {
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
   try {
     const { id } = req.params;
 
@@ -110,8 +113,9 @@ export const getAnnouncementByIdController = async (
 // Update the announcement
 export const updateAnnouncementController = async (
   req: Request,
-  res: Response
-) => {
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
   try {
     const { id } = req.params;
     const { title, content, instructor, instructorAvatar } = req.body;
@@ -150,8 +154,9 @@ export const updateAnnouncementController = async (
 // Delete the announcement
 export const deleteAnnouncementController = async (
   req: Request,
-  res: Response
-) => {
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
   try {
     const { id } = req.params;
 

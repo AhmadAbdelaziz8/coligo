@@ -1,6 +1,8 @@
-import { Schema } from "mongoose";
+import { Schema, model } from "mongoose";
+import bcrypt from "bcryptjs";
+import { IUser } from "../types/user.types";
 
-export const UserSchema = new Schema(
+export const UserSchema = new Schema<IUser>(
   {
     name: {
       type: String,
@@ -14,14 +16,10 @@ export const UserSchema = new Schema(
       unique: true,
       lowercase: true,
       trim: true,
-      match: [
-        /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/,
-        "Please enter a valid email",
-      ],
     },
-    passwordHash: {
+    password: {
       type: String,
-      required: [true, "Password hash is required"],
+      required: [true, "Password is required"],
       minlength: [6, "Password must be at least 6 characters"],
     },
     role: {
@@ -39,5 +37,28 @@ export const UserSchema = new Schema(
   }
 );
 
+// presave hook for password hashing
+UserSchema.pre("save", async function (next) {
+  if (!this.isModified("password")) return next();
+  try {
+    // Hash password with cost of 12
+    const saltRounds = 12;
+    this.password = await bcrypt.hash(this.password, saltRounds);
+    next();
+  } catch (error) {
+    next(error as Error);
+  }
+});
+
+// Instance method to compare passwords
+UserSchema.methods.comparePassword = async function (
+  candidatePassword: string
+): Promise<boolean> {
+  return bcrypt.compare(candidatePassword, this.password);
+};
+
 // Index for faster email lookups
 UserSchema.index({ email: 1 });
+
+// Export the compiled Mongoose model
+export const User = model<IUser>("User", UserSchema);

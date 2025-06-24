@@ -16,7 +16,7 @@ router.post("/", createAnnouncementController);
 router.get("/", getAllAnnouncementsController);
 router.get("/:id", getAnnouncementByIdController);
 // Update
-router.post("/:id", updateAnnouncementController);
+router.put("/:id", updateAnnouncementController);
 // Delete
 router.delete("/:id", deleteAnnouncementController);
 

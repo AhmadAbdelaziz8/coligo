@@ -1,4 +1,4 @@
-import { Response, Request } from "express";
+import { Response, Request, NextFunction } from "express";
 import {
   createQuiz,
   getAllQuizzes,
@@ -8,7 +8,11 @@ import {
 } from "../services/quiz.service";
 
 // Create new quiz
-export const createNewQuizController = async (req: Request, res: Response) => {
+export const createNewQuizController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
   try {
     const quiz = await createQuiz(req.body);
     res.status(201).json(quiz);
@@ -19,7 +23,11 @@ export const createNewQuizController = async (req: Request, res: Response) => {
 };
 
 // get quizes
-export const getAllQuizzesController = async (req: Request, res: Response) => {
+export const getAllQuizzesController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
   const quizzes = await getAllQuizzes();
   // check if the quiz exists
   if (!quizzes) {
@@ -34,7 +42,11 @@ export const getAllQuizzesController = async (req: Request, res: Response) => {
   }
 };
 
-export const getQuizByIdController = async (req: Request, res: Response) => {
+export const getQuizByIdController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
   const { id } = req.params;
   const quiz = await getQuizById(id);
   if (!quiz) {
@@ -49,7 +61,11 @@ export const getQuizByIdController = async (req: Request, res: Response) => {
 };
 
 // Update quiz, for admin
-export const updateQuizController = async (req: Request, res: Response) => {
+export const updateQuizController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
   const { id } = req.params;
   const updatedQuiz = await updateQuiz(id, req.body);
   if (!updatedQuiz) {
@@ -68,7 +84,11 @@ export const updateQuizController = async (req: Request, res: Response) => {
 };
 
 // Delete quiz, by admin
-export const deleteQuizController = async (req: Request, res: Response) => {
+export const deleteQuizController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
   const { id } = req.params;
   const deletedQuiz = await deleteQuiz(id);
   if (!deletedQuiz) {
