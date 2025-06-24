@@ -3,5 +3,5 @@ import type { RootState, AppDispatch } from "../store/store";
 
 export const useAppDispatch = () => useDispatch<AppDispatch>();
 export const useAppSelector = useSelector as (
-  selector: (state: RootState) => any
-) => any;
+  selector: (state: RootState) => ReturnType<typeof useSelector>
+) => ReturnType<typeof useSelector>;

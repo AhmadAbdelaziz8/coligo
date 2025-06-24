@@ -1,8 +1,8 @@
-import React from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import { Box } from "@mui/material";
 import { useAppSelector } from "./hooks/redux";
 import Layout from "./components/Layout/Layout";
+import LandingPage from "./pages/Landing/LandingPage";
 import LoginPage from "./pages/Auth/LoginPage";
 import RegisterPage from "./pages/Auth/RegisterPage";
 import DashboardPage from "./pages/Dashboard/DashboardPage";
@@ -14,9 +14,17 @@ function App() {
   const { isAuthenticated } = useAppSelector((state) => state.auth);
 
   return (
-    <Box className="min-h-screen bg-gray-50">
+    <Box className="min-h-screen">
       <Routes>
-        {/* Public Routes */}
+        {/* Landing Page*/}
+        <Route
+          path="/"
+          element={
+            isAuthenticated ? <Navigate to="/dashboard" /> : <LandingPage />
+          }
+        />
+
+        {/* Public Auth Routes */}
         <Route
           path="/login"
           element={
@@ -33,15 +41,13 @@ function App() {
         {/* Protected Routes */}
         <Route path="/" element={<ProtectedRoute />}>
           <Route path="/" element={<Layout />}>
-            <Route index element={<Navigate to="/dashboard" />} />
             <Route path="dashboard" element={<DashboardPage />} />
             <Route path="quizzes" element={<QuizzesPage />} />
             <Route path="announcements" element={<AnnouncementsPage />} />
           </Route>
         </Route>
 
-        {/* Catch all route */}
-        <Route path="*" element={<Navigate to="/dashboard" />} />
+        <Route path="*" element={<Navigate to="/" />} />
       </Routes>
     </Box>
   );

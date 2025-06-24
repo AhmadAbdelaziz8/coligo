@@ -1,4 +1,4 @@
-const API_BASE_URL = "http://localhost:5000/api";
+const API_BASE_URL = "http://localhost:5001/api";
 
 // Simple fetch wrapper with auth token
 const apiRequest = async (endpoint: string, options: RequestInit = {}) => {

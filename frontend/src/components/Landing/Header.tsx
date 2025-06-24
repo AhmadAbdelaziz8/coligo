@@ -1,0 +1,193 @@
+import React, { useState } from "react";
+import {
+  AppBar,
+  Toolbar,
+  Typography,
+  Button,
+  Box,
+  IconButton,
+  Drawer,
+  List,
+  ListItem,
+  ListItemText,
+  useMediaQuery,
+  useTheme,
+} from "@mui/material";
+import { Menu as MenuIcon, Close } from "@mui/icons-material";
+import { useNavigate } from "react-router-dom";
+
+const Header: React.FC = () => {
+  const navigate = useNavigate();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  const menuItems = [
+    { label: "Features", action: () => scrollToSection("features") },
+    { label: "About", action: () => scrollToSection("about") },
+    { label: "Contact", action: () => scrollToSection("contact") },
+  ];
+
+  const scrollToSection = (sectionId: string) => {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth" });
+    }
+    setMobileMenuOpen(false);
+  };
+
+  const handleMobileMenuToggle = () => {
+    setMobileMenuOpen(!mobileMenuOpen);
+  };
+
+  return (
+    <>
+      <AppBar
+        position="fixed"
+        sx={{
+          background: "rgba(255, 255, 255, 0.95)",
+          backdropFilter: "blur(10px)",
+          boxShadow: "0 2px 20px rgba(0,0,0,0.1)",
+          color: "text.primary",
+        }}
+      >
+        <Toolbar sx={{ justifyContent: "space-between" }}>
+          {/* Logo */}
+          <Typography
+            variant="h5"
+            sx={{
+              fontWeight: 700,
+              background: "linear-gradient(45deg, #667eea, #764ba2)",
+              backgroundClip: "text",
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+              cursor: "pointer",
+            }}
+            onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+          >
+            Coligo
+          </Typography>
+
+          {/* Desktop Navigation */}
+          {!isMobile && (
+            <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+              {menuItems.map((item, index) => (
+                <Button
+                  key={index}
+                  onClick={item.action}
+                  sx={{
+                    color: "text.primary",
+                    fontWeight: 500,
+                    "&:hover": {
+                      background: "rgba(102, 126, 234, 0.1)",
+                    },
+                  }}
+                >
+                  {item.label}
+                </Button>
+              ))}
+            </Box>
+          )}
+
+          {/* Auth Buttons */}
+          <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+            {!isMobile && (
+              <>
+                <Button
+                  variant="text"
+                  onClick={() => navigate("/login")}
+                  sx={{
+                    color: "text.primary",
+                    fontWeight: 500,
+                  }}
+                >
+                  Sign In
+                </Button>
+                <Button
+                  variant="contained"
+                  onClick={() => navigate("/register")}
+                  sx={{
+                    background: "linear-gradient(45deg, #667eea, #764ba2)",
+                    fontWeight: 600,
+                    px: 3,
+                    "&:hover": {
+                      background: "linear-gradient(45deg, #5a6fd8, #6a4190)",
+                    },
+                  }}
+                >
+                  Get Started
+                </Button>
+              </>
+            )}
+
+            {/* Mobile Menu Button */}
+            {isMobile && (
+              <IconButton
+                onClick={handleMobileMenuToggle}
+                sx={{ color: "text.primary" }}
+              >
+                <MenuIcon />
+              </IconButton>
+            )}
+          </Box>
+        </Toolbar>
+      </AppBar>
+
+      {/* Mobile Drawer */}
+      <Drawer
+        anchor="right"
+        open={mobileMenuOpen}
+        onClose={handleMobileMenuToggle}
+        sx={{
+          "& .MuiDrawer-paper": {
+            width: 280,
+            background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+            color: "white",
+          },
+        }}
+      >
+        <Box
+          sx={{
+            p: 2,
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
+          <Typography variant="h6" sx={{ fontWeight: 700 }}>
+            Menu
+          </Typography>
+          <IconButton onClick={handleMobileMenuToggle} sx={{ color: "white" }}>
+            <Close />
+          </IconButton>
+        </Box>
+
+        <List>
+          {menuItems.map((item, index) => (
+            <ListItem
+              key={index}
+              onClick={item.action}
+              sx={{ cursor: "pointer" }}
+            >
+              <ListItemText primary={item.label} />
+            </ListItem>
+          ))}
+          <ListItem
+            onClick={() => navigate("/login")}
+            sx={{ cursor: "pointer" }}
+          >
+            <ListItemText primary="Sign In" />
+          </ListItem>
+          <ListItem
+            onClick={() => navigate("/register")}
+            sx={{ cursor: "pointer" }}
+          >
+            <ListItemText primary="Get Started" />
+          </ListItem>
+        </List>
+      </Drawer>
+    </>
+  );
+};
+
+export default Header;
