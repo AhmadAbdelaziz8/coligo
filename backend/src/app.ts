@@ -5,8 +5,9 @@ import connectDB from "./config/db";
 // import routes
 import quizRoute from "./routes/quiz.route";
 import announcementRoute from "./routes/announcement.route";
-dotenv.config();
+import authRoute from "./routes/auth.route";
 
+dotenv.config();
 const app = express();
 
 // universal middlewares
@@ -22,6 +23,7 @@ app.get("/", (req, res) => {
 // routes
 app.use("/api/quizzes", quizRoute);
 app.use("/api/announcements", announcementRoute);
+app.use("/api/auth", authRoute);
 // connection to the database
 connectDB();
 
