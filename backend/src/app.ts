@@ -2,6 +2,9 @@ import express, { json } from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import connectDB from "./config/db";
+// swagger for documentation
+import swaggerUi from "swagger-ui-express";
+import { swaggerSpec } from "./config/swagger";
 // import routes
 import quizRoute from "./routes/quiz.route";
 import announcementRoute from "./routes/announcement.route";
@@ -21,6 +24,9 @@ app.use(express.urlencoded({ extended: true }));
 app.get("/", (req, res) => {
   res.send("Hello World");
 });
+
+// swagger documentation
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 // public authentication route
 app.use("/api/auth", authRoute);

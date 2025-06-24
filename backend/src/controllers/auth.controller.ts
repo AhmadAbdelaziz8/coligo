@@ -12,11 +12,13 @@ export const registerUserController = async (
     // validation of fields
     if (!userData.name || !userData.email || !userData.password) {
       res.status(400).json({ message: "All fields are required" });
+      return;
     }
     if (userData.password.length < 8) {
       res
         .status(400)
         .json({ message: "Password must be at least 8 characters long" });
+      return;
     }
     // register the user
     const user = await registerUser(userData);

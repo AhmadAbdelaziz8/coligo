@@ -28,13 +28,12 @@ export const getAllQuizzesController = async (
   res: Response,
   next: NextFunction
 ): Promise<void> => {
-  const quizzes = await getAllQuizzes();
-  // check if the quiz exists
-  if (!quizzes) {
-    res.status(404).json({ error: "Quizzes not found" });
-  }
-  //  send the response
   try {
+    const quizzes = await getAllQuizzes();
+    if (quizzes.length === 0) {
+      res.status(404).json({ error: "No quizzes found" });
+      return;
+    }
     res.status(200).json(quizzes);
   } catch (error) {
     console.error("Error getting quizzes:", error);
@@ -47,12 +46,13 @@ export const getQuizByIdController = async (
   res: Response,
   next: NextFunction
 ): Promise<void> => {
-  const { id } = req.params;
-  const quiz = await getQuizById(id);
-  if (!quiz) {
-    res.status(404).json({ error: "Quiz not found" });
-  }
   try {
+    const { id } = req.params;
+    const quiz = await getQuizById(id);
+    if (!quiz) {
+      res.status(404).json({ error: "Quiz not found" });
+      return;
+    }
     res.status(200).json(quiz);
   } catch (error) {
     console.error("Error getting quiz:", error);
@@ -66,12 +66,13 @@ export const updateQuizController = async (
   res: Response,
   next: NextFunction
 ): Promise<void> => {
-  const { id } = req.params;
-  const updatedQuiz = await updateQuiz(id, req.body);
-  if (!updatedQuiz) {
-    res.status(404).json({ error: "Quiz not found" });
-  }
   try {
+    const { id } = req.params;
+    const updatedQuiz = await updateQuiz(id, req.body);
+    if (!updatedQuiz) {
+      res.status(404).json({ error: "Quiz not found" });
+      return;
+    }
     res.status(200).json({
       success: true,
       message: "Quiz updated successfully",
@@ -89,12 +90,13 @@ export const deleteQuizController = async (
   res: Response,
   next: NextFunction
 ): Promise<void> => {
-  const { id } = req.params;
-  const deletedQuiz = await deleteQuiz(id);
-  if (!deletedQuiz) {
-    res.status(404).json({ error: "Quiz not found" });
-  }
   try {
+    const { id } = req.params;
+    const deletedQuiz = await deleteQuiz(id);
+    if (!deletedQuiz) {
+      res.status(404).json({ error: "Quiz not found" });
+      return;
+    }
     res
       .status(200)
       .json({ success: true, message: "Quiz deleted successfully" });
