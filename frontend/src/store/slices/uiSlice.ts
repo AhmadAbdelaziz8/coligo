@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 
 interface Notification {
   id: string;
@@ -30,26 +30,23 @@ const uiSlice = createSlice({
     toggleSidebar: (state) => {
       state.sidebarOpen = !state.sidebarOpen;
     },
-    setSidebarOpen: (state, action: PayloadAction<boolean>) => {
+    setSidebarOpen: (state, action) => {
       state.sidebarOpen = action.payload;
     },
-    setTheme: (state, action: PayloadAction<"light" | "dark">) => {
+    setTheme: (state, action) => {
       state.theme = action.payload;
     },
-    setLanguage: (state, action: PayloadAction<string>) => {
+    setLanguage: (state, action) => {
       state.language = action.payload;
     },
-    addNotification: (
-      state,
-      action: PayloadAction<Omit<Notification, "id">>
-    ) => {
+    addNotification: (state, action) => {
       const notification: Notification = {
         ...action.payload,
         id: Date.now().toString(),
       };
       state.notifications.push(notification);
     },
-    removeNotification: (state, action: PayloadAction<string>) => {
+    removeNotification: (state, action) => {
       state.notifications = state.notifications.filter(
         (notification) => notification.id !== action.payload
       );
@@ -57,7 +54,7 @@ const uiSlice = createSlice({
     clearNotifications: (state) => {
       state.notifications = [];
     },
-    setGlobalLoading: (state, action: PayloadAction<boolean>) => {
+    setGlobalLoading: (state, action) => {
       state.globalLoading = action.payload;
     },
   },
