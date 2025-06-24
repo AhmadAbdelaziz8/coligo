@@ -6,6 +6,8 @@ import connectDB from "./config/db";
 import quizRoute from "./routes/quiz.route";
 import announcementRoute from "./routes/announcement.route";
 import authRoute from "./routes/auth.route";
+// middleware
+import { authMiddleware } from "./middleware/auth.middleware";
 
 dotenv.config();
 const app = express();
@@ -20,10 +22,13 @@ app.get("/", (req, res) => {
   res.send("Hello World");
 });
 
-// routes
-app.use("/api/quizzes", quizRoute);
-app.use("/api/announcements", announcementRoute);
+// public authentication route
 app.use("/api/auth", authRoute);
+
+// protected routes
+app.use("/api/quizzes", authMiddleware, quizRoute);
+app.use("/api/announcements", authMiddleware, announcementRoute);
+
 // connection to the database
 connectDB();
 
