@@ -290,265 +290,388 @@ const QuizzesManagementPage: React.FC = () => {
   }
 
   return (
-    <Box sx={{ p: 3 }}>
+    <Box
+      sx={{
+        p: { xs: 2, sm: 3 },
+        minHeight: "100vh",
+        backgroundColor: "#f8fafc",
+      }}
+    >
       {/* Header */}
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          mb: 3,
-        }}
-      >
-        <Box>
-          <Typography
-            variant="h4"
-            sx={{ fontWeight: 700, color: "#1a365d", mb: 1 }}
-          >
-            Quiz Management 📝
-          </Typography>
-          <Typography variant="body1" color="text.secondary">
-            Create, edit, and manage your quizzes
-          </Typography>
-        </Box>
-        <Button
-          variant="contained"
-          startIcon={<AddIcon />}
-          onClick={() => handleOpenDialog()}
+      <Box sx={{ mb: 4 }}>
+        <Typography
+          variant="h4"
           sx={{
-            background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
-            borderRadius: 2,
-            textTransform: "none",
-            fontWeight: 600,
-            px: 3,
+            fontWeight: 700,
+            color: "#1a365d",
+            mb: 2,
+            fontSize: { xs: "1.5rem", sm: "2rem", md: "2.125rem" },
           }}
         >
-          Create New Quiz
-        </Button>
+          Quiz Management
+        </Typography>
+        <Typography variant="body1" color="text.secondary" sx={{ mb: 3 }}>
+          Create, edit, and manage quizzes for your courses.
+        </Typography>
+
+        {/* Stats Cards */}
+        <Grid container spacing={{ xs: 2, sm: 3 }} sx={{ mb: 4 }}>
+          <Grid item xs={12} sm={6} md={4}>
+            <Card
+              sx={{
+                background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+              }}
+            >
+              <CardContent>
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <Box>
+                    <Typography
+                      variant="h4"
+                      sx={{ fontWeight: 700, color: "white", mb: 1 }}
+                    >
+                      {quizzesArray.length}
+                    </Typography>
+                    <Typography
+                      variant="body2"
+                      sx={{ color: "rgba(255,255,255,0.8)", fontWeight: 500 }}
+                    >
+                      Total Quizzes
+                    </Typography>
+                  </Box>
+                  <SchoolIcon
+                    sx={{ color: "white", fontSize: { xs: 32, sm: 40 } }}
+                  />
+                </Box>
+              </CardContent>
+            </Card>
+          </Grid>
+          <Grid item xs={12} sm={6} md={4}>
+            <Card
+              sx={{
+                background: "linear-gradient(135deg, #4caf50 0%, #45a049 100%)",
+              }}
+            >
+              <CardContent>
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <Box>
+                    <Typography
+                      variant="h4"
+                      sx={{ fontWeight: 700, color: "white", mb: 1 }}
+                    >
+                      {quizzesArray.filter((quiz) => quiz.isActive).length}
+                    </Typography>
+                    <Typography
+                      variant="body2"
+                      sx={{ color: "rgba(255,255,255,0.8)", fontWeight: 500 }}
+                    >
+                      Active Quizzes
+                    </Typography>
+                  </Box>
+                  <TimerIcon
+                    sx={{ color: "white", fontSize: { xs: 32, sm: 40 } }}
+                  />
+                </Box>
+              </CardContent>
+            </Card>
+          </Grid>
+          <Grid item xs={12} sm={12} md={4}>
+            <Card
+              sx={{
+                background: "linear-gradient(135deg, #ff9800 0%, #f57c00 100%)",
+              }}
+            >
+              <CardContent>
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <Box>
+                    <Typography
+                      variant="h4"
+                      sx={{ fontWeight: 700, color: "white", mb: 1 }}
+                    >
+                      {quizzesArray.reduce(
+                        (total, quiz) => total + (quiz.totalMarks || 0),
+                        0
+                      )}
+                    </Typography>
+                    <Typography
+                      variant="body2"
+                      sx={{ color: "rgba(255,255,255,0.8)", fontWeight: 500 }}
+                    >
+                      Total Points
+                    </Typography>
+                  </Box>
+                  <AssignmentIcon
+                    sx={{ color: "white", fontSize: { xs: 32, sm: 40 } }}
+                  />
+                </Box>
+              </CardContent>
+            </Card>
+          </Grid>
+        </Grid>
       </Box>
 
-      {/* Statistics Cards */}
-      <Grid container spacing={3} sx={{ mb: 4 }}>
-        <Grid item xs={12} md={4}>
-          <Card
-            sx={{
-              background:
-                "linear-gradient(135deg, #667eea20 0%, #764ba230 100%)",
-            }}
-          >
-            <CardContent>
-              <Box
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                }}
-              >
-                <Box>
-                  <Typography
-                    variant="h4"
-                    sx={{ fontWeight: 700, color: "#667eea" }}
-                  >
-                    {quizzesArray.length}
-                  </Typography>
-                  <Typography variant="body2" color="text.secondary">
-                    Total Quizzes
-                  </Typography>
-                </Box>
-                <SchoolIcon sx={{ fontSize: 40, color: "#667eea" }} />
-              </Box>
-            </CardContent>
-          </Card>
-        </Grid>
-        <Grid item xs={12} md={4}>
-          <Card
-            sx={{
-              background:
-                "linear-gradient(135deg, #4caf5020 0%, #8bc34a30 100%)",
-            }}
-          >
-            <CardContent>
-              <Box
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                }}
-              >
-                <Box>
-                  <Typography
-                    variant="h4"
-                    sx={{ fontWeight: 700, color: "#4caf50" }}
-                  >
-                    {quizzesArray.filter((q) => q.isActive).length}
-                  </Typography>
-                  <Typography variant="body2" color="text.secondary">
-                    Active Quizzes
-                  </Typography>
-                </Box>
-                <AssignmentIcon sx={{ fontSize: 40, color: "#4caf50" }} />
-              </Box>
-            </CardContent>
-          </Card>
-        </Grid>
-        <Grid item xs={12} md={4}>
-          <Card
-            sx={{
-              background:
-                "linear-gradient(135deg, #ff980020 0%, #ffc10730 100%)",
-            }}
-          >
-            <CardContent>
-              <Box
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                }}
-              >
-                <Box>
-                  <Typography
-                    variant="h4"
-                    sx={{ fontWeight: 700, color: "#ff9800" }}
-                  >
-                    {Math.round(
-                      quizzesArray.reduce(
-                        (acc, quiz) => acc + quiz.duration,
-                        0
-                      ) / quizzesArray.length
-                    ) || 0}
-                  </Typography>
-                  <Typography variant="body2" color="text.secondary">
-                    Avg Duration (min)
-                  </Typography>
-                </Box>
-                <TimerIcon sx={{ fontSize: 40, color: "#ff9800" }} />
-              </Box>
-            </CardContent>
-          </Card>
-        </Grid>
-      </Grid>
-
-      {/* Quizzes Table */}
+      {/* Main Content */}
       <Paper
         sx={{
           borderRadius: 3,
-          overflow: "hidden",
           boxShadow: "0 4px 20px rgba(0,0,0,0.08)",
+          overflow: "hidden",
         }}
       >
-        <Box sx={{ p: 3, borderBottom: "1px solid #e2e8f0" }}>
-          <Typography variant="h6" sx={{ fontWeight: 600, color: "#1a365d" }}>
+        {/* Toolbar */}
+        <Box
+          sx={{
+            p: { xs: 2, sm: 3 },
+            borderBottom: "1px solid #e2e8f0",
+            display: "flex",
+            flexDirection: { xs: "column", sm: "row" },
+            alignItems: { xs: "stretch", sm: "center" },
+            justifyContent: "space-between",
+            gap: { xs: 2, sm: 0 },
+          }}
+        >
+          <Typography
+            variant="h6"
+            sx={{
+              fontWeight: 600,
+              color: "#1a365d",
+              fontSize: { xs: "1.1rem", sm: "1.25rem" },
+            }}
+          >
             All Quizzes ({quizzesArray.length})
           </Typography>
+          <Button
+            variant="contained"
+            startIcon={<AddIcon />}
+            onClick={() => handleOpenDialog()}
+            sx={{
+              background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+              borderRadius: 2,
+              textTransform: "none",
+              fontWeight: 600,
+              px: { xs: 2, sm: 3 },
+              py: { xs: 1.5, sm: 1 },
+            }}
+          >
+            Create New Quiz
+          </Button>
         </Box>
 
-        <TableContainer>
-          <Table>
-            <TableHead>
-              <TableRow sx={{ bgcolor: "#f8fafc" }}>
-                <TableCell sx={{ fontWeight: 600, color: "#1a365d" }}>
-                  Quiz Details
-                </TableCell>
-                <TableCell sx={{ fontWeight: 600, color: "#1a365d" }}>
-                  Course & Topic
-                </TableCell>
-                <TableCell sx={{ fontWeight: 600, color: "#1a365d" }}>
-                  Duration
-                </TableCell>
-                <TableCell sx={{ fontWeight: 600, color: "#1a365d" }}>
-                  Marks
-                </TableCell>
-                <TableCell sx={{ fontWeight: 600, color: "#1a365d" }}>
-                  Status
-                </TableCell>
-                <TableCell sx={{ fontWeight: 600, color: "#1a365d" }}>
-                  Due Date
-                </TableCell>
-                <TableCell sx={{ fontWeight: 600, color: "#1a365d" }}>
-                  Actions
-                </TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
+        {/* Mobile Card View for xs screens, Table for larger screens */}
+        <Box sx={{ display: { xs: "block", md: "none" } }}>
+          {loading ? (
+            <Box sx={{ p: 4, textAlign: "center" }}>
+              <Typography>Loading quizzes...</Typography>
+            </Box>
+          ) : quizzesArray.length === 0 ? (
+            <Box sx={{ p: 4, textAlign: "center" }}>
+              <Typography color="text.secondary">
+                No quizzes found. Create your first quiz!
+              </Typography>
+            </Box>
+          ) : (
+            <Box sx={{ p: 2 }}>
               {quizzesArray.map((quiz) => (
-                <TableRow
+                <Card
                   key={quiz._id}
-                  sx={{ "&:hover": { bgcolor: "#f7fafc" } }}
+                  sx={{ mb: 2, border: "1px solid #e2e8f0" }}
                 >
-                  <TableCell>
-                    <Typography variant="subtitle1" sx={{ fontWeight: 600 }}>
-                      {quiz.title}
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary">
-                      {quiz.questions?.length || 0} questions
-                    </Typography>
-                  </TableCell>
-                  <TableCell>
-                    <Typography variant="body2">{quiz.course}</Typography>
-                    <Typography variant="caption" color="text.secondary">
-                      {quiz.topic}
-                    </Typography>
-                  </TableCell>
-                  <TableCell>
-                    <Chip
-                      label={`${quiz.duration} min`}
-                      size="small"
-                      color="primary"
-                      variant="outlined"
-                    />
-                  </TableCell>
-                  <TableCell>
-                    <Typography variant="body2" sx={{ fontWeight: 600 }}>
-                      {quiz.totalMarks} pts
-                    </Typography>
-                  </TableCell>
-                  <TableCell>
-                    <Chip
-                      label={quiz.isActive ? "Active" : "Inactive"}
-                      size="small"
-                      color={quiz.isActive ? "success" : "default"}
-                    />
-                  </TableCell>
-                  <TableCell>
-                    <Typography variant="body2">
-                      {new Date(quiz.dueDate).toLocaleDateString()}
-                    </Typography>
-                  </TableCell>
-                  <TableCell>
-                    <IconButton
-                      onClick={(e) => handleMenuClick(e, quiz)}
-                      size="small"
+                  <CardContent sx={{ pb: 1 }}>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "flex-start",
+                        mb: 2,
+                      }}
                     >
-                      <MoreVertIcon />
-                    </IconButton>
-                  </TableCell>
-                </TableRow>
+                      <Box sx={{ flex: 1 }}>
+                        <Typography
+                          variant="h6"
+                          sx={{ fontWeight: 600, mb: 1, fontSize: "1rem" }}
+                        >
+                          {quiz.title}
+                        </Typography>
+                        <Typography
+                          variant="body2"
+                          color="text.secondary"
+                          sx={{ mb: 1 }}
+                        >
+                          Course: {quiz.course}
+                        </Typography>
+                        <Typography
+                          variant="body2"
+                          color="text.secondary"
+                          sx={{ mb: 1 }}
+                        >
+                          Topic: {quiz.topic}
+                        </Typography>
+                        <Typography
+                          variant="body2"
+                          color="text.secondary"
+                          sx={{ mb: 2 }}
+                        >
+                          Due: {new Date(quiz.dueDate).toLocaleDateString()}
+                        </Typography>
+                        <Box sx={{ display: "flex", gap: 1, flexWrap: "wrap" }}>
+                          <Chip
+                            label={quiz.isActive ? "Active" : "Inactive"}
+                            color={quiz.isActive ? "success" : "default"}
+                            size="small"
+                          />
+                          <Chip
+                            label={`${quiz.duration} min`}
+                            variant="outlined"
+                            size="small"
+                          />
+                          <Chip
+                            label={`${quiz.totalMarks} pts`}
+                            variant="outlined"
+                            size="small"
+                          />
+                        </Box>
+                      </Box>
+                      <IconButton
+                        onClick={(e) => handleMenuClick(e, quiz)}
+                        size="small"
+                      >
+                        <MoreVertIcon />
+                      </IconButton>
+                    </Box>
+                  </CardContent>
+                </Card>
               ))}
-              {quizzesArray.length === 0 && (
+            </Box>
+          )}
+        </Box>
+
+        {/* Desktop Table View */}
+        <Box sx={{ display: { xs: "none", md: "block" } }}>
+          <TableContainer>
+            <Table>
+              <TableHead sx={{ backgroundColor: "#f8fafc" }}>
                 <TableRow>
-                  <TableCell colSpan={7} sx={{ textAlign: "center", py: 4 }}>
-                    <Typography color="text.secondary">
-                      No quizzes found. Create your first quiz!
-                    </Typography>
+                  <TableCell sx={{ fontWeight: 600, color: "#1a365d" }}>
+                    Quiz Title
+                  </TableCell>
+                  <TableCell sx={{ fontWeight: 600, color: "#1a365d" }}>
+                    Course
+                  </TableCell>
+                  <TableCell sx={{ fontWeight: 600, color: "#1a365d" }}>
+                    Topic
+                  </TableCell>
+                  <TableCell sx={{ fontWeight: 600, color: "#1a365d" }}>
+                    Due Date
+                  </TableCell>
+                  <TableCell sx={{ fontWeight: 600, color: "#1a365d" }}>
+                    Duration
+                  </TableCell>
+                  <TableCell sx={{ fontWeight: 600, color: "#1a365d" }}>
+                    Total Marks
+                  </TableCell>
+                  <TableCell sx={{ fontWeight: 600, color: "#1a365d" }}>
+                    Status
+                  </TableCell>
+                  <TableCell
+                    sx={{
+                      fontWeight: 600,
+                      color: "#1a365d",
+                      textAlign: "center",
+                    }}
+                  >
+                    Actions
                   </TableCell>
                 </TableRow>
-              )}
-            </TableBody>
-          </Table>
-        </TableContainer>
+              </TableHead>
+              <TableBody>
+                {loading ? (
+                  <TableRow>
+                    <TableCell colSpan={8} sx={{ textAlign: "center", py: 4 }}>
+                      <Typography>Loading quizzes...</Typography>
+                    </TableCell>
+                  </TableRow>
+                ) : quizzesArray.length === 0 ? (
+                  <TableRow>
+                    <TableCell colSpan={8} sx={{ textAlign: "center", py: 4 }}>
+                      <Typography color="text.secondary">
+                        No quizzes found. Create your first quiz!
+                      </Typography>
+                    </TableCell>
+                  </TableRow>
+                ) : (
+                  quizzesArray.map((quiz) => (
+                    <TableRow
+                      key={quiz._id}
+                      sx={{ "&:hover": { backgroundColor: "#f8fafc" } }}
+                    >
+                      <TableCell>
+                        <Typography
+                          variant="subtitle2"
+                          sx={{ fontWeight: 600 }}
+                        >
+                          {quiz.title}
+                        </Typography>
+                      </TableCell>
+                      <TableCell>{quiz.course}</TableCell>
+                      <TableCell>{quiz.topic}</TableCell>
+                      <TableCell>
+                        {new Date(quiz.dueDate).toLocaleDateString()}
+                      </TableCell>
+                      <TableCell>{quiz.duration} min</TableCell>
+                      <TableCell>{quiz.totalMarks}</TableCell>
+                      <TableCell>
+                        <Chip
+                          label={quiz.isActive ? "Active" : "Inactive"}
+                          color={quiz.isActive ? "success" : "default"}
+                          size="small"
+                        />
+                      </TableCell>
+                      <TableCell sx={{ textAlign: "center" }}>
+                        <IconButton
+                          onClick={(e) => handleMenuClick(e, quiz)}
+                          size="small"
+                        >
+                          <MoreVertIcon />
+                        </IconButton>
+                      </TableCell>
+                    </TableRow>
+                  ))
+                )}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </Box>
       </Paper>
 
-      {/* Floating Action Button */}
+      {/* Floating Action Button for mobile */}
       <Fab
         color="primary"
+        aria-label="add quiz"
+        onClick={() => handleOpenDialog()}
         sx={{
           position: "fixed",
-          bottom: 24,
-          right: 24,
+          bottom: { xs: 16, sm: 24 },
+          right: { xs: 16, sm: 24 },
+          display: { xs: "flex", sm: "none" },
           background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
         }}
-        onClick={() => handleOpenDialog()}
       >
         <AddIcon />
       </Fab>

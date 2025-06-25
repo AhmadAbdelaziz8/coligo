@@ -296,168 +296,321 @@ const AnnouncementsManagementPage: React.FC = () => {
   }
 
   return (
-    <Box sx={{ p: 3 }}>
-      {/* Header */}
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          mb: 3,
-        }}
-      >
-        <Box>
-          <Typography
-            variant="h4"
-            sx={{ fontWeight: 700, color: "#1a365d", mb: 1 }}
-          >
-            Announcements Management 📢
-          </Typography>
-          <Typography variant="body1" color="text.secondary">
-            Create and manage announcements for your students
-          </Typography>
-        </Box>
-        <Button
-          variant="contained"
-          startIcon={<AddIcon />}
-          onClick={() => handleOpenDialog()}
+    <Container
+      maxWidth={false}
+      sx={{ py: { xs: 2, sm: 3 }, px: { xs: 2, sm: 3 } }}
+    >
+      {/* Header Section */}
+      <Box sx={{ mb: 4 }}>
+        <Typography
+          variant="h4"
           sx={{
-            background: "linear-gradient(135deg, #f093fb 0%, #f5576c 100%)",
-            borderRadius: 2,
-            textTransform: "none",
-            fontWeight: 600,
-            px: 3,
+            fontWeight: 700,
+            color: "#1a365d",
+            mb: 2,
+            fontSize: { xs: "1.5rem", sm: "2rem", md: "2.125rem" },
           }}
         >
-          Create Announcement
-        </Button>
+          Announcements Management
+        </Typography>
+        <Typography variant="body1" color="text.secondary" sx={{ mb: 3 }}>
+          Create and manage announcements for your students.
+        </Typography>
+
+        {/* Statistics Cards */}
+        <Grid container spacing={{ xs: 2, sm: 3 }} sx={{ mb: 4 }}>
+          <Grid item xs={12} sm={6} md={4}>
+            <StatCard
+              title="Total Announcements"
+              value={Array.isArray(announcements) ? announcements.length : 0}
+              icon={<AnnouncementIcon />}
+              color="#ff9800"
+              bgColor="linear-gradient(135deg, #ff9800 0%, #f57c00 100%)"
+            />
+          </Grid>
+          <Grid item xs={12} sm={6} md={4}>
+            <StatCard
+              title="This Week"
+              value={
+                Array.isArray(announcements)
+                  ? announcements.filter((ann) => {
+                      const weekAgo = new Date();
+                      weekAgo.setDate(weekAgo.getDate() - 7);
+                      return new Date(ann.createdAt) > weekAgo;
+                    }).length
+                  : 0
+              }
+              icon={<TodayIcon />}
+              color="#4caf50"
+              bgColor="linear-gradient(135deg, #4caf50 0%, #45a049 100%)"
+            />
+          </Grid>
+          <Grid item xs={12} sm={12} md={4}>
+            <StatCard
+              title="Active Instructor"
+              value={user?.name || "Admin"}
+              icon={<PersonIcon />}
+              color="#2196f3"
+              bgColor="linear-gradient(135deg, #2196f3 0%, #1976d2 100%)"
+            />
+          </Grid>
+        </Grid>
       </Box>
 
-      {/* Statistics Cards */}
-      <Grid container spacing={3} sx={{ mb: 4 }}>
-        {stats.map((stat, index) => (
-          <Grid item xs={12} md={4} key={index}>
-            <StatCard {...stat} />
-          </Grid>
-        ))}
-      </Grid>
-
-      {/* Announcements Table */}
+      {/* Main Content */}
       <Paper
         sx={{
           borderRadius: 3,
-          overflow: "hidden",
           boxShadow: "0 4px 20px rgba(0,0,0,0.08)",
+          overflow: "hidden",
         }}
       >
-        <Box sx={{ p: 3, borderBottom: "1px solid #e2e8f0" }}>
-          <Typography variant="h6" sx={{ fontWeight: 600, color: "#1a365d" }}>
-            All Announcements ({announcements.length})
+        {/* Toolbar */}
+        <Box
+          sx={{
+            p: { xs: 2, sm: 3 },
+            borderBottom: "1px solid #e2e8f0",
+            display: "flex",
+            flexDirection: { xs: "column", sm: "row" },
+            alignItems: { xs: "stretch", sm: "center" },
+            justifyContent: "space-between",
+            gap: { xs: 2, sm: 0 },
+          }}
+        >
+          <Typography
+            variant="h6"
+            sx={{
+              fontWeight: 600,
+              color: "#1a365d",
+              fontSize: { xs: "1.1rem", sm: "1.25rem" },
+            }}
+          >
+            All Announcements (
+            {Array.isArray(announcements) ? announcements.length : 0})
           </Typography>
+          <Button
+            variant="contained"
+            startIcon={<AddIcon />}
+            onClick={() => handleOpenDialog()}
+            sx={{
+              background: "linear-gradient(135deg, #ff9800 0%, #f57c00 100%)",
+              borderRadius: 2,
+              textTransform: "none",
+              fontWeight: 600,
+              px: { xs: 2, sm: 3 },
+              py: { xs: 1.5, sm: 1 },
+            }}
+          >
+            Create Announcement
+          </Button>
         </Box>
 
-        <TableContainer>
-          <Table>
-            <TableHead>
-              <TableRow sx={{ bgcolor: "#f8fafc" }}>
-                <TableCell sx={{ fontWeight: 600, color: "#1a365d" }}>
-                  Title
-                </TableCell>
-                <TableCell sx={{ fontWeight: 600, color: "#1a365d" }}>
-                  Content Preview
-                </TableCell>
-                <TableCell sx={{ fontWeight: 600, color: "#1a365d" }}>
-                  Instructor
-                </TableCell>
-                <TableCell sx={{ fontWeight: 600, color: "#1a365d" }}>
-                  Created
-                </TableCell>
-                <TableCell sx={{ fontWeight: 600, color: "#1a365d" }}>
-                  Actions
-                </TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
+        {/* Mobile Card View for xs and sm screens */}
+        <Box sx={{ display: { xs: "block", md: "none" } }}>
+          {loading ? (
+            <Box sx={{ p: 4, textAlign: "center" }}>
+              <Typography>Loading announcements...</Typography>
+            </Box>
+          ) : !Array.isArray(announcements) || announcements.length === 0 ? (
+            <Box sx={{ p: 4, textAlign: "center" }}>
+              <Typography color="text.secondary">
+                No announcements found. Create your first announcement!
+              </Typography>
+            </Box>
+          ) : (
+            <Box sx={{ p: 2 }}>
               {announcements.map((announcement) => (
-                <TableRow
+                <Card
                   key={announcement._id}
-                  sx={{ "&:hover": { bgcolor: "#f7fafc" } }}
+                  sx={{ mb: 2, border: "1px solid #e2e8f0" }}
                 >
-                  <TableCell>
-                    <Typography variant="subtitle1" sx={{ fontWeight: 600 }}>
-                      {announcement.title}
-                    </Typography>
-                  </TableCell>
-                  <TableCell>
-                    <Typography
-                      variant="body2"
-                      color="text.secondary"
+                  <CardContent>
+                    <Box
                       sx={{
-                        display: "-webkit-box",
-                        WebkitLineClamp: 2,
-                        WebkitBoxOrient: "vertical",
-                        overflow: "hidden",
-                        maxWidth: 300,
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "flex-start",
+                        mb: 2,
                       }}
                     >
-                      {announcement.content}
-                    </Typography>
-                  </TableCell>
-                  <TableCell>
-                    <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                      <Avatar
-                        src={announcement.instructorAvatar}
-                        sx={{ width: 32, height: 32, bgcolor: "#2196f3" }}
+                      <Box sx={{ flex: 1 }}>
+                        <Typography
+                          variant="h6"
+                          sx={{ fontWeight: 600, mb: 1, fontSize: "1rem" }}
+                        >
+                          {announcement.title}
+                        </Typography>
+                        <Typography
+                          variant="body2"
+                          color="text.secondary"
+                          sx={{
+                            mb: 2,
+                            display: "-webkit-box",
+                            WebkitLineClamp: 3,
+                            WebkitBoxOrient: "vertical",
+                            overflow: "hidden",
+                            textOverflow: "ellipsis",
+                          }}
+                        >
+                          {announcement.content}
+                        </Typography>
+                        <Box
+                          sx={{
+                            display: "flex",
+                            alignItems: "center",
+                            gap: 1,
+                            flexWrap: "wrap",
+                          }}
+                        >
+                          <Avatar
+                            sx={{ width: 24, height: 24, bgcolor: "#ff9800" }}
+                          >
+                            <PersonIcon sx={{ fontSize: 16 }} />
+                          </Avatar>
+                          <Typography variant="caption" color="text.secondary">
+                            By {announcement.instructor}
+                          </Typography>
+                          <Typography variant="caption" color="text.secondary">
+                            •{" "}
+                            {new Date(
+                              announcement.createdAt
+                            ).toLocaleDateString()}
+                          </Typography>
+                        </Box>
+                      </Box>
+                      <IconButton
+                        onClick={(e) => handleMenuClick(e, announcement)}
+                        size="small"
                       >
-                        {announcement.instructor.charAt(0)}
-                      </Avatar>
-                      <Typography variant="body2">
-                        {announcement.instructor}
-                      </Typography>
+                        <MoreVertIcon />
+                      </IconButton>
                     </Box>
-                  </TableCell>
-                  <TableCell>
-                    <Typography variant="body2">
-                      {new Date(announcement.createdAt).toLocaleDateString()}
-                    </Typography>
-                    <Typography variant="caption" color="text.secondary">
-                      {new Date(announcement.createdAt).toLocaleTimeString()}
-                    </Typography>
-                  </TableCell>
-                  <TableCell>
-                    <IconButton
-                      onClick={(e) => handleMenuClick(e, announcement)}
-                      size="small"
-                    >
-                      <MoreVertIcon />
-                    </IconButton>
-                  </TableCell>
-                </TableRow>
+                  </CardContent>
+                </Card>
               ))}
-              {announcements.length === 0 && (
+            </Box>
+          )}
+        </Box>
+
+        {/* Desktop Table View */}
+        <Box sx={{ display: { xs: "none", md: "block" } }}>
+          <TableContainer>
+            <Table>
+              <TableHead sx={{ backgroundColor: "#f8fafc" }}>
                 <TableRow>
-                  <TableCell colSpan={5} sx={{ textAlign: "center", py: 4 }}>
-                    <Typography color="text.secondary">
-                      No announcements found. Create your first announcement!
-                    </Typography>
+                  <TableCell sx={{ fontWeight: 600, color: "#1a365d" }}>
+                    Announcement
+                  </TableCell>
+                  <TableCell sx={{ fontWeight: 600, color: "#1a365d" }}>
+                    Instructor
+                  </TableCell>
+                  <TableCell sx={{ fontWeight: 600, color: "#1a365d" }}>
+                    Created
+                  </TableCell>
+                  <TableCell
+                    sx={{
+                      fontWeight: 600,
+                      color: "#1a365d",
+                      textAlign: "center",
+                    }}
+                  >
+                    Actions
                   </TableCell>
                 </TableRow>
-              )}
-            </TableBody>
-          </Table>
-        </TableContainer>
+              </TableHead>
+              <TableBody>
+                {loading ? (
+                  <TableRow>
+                    <TableCell colSpan={4} sx={{ textAlign: "center", py: 4 }}>
+                      <Typography>Loading announcements...</Typography>
+                    </TableCell>
+                  </TableRow>
+                ) : !Array.isArray(announcements) ||
+                  announcements.length === 0 ? (
+                  <TableRow>
+                    <TableCell colSpan={4} sx={{ textAlign: "center", py: 4 }}>
+                      <Typography color="text.secondary">
+                        No announcements found. Create your first announcement!
+                      </Typography>
+                    </TableCell>
+                  </TableRow>
+                ) : (
+                  announcements.map((announcement) => (
+                    <TableRow
+                      key={announcement._id}
+                      sx={{ "&:hover": { backgroundColor: "#f8fafc" } }}
+                    >
+                      <TableCell sx={{ maxWidth: "400px" }}>
+                        <Typography
+                          variant="subtitle2"
+                          sx={{ fontWeight: 600, mb: 1 }}
+                        >
+                          {announcement.title}
+                        </Typography>
+                        <Typography
+                          variant="body2"
+                          color="text.secondary"
+                          sx={{
+                            display: "-webkit-box",
+                            WebkitLineClamp: 2,
+                            WebkitBoxOrient: "vertical",
+                            overflow: "hidden",
+                            textOverflow: "ellipsis",
+                          }}
+                        >
+                          {announcement.content}
+                        </Typography>
+                      </TableCell>
+                      <TableCell>
+                        <Box
+                          sx={{ display: "flex", alignItems: "center", gap: 1 }}
+                        >
+                          <Avatar
+                            sx={{ width: 32, height: 32, bgcolor: "#ff9800" }}
+                          >
+                            <PersonIcon sx={{ fontSize: 18 }} />
+                          </Avatar>
+                          <Typography variant="body2">
+                            {announcement.instructor}
+                          </Typography>
+                        </Box>
+                      </TableCell>
+                      <TableCell>
+                        <Typography variant="body2">
+                          {new Date(
+                            announcement.createdAt
+                          ).toLocaleDateString()}
+                        </Typography>
+                      </TableCell>
+                      <TableCell sx={{ textAlign: "center" }}>
+                        <IconButton
+                          onClick={(e) => handleMenuClick(e, announcement)}
+                          size="small"
+                        >
+                          <MoreVertIcon />
+                        </IconButton>
+                      </TableCell>
+                    </TableRow>
+                  ))
+                )}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </Box>
       </Paper>
 
-      {/* Floating Action Button */}
+      {/* Floating Action Button for mobile */}
       <Fab
         color="primary"
+        aria-label="add announcement"
+        onClick={() => handleOpenDialog()}
         sx={{
           position: "fixed",
-          bottom: 24,
-          right: 24,
-          background: "linear-gradient(135deg, #f093fb 0%, #f5576c 100%)",
+          bottom: { xs: 16, sm: 24 },
+          right: { xs: 16, sm: 24 },
+          display: { xs: "flex", sm: "none" },
+          background: "linear-gradient(135deg, #ff9800 0%, #f57c00 100%)",
         }}
-        onClick={() => handleOpenDialog()}
       >
         <AddIcon />
       </Fab>
@@ -590,7 +743,7 @@ const AnnouncementsManagementPage: React.FC = () => {
           {snackbar.message}
         </Alert>
       </Snackbar>
-    </Box>
+    </Container>
   );
 };
 

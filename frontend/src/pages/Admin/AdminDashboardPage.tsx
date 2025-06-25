@@ -150,11 +150,18 @@ const AdminDashboardPage: React.FC = () => {
   ];
 
   return (
-    <Box sx={{ p: 3, background: "#f8fafc", minHeight: "100vh" }}>
+    <Box
+      sx={{ p: { xs: 2, sm: 3 }, background: "#f8fafc", minHeight: "100vh" }}
+    >
       <Box sx={{ mb: 4 }}>
         <Typography
           variant="h4"
-          sx={{ fontWeight: 700, color: "#1a365d", mb: 1 }}
+          sx={{
+            fontWeight: 700,
+            color: "#1a365d",
+            mb: 1,
+            fontSize: { xs: "1.5rem", sm: "2rem", md: "2.125rem" },
+          }}
         >
           Welcome back, {user?.name}! 👋
         </Typography>
@@ -163,7 +170,7 @@ const AdminDashboardPage: React.FC = () => {
         </Typography>
       </Box>
 
-      <Grid container spacing={3} sx={{ mb: 4 }}>
+      <Grid container spacing={{ xs: 2, sm: 3 }} sx={{ mb: 4 }}>
         {stats.map((stat, index) => (
           <Grid item xs={12} sm={6} md={3} key={index}>
             <StatCard {...stat} />
@@ -174,14 +181,14 @@ const AdminDashboardPage: React.FC = () => {
       <Box
         sx={{
           display: "flex",
-          gap: 3,
-          flexDirection: { xs: "column", md: "row" },
+          gap: { xs: 2, sm: 3 },
+          flexDirection: { xs: "column", lg: "row" },
         }}
       >
-        <Box sx={{ flex: 2, minWidth: 0 }}>
+        <Box sx={{ flex: { lg: 2 }, minWidth: 0 }}>
           <Paper
             sx={{
-              p: 3,
+              p: { xs: 2, sm: 3 },
               borderRadius: 3,
               boxShadow: "0 4px 20px rgba(0,0,0,0.08)",
               height: "100%",
@@ -190,14 +197,20 @@ const AdminDashboardPage: React.FC = () => {
             <Box
               sx={{
                 display: "flex",
-                alignItems: "center",
+                alignItems: { xs: "flex-start", sm: "center" },
                 justifyContent: "space-between",
                 mb: 3,
+                flexDirection: { xs: "column", sm: "row" },
+                gap: { xs: 2, sm: 0 },
               }}
             >
               <Typography
                 variant="h6"
-                sx={{ fontWeight: 600, color: "#1a365d" }}
+                sx={{
+                  fontWeight: 600,
+                  color: "#1a365d",
+                  fontSize: { xs: "1.1rem", sm: "1.25rem" },
+                }}
               >
                 Recent Announcements
               </Typography>
@@ -212,6 +225,9 @@ const AdminDashboardPage: React.FC = () => {
                   borderRadius: 2,
                   textTransform: "none",
                   fontWeight: 600,
+                  width: { xs: "100%", sm: "auto" },
+                  fontSize: { xs: "0.875rem", sm: "0.8125rem" },
+                  py: { xs: 1.5, sm: 1 },
                 }}
               >
                 Manage Announcements
@@ -220,30 +236,76 @@ const AdminDashboardPage: React.FC = () => {
             {announcementsLoading ? (
               <Typography>Loading...</Typography>
             ) : recentAnnouncements.length > 0 ? (
-              <List>
+              <List sx={{ maxHeight: { xs: 300, md: 400 }, overflow: "auto" }}>
                 {recentAnnouncements.map((announcement) => (
-                  <ListItem key={announcement._id}>
+                  <ListItem
+                    key={announcement._id}
+                    sx={{
+                      px: { xs: 1, sm: 2 },
+                      py: { xs: 1, sm: 1.5 },
+                      border: "1px solid #e2e8f0",
+                      borderRadius: 2,
+                      mb: 1,
+                      "&:hover": { bgcolor: "#f7fafc" },
+                    }}
+                  >
                     <ListItemAvatar>
-                      <Avatar sx={{ bgcolor: "#ff9800" }}>
-                        <AnnouncementIcon />
+                      <Avatar
+                        sx={{
+                          bgcolor: "#ff9800",
+                          width: { xs: 32, sm: 40 },
+                          height: { xs: 32, sm: 40 },
+                        }}
+                      >
+                        <AnnouncementIcon
+                          sx={{ fontSize: { xs: 16, sm: 20 } }}
+                        />
                       </Avatar>
                     </ListItemAvatar>
                     <ListItemText
-                      primary={announcement.title}
-                      secondary={announcement.content}
+                      primary={
+                        <Typography
+                          variant="subtitle2"
+                          sx={{
+                            fontWeight: 600,
+                            fontSize: { xs: "0.875rem", sm: "1rem" },
+                            lineHeight: 1.3,
+                          }}
+                        >
+                          {announcement.title}
+                        </Typography>
+                      }
+                      secondary={
+                        <Typography
+                          variant="body2"
+                          sx={{
+                            display: "-webkit-box",
+                            WebkitLineClamp: { xs: 2, sm: 3 },
+                            WebkitBoxOrient: "vertical",
+                            overflow: "hidden",
+                            textOverflow: "ellipsis",
+                            fontSize: { xs: "0.75rem", sm: "0.875rem" },
+                            mt: 0.5,
+                          }}
+                        >
+                          {announcement.content}
+                        </Typography>
+                      }
                     />
                   </ListItem>
                 ))}
               </List>
             ) : (
-              <Typography>No recent announcements.</Typography>
+              <Typography sx={{ textAlign: "center", color: "#64748b", py: 4 }}>
+                No recent announcements.
+              </Typography>
             )}
           </Paper>
         </Box>
-        <Box sx={{ flex: 1, minWidth: 0 }}>
+        <Box sx={{ flex: { lg: 1 }, minWidth: 0 }}>
           <Paper
             sx={{
-              p: 3,
+              p: { xs: 2, sm: 3 },
               borderRadius: 3,
               boxShadow: "0 4px 20px rgba(0,0,0,0.08)",
               height: "100%",
@@ -252,14 +314,20 @@ const AdminDashboardPage: React.FC = () => {
             <Box
               sx={{
                 display: "flex",
-                alignItems: "center",
+                alignItems: { xs: "flex-start", sm: "center" },
                 justifyContent: "space-between",
                 mb: 3,
+                flexDirection: { xs: "column", sm: "row" },
+                gap: { xs: 2, sm: 0 },
               }}
             >
               <Typography
                 variant="h6"
-                sx={{ fontWeight: 600, color: "#1a365d" }}
+                sx={{
+                  fontWeight: 600,
+                  color: "#1a365d",
+                  fontSize: { xs: "1.1rem", sm: "1.25rem" },
+                }}
               >
                 Recent Quizzes
               </Typography>
@@ -274,6 +342,9 @@ const AdminDashboardPage: React.FC = () => {
                   borderRadius: 2,
                   textTransform: "none",
                   fontWeight: 600,
+                  width: { xs: "100%", sm: "auto" },
+                  fontSize: { xs: "0.875rem", sm: "0.8125rem" },
+                  py: { xs: 1.5, sm: 1 },
                 }}
               >
                 Manage Quizzes
@@ -283,45 +354,80 @@ const AdminDashboardPage: React.FC = () => {
             {quizzesLoading ? (
               <Typography>Loading...</Typography>
             ) : recentQuizzes.length > 0 ? (
-              <List sx={{ maxHeight: 400, overflow: "auto" }}>
+              <List sx={{ maxHeight: { xs: 300, md: 400 }, overflow: "auto" }}>
                 {recentQuizzes.map((quiz) => (
                   <ListItem
                     key={quiz._id}
                     sx={{
+                      px: { xs: 1, sm: 2 },
+                      py: { xs: 1, sm: 1.5 },
                       border: "1px solid #e2e8f0",
                       borderRadius: 2,
                       mb: 1,
                       "&:hover": { bgcolor: "#f7fafc" },
+                      flexDirection: { xs: "column", sm: "row" },
+                      alignItems: { xs: "flex-start", sm: "center" },
+                      gap: { xs: 1, sm: 0 },
                     }}
                   >
-                    <ListItemAvatar>
-                      <Avatar sx={{ bgcolor: "#2196f3" }}>
-                        <QuizIcon />
-                      </Avatar>
-                    </ListItemAvatar>
-                    <ListItemText
-                      primary={
-                        <Typography
-                          variant="subtitle1"
-                          sx={{ fontWeight: 600 }}
+                    <Box
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        width: "100%",
+                      }}
+                    >
+                      <ListItemAvatar>
+                        <Avatar
+                          sx={{
+                            bgcolor: "#2196f3",
+                            width: { xs: 32, sm: 40 },
+                            height: { xs: 32, sm: 40 },
+                          }}
                         >
-                          {quiz.title}
-                        </Typography>
-                      }
-                      secondary={`Due: ${new Date(
-                        quiz.dueDate
-                      ).toLocaleDateString()}`}
-                    />
+                          <QuizIcon sx={{ fontSize: { xs: 16, sm: 20 } }} />
+                        </Avatar>
+                      </ListItemAvatar>
+                      <ListItemText
+                        primary={
+                          <Typography
+                            variant="subtitle2"
+                            sx={{
+                              fontWeight: 600,
+                              fontSize: { xs: "0.875rem", sm: "1rem" },
+                              lineHeight: 1.3,
+                            }}
+                          >
+                            {quiz.title}
+                          </Typography>
+                        }
+                        secondary={
+                          <Typography
+                            variant="body2"
+                            sx={{ fontSize: { xs: "0.75rem", sm: "0.875rem" } }}
+                          >
+                            Due: {new Date(quiz.dueDate).toLocaleDateString()}
+                          </Typography>
+                        }
+                      />
+                    </Box>
                     <Chip
                       label={quiz.isActive ? "Active" : "Inactive"}
                       color={quiz.isActive ? "success" : "default"}
                       size="small"
+                      sx={{
+                        alignSelf: { xs: "flex-end", sm: "center" },
+                        mt: { xs: 1, sm: 0 },
+                        fontSize: { xs: "0.7rem", sm: "0.75rem" },
+                      }}
                     />
                   </ListItem>
                 ))}
               </List>
             ) : (
-              <Typography>No recent quizzes.</Typography>
+              <Typography sx={{ textAlign: "center", color: "#64748b", py: 4 }}>
+                No recent quizzes.
+              </Typography>
             )}
           </Paper>
         </Box>
