@@ -26,6 +26,8 @@ import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../hooks/redux";
 import { fetchQuizzes } from "../../store/slices/quizSlice";
 import { fetchAnnouncements } from "../../store/slices/announcementSlice";
+import type { Quiz } from "../../types/quiz";
+import type { Announcement } from "../../types/announcement";
 
 interface StatCardProps {
   title: string;
@@ -91,7 +93,6 @@ const StatCard: React.FC<StatCardProps> = ({
 );
 
 const AdminDashboardPage: React.FC = () => {
-  // const { t } = useTranslation();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
@@ -108,9 +109,8 @@ const AdminDashboardPage: React.FC = () => {
     dispatch(fetchAnnouncements());
   }, [dispatch]);
 
-  // Calculate statistics
-  const quizzesArray = Array.isArray(quizzes) ? quizzes : [];
-  const announcementsArray = Array.isArray(announcements) ? announcements : [];
+  const quizzesArray: Quiz[] = Array.isArray(quizzes) ? quizzes : [];
+  const announcementsArray: Announcement[] = Array.isArray(announcements) ? announcements : [];
   const activeQuizzes = quizzesArray.filter((quiz) => quiz.isActive).length;
   const totalQuizzes = quizzesArray.length;
   const recentAnnouncements = announcementsArray.slice(0, 5);
@@ -149,7 +149,6 @@ const AdminDashboardPage: React.FC = () => {
 
   return (
     <Box sx={{ p: 3, background: "#f8fafc", minHeight: "100vh" }}>
-      {/* Header */}
       <Box sx={{ mb: 4 }}>
         <Typography
           variant="h4"
@@ -162,7 +161,6 @@ const AdminDashboardPage: React.FC = () => {
         </Typography>
       </Box>
 
-      {/* Statistics Cards */}
       <Grid container spacing={3} sx={{ mb: 4 }}>
         {stats.map((stat, index) => (
           <Grid item xs={12} sm={6} md={3} key={index}>
@@ -171,7 +169,6 @@ const AdminDashboardPage: React.FC = () => {
         ))}
       </Grid>
 
-      {/* Main Content */}
       <Box
         sx={{
           display: "flex",
@@ -179,14 +176,13 @@ const AdminDashboardPage: React.FC = () => {
           flexDirection: { xs: "column", md: "row" },
         }}
       >
-        {/* Recent Quizzes */}
-        <Box sx={{ flex: "0 0 auto", minWidth: { md: "400px" } }}>
+        <Box sx={{ flex: 2, minWidth: 0 }}>
           <Paper
             sx={{
               p: 3,
               borderRadius: 3,
               boxShadow: "0 4px 20px rgba(0,0,0,0.08)",
-              height: "fit-content",
+              height: "100%",
             }}
           >
             <Box
@@ -248,48 +244,31 @@ const AdminDashboardPage: React.FC = () => {
                           {quiz.title}
                         </Typography>
                       }
-                      secondary={
-                        <Box sx={{ mt: 1 }}>
-                          <Typography variant="body2" color="text.secondary">
-                            {quiz.course} • {quiz.topic}
-                          </Typography>
-                          <Box sx={{ display: "flex", gap: 1, mt: 1 }}>
-                            <Chip
-                              label={quiz.isActive ? "Active" : "Inactive"}
-                              size="small"
-                              color={quiz.isActive ? "success" : "default"}
-                            />
-                            <Chip
-                              label={`${quiz.totalMarks} marks`}
-                              size="small"
-                              variant="outlined"
-                            />
-                          </Box>
-                        </Box>
-                      }
+                      secondary={`Due: ${new Date(
+                        quiz.dueDate
+                      ).toLocaleDateString()}`}
+                    />
+                    <Chip
+                      label={quiz.isActive ? "Active" : "Inactive"}
+                      color={quiz.isActive ? "success" : "default"}
+                      size="small"
                     />
                   </ListItem>
                 ))}
               </List>
             ) : (
-              <Typography
-                color="text.secondary"
-                sx={{ textAlign: "center", py: 4 }}
-              >
-                No quizzes found. Create your first quiz!
-              </Typography>
+              <Typography>No recent quizzes.</Typography>
             )}
           </Paper>
         </Box>
 
-        {/* Recent Announcements */}
-        <Box sx={{ flex: 1 }}>
+        <Box sx={{ flex: 1, minWidth: 0 }}>
           <Paper
             sx={{
               p: 3,
               borderRadius: 3,
               boxShadow: "0 4px 20px rgba(0,0,0,0.08)",
-              height: "fit-content",
+              height: "100%",
             }}
           >
             <Box
@@ -313,178 +292,39 @@ const AdminDashboardPage: React.FC = () => {
                 onClick={() => navigate("/admin/announcements")}
                 sx={{
                   background:
-                    "linear-gradient(135deg, #f093fb 0%, #f5576c 100%)",
+                    "linear-gradient(135deg, #ff9800 0%, #ff5722 100%)",
                   borderRadius: 2,
                   textTransform: "none",
                   fontWeight: 600,
                 }}
               >
-                Manage Posts
+                Manage Announcements
               </Button>
             </Box>
-
             {announcementsLoading ? (
               <Typography>Loading...</Typography>
             ) : recentAnnouncements.length > 0 ? (
-              <List sx={{ maxHeight: 400, overflow: "auto" }}>
+              <List>
                 {recentAnnouncements.map((announcement) => (
-                  <ListItem
-                    key={announcement._id}
-                    sx={{
-                      border: "1px solid #e2e8f0",
-                      borderRadius: 2,
-                      mb: 1,
-                      "&:hover": { bgcolor: "#f7fafc" },
-                    }}
-                  >
+                  <ListItem key={announcement._id}>
                     <ListItemAvatar>
                       <Avatar sx={{ bgcolor: "#ff9800" }}>
                         <AnnouncementIcon />
                       </Avatar>
                     </ListItemAvatar>
                     <ListItemText
-                      primary={
-                        <Typography
-                          variant="subtitle1"
-                          sx={{ fontWeight: 600 }}
-                        >
-                          {announcement.title}
-                        </Typography>
-                      }
-                      secondary={
-                        <Box sx={{ mt: 1 }}>
-                          <Typography
-                            variant="body2"
-                            color="text.secondary"
-                            sx={{
-                              display: "-webkit-box",
-                              WebkitLineClamp: 2,
-                              WebkitBoxOrient: "vertical",
-                              overflow: "hidden",
-                            }}
-                          >
-                            {announcement.content}
-                          </Typography>
-                          <Typography
-                            variant="caption"
-                            color="text.secondary"
-                            sx={{ mt: 1, display: "block" }}
-                          >
-                            By {announcement.instructor} •{" "}
-                            {new Date(
-                              announcement.createdAt
-                            ).toLocaleDateString()}
-                          </Typography>
-                        </Box>
-                      }
+                      primary={announcement.title}
+                      secondary={announcement.content}
                     />
                   </ListItem>
                 ))}
               </List>
             ) : (
-              <Typography
-                color="text.secondary"
-                sx={{ textAlign: "center", py: 4 }}
-              >
-                No announcements yet. Create your first announcement!
-              </Typography>
+              <Typography>No recent announcements.</Typography>
             )}
           </Paper>
         </Box>
       </Box>
-
-      {/* Quick Actions */}
-      <Paper
-        sx={{
-          p: 3,
-          borderRadius: 3,
-          boxShadow: "0 4px 20px rgba(0,0,0,0.08)",
-          mt: 3,
-        }}
-      >
-        <Typography
-          variant="h6"
-          sx={{ fontWeight: 600, color: "#1a365d", mb: 3 }}
-        >
-          Quick Actions
-        </Typography>
-        <Grid container spacing={2}>
-          <Grid item xs={12} sm={6} md={3}>
-            <Button
-              fullWidth
-              variant="outlined"
-              startIcon={<QuizIcon />}
-              onClick={() => navigate("/admin/quizzes")}
-              sx={{
-                py: 2,
-                borderRadius: 2,
-                textTransform: "none",
-                fontWeight: 600,
-                borderColor: "#2196f3",
-                color: "#2196f3",
-                "&:hover": { bgcolor: "#2196f310" },
-              }}
-            >
-              Manage Quizzes
-            </Button>
-          </Grid>
-          <Grid item xs={12} sm={6} md={3}>
-            <Button
-              fullWidth
-              variant="outlined"
-              startIcon={<AnnouncementIcon />}
-              onClick={() => navigate("/admin/announcements")}
-              sx={{
-                py: 2,
-                borderRadius: 2,
-                textTransform: "none",
-                fontWeight: 600,
-                borderColor: "#ff9800",
-                color: "#ff9800",
-                "&:hover": { bgcolor: "#ff980010" },
-              }}
-            >
-              Manage Announcements
-            </Button>
-          </Grid>
-          <Grid item xs={12} sm={6} md={3}>
-            <Button
-              fullWidth
-              variant="outlined"
-              startIcon={<AssignmentIcon />}
-              sx={{
-                py: 2,
-                borderRadius: 2,
-                textTransform: "none",
-                fontWeight: 600,
-                borderColor: "#4caf50",
-                color: "#4caf50",
-                "&:hover": { bgcolor: "#4caf5010" },
-              }}
-            >
-              View Students
-            </Button>
-          </Grid>
-          <Grid item xs={12} sm={6} md={3}>
-            <Button
-              fullWidth
-              variant="outlined"
-              startIcon={<SchoolIcon />}
-              sx={{
-                py: 2,
-                borderRadius: 2,
-                textTransform: "none",
-                fontWeight: 600,
-                borderColor: "#9c27b0",
-                color: "#9c27b0",
-                "&:hover": { bgcolor: "#9c27b010" },
-              }}
-            >
-              Course Analytics
-            </Button>
-          </Grid>
-        </Grid>
-      </Paper>
     </Box>
   );
 };
