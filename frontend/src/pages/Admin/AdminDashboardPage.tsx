@@ -110,7 +110,9 @@ const AdminDashboardPage: React.FC = () => {
   }, [dispatch]);
 
   const quizzesArray: Quiz[] = Array.isArray(quizzes) ? quizzes : [];
-  const announcementsArray: Announcement[] = Array.isArray(announcements) ? announcements : [];
+  const announcementsArray: Announcement[] = Array.isArray(announcements)
+    ? announcements
+    : [];
   const activeQuizzes = quizzesArray.filter((quiz) => quiz.isActive).length;
   const totalQuizzes = quizzesArray.length;
   const recentAnnouncements = announcementsArray.slice(0, 5);
@@ -197,6 +199,68 @@ const AdminDashboardPage: React.FC = () => {
                 variant="h6"
                 sx={{ fontWeight: 600, color: "#1a365d" }}
               >
+                Recent Announcements
+              </Typography>
+              <Button
+                variant="contained"
+                startIcon={<AddIcon />}
+                size="small"
+                onClick={() => navigate("/admin/announcements")}
+                sx={{
+                  background:
+                    "linear-gradient(135deg, #ff9800 0%, #ff5722 100%)",
+                  borderRadius: 2,
+                  textTransform: "none",
+                  fontWeight: 600,
+                }}
+              >
+                Manage Announcements
+              </Button>
+            </Box>
+            {announcementsLoading ? (
+              <Typography>Loading...</Typography>
+            ) : recentAnnouncements.length > 0 ? (
+              <List>
+                {recentAnnouncements.map((announcement) => (
+                  <ListItem key={announcement._id}>
+                    <ListItemAvatar>
+                      <Avatar sx={{ bgcolor: "#ff9800" }}>
+                        <AnnouncementIcon />
+                      </Avatar>
+                    </ListItemAvatar>
+                    <ListItemText
+                      primary={announcement.title}
+                      secondary={announcement.content}
+                    />
+                  </ListItem>
+                ))}
+              </List>
+            ) : (
+              <Typography>No recent announcements.</Typography>
+            )}
+          </Paper>
+        </Box>
+        <Box sx={{ flex: 1, minWidth: 0 }}>
+          <Paper
+            sx={{
+              p: 3,
+              borderRadius: 3,
+              boxShadow: "0 4px 20px rgba(0,0,0,0.08)",
+              height: "100%",
+            }}
+          >
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                mb: 3,
+              }}
+            >
+              <Typography
+                variant="h6"
+                sx={{ fontWeight: 600, color: "#1a365d" }}
+              >
                 Recent Quizzes
               </Typography>
               <Button
@@ -258,69 +322,6 @@ const AdminDashboardPage: React.FC = () => {
               </List>
             ) : (
               <Typography>No recent quizzes.</Typography>
-            )}
-          </Paper>
-        </Box>
-
-        <Box sx={{ flex: 1, minWidth: 0 }}>
-          <Paper
-            sx={{
-              p: 3,
-              borderRadius: 3,
-              boxShadow: "0 4px 20px rgba(0,0,0,0.08)",
-              height: "100%",
-            }}
-          >
-            <Box
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
-                mb: 3,
-              }}
-            >
-              <Typography
-                variant="h6"
-                sx={{ fontWeight: 600, color: "#1a365d" }}
-              >
-                Recent Announcements
-              </Typography>
-              <Button
-                variant="contained"
-                startIcon={<AddIcon />}
-                size="small"
-                onClick={() => navigate("/admin/announcements")}
-                sx={{
-                  background:
-                    "linear-gradient(135deg, #ff9800 0%, #ff5722 100%)",
-                  borderRadius: 2,
-                  textTransform: "none",
-                  fontWeight: 600,
-                }}
-              >
-                Manage Announcements
-              </Button>
-            </Box>
-            {announcementsLoading ? (
-              <Typography>Loading...</Typography>
-            ) : recentAnnouncements.length > 0 ? (
-              <List>
-                {recentAnnouncements.map((announcement) => (
-                  <ListItem key={announcement._id}>
-                    <ListItemAvatar>
-                      <Avatar sx={{ bgcolor: "#ff9800" }}>
-                        <AnnouncementIcon />
-                      </Avatar>
-                    </ListItemAvatar>
-                    <ListItemText
-                      primary={announcement.title}
-                      secondary={announcement.content}
-                    />
-                  </ListItem>
-                ))}
-              </List>
-            ) : (
-              <Typography>No recent announcements.</Typography>
             )}
           </Paper>
         </Box>
