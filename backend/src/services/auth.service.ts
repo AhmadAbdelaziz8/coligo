@@ -7,7 +7,7 @@ export const registerUser = async (userData: {
   email: string;
   password: string;
   role?: "student" | "admin";
-}): Promise<IUserSafe> => {
+}): Promise<{ user: IUserSafe; token: string }> => {
   const { name, email, password, role = "student" } = userData;
 
   // Check if user already exists
@@ -32,7 +32,23 @@ export const registerUser = async (userData: {
     role: user.role,
   };
 
-  return userWithoutPassword;
+  const jwtSecret = process.env.JWT_SECRET;
+  if (!jwtSecret) {
+    throw new Error("JWT_SECRET not configured");
+  }
+
+  // Generate token
+  const token = jwt.sign(
+    {
+      userId: user._id,
+      email: user.email,
+      role: user.role,
+    },
+    jwtSecret,
+    { expiresIn: "7d" }
+  );
+
+  return { user: userWithoutPassword, token };
 };
 
 export const loginUser = async (credentials: {

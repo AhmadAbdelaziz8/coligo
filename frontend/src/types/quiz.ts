@@ -10,7 +10,7 @@ export interface QuizQuestion {
 export interface Quiz {
   _id: string;
   title: string;
-  description: string;
+  topic: string;
   course: string;
   questions: QuizQuestion[];
   timeLimit: number;

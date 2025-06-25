@@ -2,10 +2,8 @@ export interface Announcement {
   _id: string;
   title: string;
   content: string;
-  course: string;
-  priority: "low" | "medium" | "high";
-  isActive: boolean;
-  createdBy: string;
+  instructor: string;
+  instructorAvatar?: string;
   createdAt: string;
   updatedAt: string;
 }
@@ -13,6 +11,5 @@ export interface Announcement {
 export interface CreateAnnouncementData {
   title: string;
   content: string;
-  course: string;
-  priority: "low" | "medium" | "high";
+  instructor: string;
 }

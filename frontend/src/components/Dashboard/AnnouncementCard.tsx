@@ -5,9 +5,7 @@ interface Announcement {
   _id: string;
   title: string;
   content: string;
-  course: string;
-  priority: string;
-  isActive: boolean;
+  instructor: string;
   createdAt: string;
 }
 
@@ -41,7 +39,7 @@ const AnnouncementCard: React.FC<AnnouncementCardProps> = ({
             color: "#fff",
           }}
         >
-          {announcement.title.charAt(0)}
+          {announcement.instructor.charAt(0)}
         </Avatar>
 
         <Box sx={{ flex: 1 }}>
@@ -62,9 +60,21 @@ const AnnouncementCard: React.FC<AnnouncementCardProps> = ({
               color: "#666",
               lineHeight: 1.6,
               fontSize: "14px",
+              mb: 1,
             }}
           >
             {announcement.content}
+          </Typography>
+
+          <Typography
+            variant="caption"
+            sx={{
+              color: "#999",
+              fontStyle: "italic",
+              display: "block",
+            }}
+          >
+            By {announcement.instructor}
           </Typography>
 
           <Typography

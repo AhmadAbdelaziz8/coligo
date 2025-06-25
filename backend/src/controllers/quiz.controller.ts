@@ -15,10 +15,14 @@ export const createNewQuizController = async (
 ): Promise<void> => {
   try {
     const quiz = await createQuiz(req.body);
-    res.status(201).json(quiz);
+    res.status(201).json({
+      success: true,
+      message: "Quiz created successfully",
+      data: quiz,
+    });
   } catch (error) {
     console.error("Error creating quiz:", error);
-    res.status(500).json({ error: "Internal server error" });
+    res.status(500).json({ success: false, message: "Internal server error" });
   }
 };
 
@@ -31,13 +35,15 @@ export const getAllQuizzesController = async (
   try {
     const quizzes = await getAllQuizzes();
     if (quizzes.length === 0) {
-      res.status(404).json({ error: "No quizzes found" });
+      res.status(404).json({ success: false, message: "No quizzes found" });
       return;
     }
-    res.status(200).json(quizzes);
+    res
+      .status(200)
+      .json({ success: true, data: quizzes, count: quizzes.length });
   } catch (error) {
     console.error("Error getting quizzes:", error);
-    res.status(500).json({ error: "Internal server error" });
+    res.status(500).json({ success: false, message: "Internal server error" });
   }
 };
 
@@ -50,13 +56,13 @@ export const getQuizByIdController = async (
     const { id } = req.params;
     const quiz = await getQuizById(id);
     if (!quiz) {
-      res.status(404).json({ error: "Quiz not found" });
+      res.status(404).json({ success: false, message: "Quiz not found" });
       return;
     }
-    res.status(200).json(quiz);
+    res.status(200).json({ success: true, data: quiz });
   } catch (error) {
     console.error("Error getting quiz:", error);
-    res.status(500).json({ error: "Internal server error" });
+    res.status(500).json({ success: false, message: "Internal server error" });
   }
 };
 
@@ -70,7 +76,7 @@ export const updateQuizController = async (
     const { id } = req.params;
     const updatedQuiz = await updateQuiz(id, req.body);
     if (!updatedQuiz) {
-      res.status(404).json({ error: "Quiz not found" });
+      res.status(404).json({ success: false, message: "Quiz not found" });
       return;
     }
     res.status(200).json({
@@ -80,7 +86,7 @@ export const updateQuizController = async (
     });
   } catch (error) {
     console.error("Error updating quiz:", error);
-    res.status(500).json({ error: "Internal server error" });
+    res.status(500).json({ success: false, message: "Internal server error" });
   }
 };
 
@@ -94,7 +100,7 @@ export const deleteQuizController = async (
     const { id } = req.params;
     const deletedQuiz = await deleteQuiz(id);
     if (!deletedQuiz) {
-      res.status(404).json({ error: "Quiz not found" });
+      res.status(404).json({ success: false, message: "Quiz not found" });
       return;
     }
     res
@@ -102,6 +108,6 @@ export const deleteQuizController = async (
       .json({ success: true, message: "Quiz deleted successfully" });
   } catch (error) {
     console.error("Error deleting quiz:", error);
-    res.status(500).json({ error: "Internal server error" });
+    res.status(500).json({ success: false, message: "Internal server error" });
   }
 };

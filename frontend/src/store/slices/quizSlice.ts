@@ -4,7 +4,7 @@ import { quizAPI } from "../../services/api";
 interface Quiz {
   _id: string;
   title: string;
-  description: string;
+  topic: string;
   course: string;
   questions: unknown[];
   timeLimit: number;

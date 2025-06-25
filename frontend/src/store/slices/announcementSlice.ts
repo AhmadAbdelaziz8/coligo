@@ -5,9 +5,8 @@ interface Announcement {
   _id: string;
   title: string;
   content: string;
-  course: string;
-  priority: string;
-  isActive: boolean;
+  instructor: string;
+  instructorAvatar?: string;
   createdAt: string;
 }
 

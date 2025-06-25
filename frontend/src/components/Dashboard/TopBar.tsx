@@ -151,33 +151,8 @@ const TopBar: React.FC<TopBarProps> = ({
             },
           }}
         >
-          <Badge
-            badgeContent={3}
-            color="error"
-            sx={{ "& .MuiBadge-badge": { fontSize: "10px" } }}
-          >
+          <Badge color="error" sx={{ "& .MuiBadge-badge": { fontSize: "10px" } }}>
             <Notifications sx={{ fontSize: { xs: 20, sm: 24 } }} />
-          </Badge>
-        </IconButton>
-
-        {/* Messages */}
-        <IconButton
-          sx={{
-            backgroundColor: "#4fc3f7",
-            color: "white",
-            width: { xs: 40, sm: 45 },
-            height: { xs: 40, sm: 45 },
-            "&:hover": {
-              backgroundColor: "#29b6f6",
-            },
-          }}
-        >
-          <Badge
-            badgeContent={5}
-            color="error"
-            sx={{ "& .MuiBadge-badge": { fontSize: "10px" } }}
-          >
-            <Mail sx={{ fontSize: { xs: 20, sm: 24 } }} />
           </Badge>
         </IconButton>
 

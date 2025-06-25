@@ -21,10 +21,19 @@ export const registerUserController = async (
       return;
     }
     // register the user
-    const user = await registerUser(userData);
-    res.status(201).json(user);
+    const { user, token } = await registerUser(userData);
+    res.status(201).json({ user, token });
   } catch (error) {
-    next(error);
+    if (
+      error instanceof Error &&
+      error.message === "User already exists with this email"
+    ) {
+      res.status(409).json({ success: false, message: error.message });
+    } else {
+      res
+        .status(500)
+        .json({ success: false, message: "Internal server error" });
+    }
   }
 };
 

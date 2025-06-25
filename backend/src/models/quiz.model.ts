@@ -1,4 +1,5 @@
-import { Schema } from "mongoose";
+import { Schema, model } from "mongoose";
+import { IQuizDocument } from "../types/quiz.types";
 
 const QuestionSchema = new Schema({
   questionText: {
@@ -79,3 +80,5 @@ export const QuizSchema = new Schema(
     timestamps: true,
   }
 );
+
+export const Quiz = model<IQuizDocument>("Quiz", QuizSchema);

@@ -1,4 +1,5 @@
-import { Schema } from "mongoose";
+import { Schema, model } from "mongoose";
+import { IAnnouncementDocument } from "../types/announcement.types";
 
 export const announcementSchema = new Schema(
   {
@@ -28,4 +29,9 @@ export const announcementSchema = new Schema(
   {
     timestamps: true,
   }
+);
+
+export const Announcement = model<IAnnouncementDocument>(
+  "Announcement",
+  announcementSchema
 );

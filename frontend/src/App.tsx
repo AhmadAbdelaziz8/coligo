@@ -1,7 +1,7 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import { Box } from "@mui/material";
 import { useAppSelector } from "./hooks/redux";
-import Layout from "./components/Layout/Layout";
+import DashboardLayout from "./components/Layout/DashboardLayout";
 import LandingPage from "./pages/LandingPage";
 import LoginPage from "./pages/Auth/LoginPage";
 import RegisterPage from "./pages/Auth/RegisterPage";
@@ -13,6 +13,7 @@ import PerformancePage from "./pages/PerformancePage";
 import QuizzesPage from "./pages/QuizzesPage";
 import AnnouncementsPage from "./pages/AnnouncementsPage";
 import ProtectedRoute from "./components/Auth/ProtectedRoute";
+import QuizAttemptPage from "./pages/QuizAttemptPage";
 
 function App() {
   const { isAuthenticated } = useAppSelector((state) => state.auth);
@@ -44,13 +45,14 @@ function App() {
 
         {/* Protected Routes */}
         <Route path="/" element={<ProtectedRoute />}>
-          <Route path="/" element={<Layout />}>
+          <Route element={<DashboardLayout />}>
             <Route path="dashboard" element={<DashboardPage />} />
             <Route path="schedule" element={<SchedulePage />} />
             <Route path="courses" element={<CoursesPage />} />
             <Route path="gradebook" element={<GradebookPage />} />
             <Route path="performance" element={<PerformancePage />} />
             <Route path="quizzes" element={<QuizzesPage />} />
+            <Route path="quizzes/:id" element={<QuizAttemptPage />} />
             <Route path="announcements" element={<AnnouncementsPage />} />
           </Route>
         </Route>
