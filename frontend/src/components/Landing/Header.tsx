@@ -152,24 +152,7 @@ const Header: React.FC = () => {
                   </Button>
                 ) : (
                   <>
-                    <Button
-                      variant="text"
-                      onClick={() => navigate("/login")}
-                      sx={{
-                        color: "text.primary",
-                        fontWeight: 500,
-                        borderRadius: 2,
-                        px: 2,
-                        py: 1,
-                        transition: "all 0.3s ease",
-                        "&:hover": {
-                          background: "rgba(0, 0, 0, 0.05)",
-                          transform: "translateY(-2px)",
-                        },
-                      }}
-                    >
-                      Sign In
-                    </Button>
+                   
                     <Button
                       variant="contained"
                       onClick={() => navigate("/register")}
