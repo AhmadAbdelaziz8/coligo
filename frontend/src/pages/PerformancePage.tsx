@@ -1,19 +1,24 @@
 import React from "react";
-import { Box, Typography } from "@mui/material";
+import { TrendingUp as PerformanceIcon } from "@mui/icons-material";
+import { PlaceholderPage } from "../components/common";
 
 const PerformancePage: React.FC = () => {
+  const features = [
+    "Detailed analytics of your learning progress",
+    "Performance trends and insights",
+    "Time spent studying breakdown",
+    "Strength and weakness analysis",
+    "Comparison with class averages",
+    "Personalized improvement recommendations",
+  ];
+
   return (
-    <Box>
-      <Typography
-        variant="h4"
-        sx={{ fontWeight: 600, color: "#2d5a87", mb: 3 }}
-      >
-        Performance
-      </Typography>
-      <Typography variant="body1" sx={{ color: "#666" }}>
-        Performance analytics will be implemented here.
-      </Typography>
-    </Box>
+    <PlaceholderPage
+      title="Performance Analytics"
+      description="Gain insights into your learning journey with detailed analytics"
+      icon={<PerformanceIcon />}
+      features={features}
+    />
   );
 };
 

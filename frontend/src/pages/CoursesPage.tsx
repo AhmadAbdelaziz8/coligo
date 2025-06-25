@@ -1,19 +1,24 @@
 import React from "react";
-import { Box, Typography } from "@mui/material";
+import { School as SchoolIcon } from "@mui/icons-material";
+import { PlaceholderPage } from "../components/common";
 
 const CoursesPage: React.FC = () => {
+  const features = [
+    "Browse available courses and programs",
+    "Enroll in new courses with one click",
+    "Track your course progress and completion",
+    "Access course materials and resources",
+    "View course schedules and timings",
+    "Rate and review completed courses",
+  ];
+
   return (
-    <Box>
-      <Typography
-        variant="h4"
-        sx={{ fontWeight: 600, color: "#2d5a87", mb: 3 }}
-      >
-        Courses
-      </Typography>
-      <Typography variant="body1" sx={{ color: "#666" }}>
-        Courses functionality will be implemented here.
-      </Typography>
-    </Box>
+    <PlaceholderPage
+      title="Courses"
+      description="Discover and manage your educational courses"
+      icon={<SchoolIcon />}
+      features={features}
+    />
   );
 };
 

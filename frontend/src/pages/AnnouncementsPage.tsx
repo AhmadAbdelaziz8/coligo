@@ -4,13 +4,14 @@ import {
   Typography,
   CircularProgress,
   Alert,
-  Card,
-  CardContent,
+  Container,
+  Paper,
   Stack,
 } from "@mui/material";
+import { Campaign as CampaignIcon } from "@mui/icons-material";
 import { useAppDispatch, useAppSelector } from "../hooks/redux";
 import { fetchAnnouncements } from "../store/slices/announcementSlice";
-import { Campaign } from "@mui/icons-material";
+import AnnouncementCard from "../components/Announcements/AnnouncementCard";
 
 const AnnouncementsPage: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -23,50 +24,59 @@ const AnnouncementsPage: React.FC = () => {
   }, [dispatch]);
 
   return (
-    <Box>
-      <Typography
-        variant="h4"
-        sx={{ fontWeight: 600, color: "#2d5a87", mb: 3 }}
-      >
-        Announcements
-      </Typography>
+    <Container maxWidth="md">
+      {/* Header */}
+      <Box sx={{ mb: 4 }}>
+        <Typography
+          variant="h4"
+          sx={{ fontWeight: 700, color: "#1a365d", mb: 1 }}
+        >
+          📢 Announcements
+        </Typography>
+        <Typography variant="body1" color="text.secondary">
+          Stay updated with the latest news and information from your
+          instructors
+        </Typography>
+      </Box>
 
+      {/* Content */}
       {loading ? (
         <Box sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
           <CircularProgress />
         </Box>
       ) : error ? (
-        <Alert severity="error">{error}</Alert>
+        <Alert severity="error" sx={{ borderRadius: 2 }}>
+          {error}
+        </Alert>
+      ) : announcements.length === 0 ? (
+        <Paper
+          sx={{
+            p: 4,
+            textAlign: "center",
+            borderRadius: 3,
+            bgcolor: "#f8fafc",
+            border: "1px solid #e2e8f0",
+          }}
+        >
+          <CampaignIcon sx={{ fontSize: 48, color: "#cbd5e1", mb: 2 }} />
+          <Typography variant="h6" color="text.secondary" sx={{ mb: 1 }}>
+            No announcements yet
+          </Typography>
+          <Typography variant="body2" color="text.secondary">
+            Check back later for updates from your instructors
+          </Typography>
+        </Paper>
       ) : (
         <Stack spacing={3}>
           {announcements.map((announcement) => (
-            <Card
-              sx={{ borderLeft: "5px solid #2d5a87" }}
+            <AnnouncementCard
               key={announcement._id}
-            >
-              <CardContent>
-                <Box sx={{ display: "flex", alignItems: "center" }}>
-                  <Campaign sx={{ mr: 1.5, color: "#2d5a87" }} />
-                  <Typography
-                    variant="h6"
-                    component="div"
-                    sx={{ fontWeight: "bold" }}
-                  >
-                    {announcement.title}
-                  </Typography>
-                </Box>
-                <Typography sx={{ mt: 1, mb: 2, color: "text.secondary" }}>
-                  {announcement.content}
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  {new Date(announcement.createdAt).toLocaleString()}
-                </Typography>
-              </CardContent>
-            </Card>
+              announcement={announcement}
+            />
           ))}
         </Stack>
       )}
-    </Box>
+    </Container>
   );
 };
 

@@ -38,7 +38,6 @@ const Header: React.FC = () => {
 
   const menuItems = [
     { label: "Features", action: () => scrollToSection("features") },
-    { label: "About", action: () => scrollToSection("about") },
     { label: "Contact", action: () => scrollToSection("contact") },
   ];
 
@@ -56,7 +55,7 @@ const Header: React.FC = () => {
 
   const handleDashboardClick = () => {
     // Redirect based on user role
-    if (user?.role === 'admin') {
+    if (user?.role === "admin") {
       navigate("/admin");
     } else {
       navigate("/dashboard");
@@ -157,11 +156,10 @@ const Header: React.FC = () => {
                       },
                     }}
                   >
-                    {user?.role === 'admin' ? 'Admin Panel' : 'Dashboard'}
+                    {user?.role === "admin" ? "Admin Panel" : "Dashboard"}
                   </Button>
                 ) : (
                   <>
-                   
                     <Button
                       variant="contained"
                       onClick={() => navigate("/register")}
@@ -241,11 +239,10 @@ const Header: React.FC = () => {
             </ListItem>
           ))}
           {isAuthenticated ? (
-            <ListItem
-              onClick={handleDashboardClick}
-              sx={{ cursor: "pointer" }}
-            >
-              <ListItemText primary={user?.role === 'admin' ? 'Admin Panel' : 'Dashboard'} />
+            <ListItem onClick={handleDashboardClick} sx={{ cursor: "pointer" }}>
+              <ListItemText
+                primary={user?.role === "admin" ? "Admin Panel" : "Dashboard"}
+              />
             </ListItem>
           ) : (
             <>

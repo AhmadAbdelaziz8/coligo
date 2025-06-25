@@ -92,7 +92,7 @@ const StatCard: React.FC<StatCardProps> = ({
 );
 
 const AdminDashboardPage: React.FC = () => {
-  const { t } = useTranslation();
+  // const { t } = useTranslation();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 

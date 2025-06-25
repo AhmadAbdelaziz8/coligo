@@ -1,19 +1,24 @@
 import React from "react";
-import { Box, Typography } from "@mui/material";
+import { Assessment as GradeIcon } from "@mui/icons-material";
+import { PlaceholderPage } from "../components/common";
 
 const GradebookPage: React.FC = () => {
+  const features = [
+    "View all your grades in one place",
+    "Track assignment and quiz scores",
+    "Calculate GPA and semester averages",
+    "Export grade reports and transcripts",
+    "Compare performance across subjects",
+    "Set grade goals and targets",
+  ];
+
   return (
-    <Box>
-      <Typography
-        variant="h4"
-        sx={{ fontWeight: 600, color: "#2d5a87", mb: 3 }}
-      >
-        Gradebook
-      </Typography>
-      <Typography variant="body1" sx={{ color: "#666" }}>
-        Gradebook functionality will be implemented here.
-      </Typography>
-    </Box>
+    <PlaceholderPage
+      title="Gradebook"
+      description="Monitor your academic performance and grades"
+      icon={<GradeIcon />}
+      features={features}
+    />
   );
 };
 

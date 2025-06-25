@@ -4,11 +4,9 @@ import {
   Typography,
   TextField,
   Button,
-  Checkbox,
-  FormControlLabel,
-  Link,
   Paper,
   Alert,
+  Link,
 } from "@mui/material";
 
 interface LoginFormProps {
@@ -102,31 +100,12 @@ const LoginForm: React.FC<LoginFormProps> = ({
 
         {/* Password Field */}
         <Box sx={{ mb: 3 }}>
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              mb: 1,
-            }}
+          <Typography
+            variant="body2"
+            sx={{ color: "rgba(255,255,255,0.8)", mb: 1 }}
           >
-            <Typography variant="body2" sx={{ color: "rgba(255,255,255,0.8)" }}>
-              Password
-            </Typography>
-            <Link
-              href="#"
-              sx={{
-                color: "#4fc3f7",
-                textDecoration: "none",
-                fontSize: "14px",
-                "&:hover": {
-                  textDecoration: "underline",
-                },
-              }}
-            >
-              Forgot your password?
-            </Link>
-          </Box>
+            Password
+          </Typography>
           <TextField
             fullWidth
             name="password"
@@ -158,26 +137,6 @@ const LoginForm: React.FC<LoginFormProps> = ({
             }}
           />
         </Box>
-
-        {/* Remember Me */}
-        <FormControlLabel
-          control={
-            <Checkbox
-              sx={{
-                color: "rgba(255,255,255,0.5)",
-                "&.Mui-checked": {
-                  color: "#4fc3f7",
-                },
-              }}
-            />
-          }
-          label={
-            <Typography sx={{ color: "rgba(255,255,255,0.8)" }}>
-              Remember me
-            </Typography>
-          }
-          sx={{ mb: 3 }}
-        />
 
         {/* Sign In Button */}
         <Button
