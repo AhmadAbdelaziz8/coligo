@@ -7,6 +7,8 @@ import {
   Checkbox,
   FormControlLabel,
   Link,
+  Paper,
+  Alert,
 } from "@mui/material";
 
 interface RegisterFormProps {
@@ -57,7 +59,18 @@ const RegisterForm: React.FC<RegisterFormProps> = ({
   };
 
   return (
-    <>
+    <Paper
+      elevation={0}
+      sx={{
+        width: "100%",
+        maxWidth: 440,
+        p: 4,
+        borderRadius: 3,
+        backgroundColor: "rgba(255,255,255,0.05)",
+        backdropFilter: "blur(10px)",
+        border: "1px solid rgba(255,255,255,0.1)",
+      }}
+    >
       <Typography
         variant="h4"
         sx={{
@@ -69,6 +82,12 @@ const RegisterForm: React.FC<RegisterFormProps> = ({
       >
         Create Account
       </Typography>
+
+      {error && (
+        <Alert severity="error" sx={{ mb: 3 }}>
+          {error}
+        </Alert>
+      )}
 
       <form onSubmit={onSubmit}>
         {/* Name Field */}
@@ -130,30 +149,6 @@ const RegisterForm: React.FC<RegisterFormProps> = ({
           />
         </Box>
 
-        {/* Terms Agreement */}
-        <FormControlLabel
-          control={
-            <Checkbox
-              checked={agreeTerms}
-              onChange={(e) => onTermsChange(e.target.checked)}
-              sx={{
-                color: "rgba(255,255,255,0.5)",
-                "&.Mui-checked": {
-                  color: "#4fc3f7",
-                },
-              }}
-            />
-          }
-          label={
-            <Typography
-              sx={{ color: "rgba(255,255,255,0.8)", fontSize: "14px" }}
-            >
-              I agree to the Terms of Service and Privacy Policy
-            </Typography>
-          }
-          sx={{ mb: 3 }}
-        />
-
         {/* Create Account Button */}
         <Button
           type="submit"
@@ -201,24 +196,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({
           </Link>
         </Typography>
       </form>
-
-      {error && (
-        <Typography
-          variant="body2"
-          sx={{
-            color: "#ff5252",
-            textAlign: "center",
-            mt: 2,
-            p: 2,
-            backgroundColor: "rgba(255,82,82,0.1)",
-            borderRadius: 1,
-            border: "1px solid rgba(255,82,82,0.2)",
-          }}
-        >
-          {error}
-        </Typography>
-      )}
-    </>
+    </Paper>
   );
 };
 

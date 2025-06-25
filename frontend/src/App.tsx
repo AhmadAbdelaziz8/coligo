@@ -18,8 +18,7 @@ import AdminLayout from "./components/Layout/AdminLayout";
 
 // Pages
 import LandingPage from "./pages/LandingPage";
-import LoginPage from "./pages/Auth/LoginPage";
-import RegisterPage from "./pages/Auth/RegisterPage";
+import AuthPage from "./pages/AuthPage";
 import DashboardPage from "./pages/DashboardPage";
 import QuizzesPage from "./pages/QuizzesPage";
 import AnnouncementsPage from "./pages/AnnouncementsPage";
@@ -72,8 +71,9 @@ const AppContent: React.FC = () => {
       <Routes>
         {/* Public Routes */}
         <Route path="/" element={<LandingPage />} />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/register" element={<RegisterPage />} />
+        <Route path="/login" element={<AuthPage />} />
+        <Route path="/register" element={<AuthPage />} />
+        <Route path="/auth" element={<Navigate to="/login" replace />} />
 
         {/* Student Dashboard Routes */}
         <Route

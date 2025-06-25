@@ -18,6 +18,7 @@ interface LoginFormProps {
   onSubmit: (e: React.FormEvent) => void;
   loading: boolean;
   error: string | null;
+  onNavigateToRegister: () => void;
 }
 
 const LoginForm: React.FC<LoginFormProps> = ({
@@ -26,6 +27,7 @@ const LoginForm: React.FC<LoginFormProps> = ({
   onSubmit,
   loading,
   error,
+  onNavigateToRegister,
 }) => {
   return (
     <Paper
@@ -175,11 +177,17 @@ const LoginForm: React.FC<LoginFormProps> = ({
         >
           Don't have an account?{" "}
           <Link
-            href="/register"
+            component="button"
+            onClick={onNavigateToRegister}
             sx={{
               color: "#4fc3f7",
               textDecoration: "none",
               fontWeight: 500,
+              background: "none",
+              border: "none",
+              padding: 0,
+              font: "inherit",
+              cursor: "pointer",
               "&:hover": {
                 textDecoration: "underline",
               },

@@ -8,38 +8,15 @@ interface Feature {
 }
 
 interface AuthFeaturesProps {
+  title: string;
+  subtitle: string;
   features?: Feature[];
 }
 
-const defaultFeatures: Feature[] = [
-  {
-    icon: "⚡",
-    title: "Adaptable performance",
-    description:
-      "Our product effortlessly adjusts to your needs, boosting efficiency and simplifying your tasks.",
-  },
-  {
-    icon: "🔧",
-    title: "Built to last",
-    description:
-      "Experience unmatched durability that goes above and beyond with lasting investment.",
-  },
-  {
-    icon: "👍",
-    title: "Great user experience",
-    description:
-      "Integrate our product into your routine with an intuitive and easy-to-use interface.",
-  },
-  {
-    icon: "🚀",
-    title: "Innovative functionality",
-    description:
-      "Stay ahead with features that set new standards, addressing your evolving needs better than the rest.",
-  },
-];
-
 const AuthFeatures: React.FC<AuthFeaturesProps> = ({
-  features = defaultFeatures,
+  title,
+  subtitle,
+  features,
 }) => {
   return (
     <Box
@@ -52,61 +29,73 @@ const AuthFeatures: React.FC<AuthFeaturesProps> = ({
         py: 8,
       }}
     >
-      {/* Logo */}
+      {/* Title and Subtitle */}
       <Box sx={{ mb: 6 }}>
         <Typography
           variant="h4"
           sx={{
-            color: "#4fc3f7",
+            color: "white",
             fontWeight: 700,
             mb: 1,
           }}
         >
-          🎓 Coligo
+          {title}
+        </Typography>
+        <Typography
+          variant="h6"
+          sx={{
+            color: "rgba(255,255,255,0.7)",
+            fontWeight: 400,
+          }}
+        >
+          {subtitle}
         </Typography>
       </Box>
 
       {/* Features List */}
-      <Box sx={{ space: 4 }}>
-        {features.map((feature, index) => (
-          <Box
-            key={index}
-            sx={{ display: "flex", alignItems: "flex-start", mb: 4 }}
-          >
+      {features && (
+        <Box sx={{ space: 4 }}>
+          {features.map((feature, index) => (
             <Box
-              sx={{
-                width: 40,
-                height: 40,
-                borderRadius: "50%",
-                backgroundColor: "#4fc3f7",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                mr: 3,
-                flexShrink: 0,
-              }}
+              key={index}
+              sx={{ display: "flex", alignItems: "flex-start", mb: 4 }}
             >
-              <Typography variant="h6" sx={{ color: "white" }}>
-                {feature.icon}
-              </Typography>
-            </Box>
-            <Box>
-              <Typography
-                variant="h6"
-                sx={{ color: "white", fontWeight: 600, mb: 1 }}
+              <Box
+                sx={{
+                  width: 40,
+                  height: 40,
+                  borderRadius: "50%",
+                  backgroundColor: "rgba(79, 195, 247, 0.1)",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  mr: 3,
+                  flexShrink: 0,
+                  border: "1px solid rgba(79, 195, 247, 0.2)",
+                }}
               >
-                {feature.title}
-              </Typography>
-              <Typography
-                variant="body2"
-                sx={{ color: "rgba(255,255,255,0.7)" }}
-              >
-                {feature.description}
-              </Typography>
+                <Typography variant="h6" sx={{ color: "#4fc3f7" }}>
+                  {feature.icon}
+                </Typography>
+              </Box>
+              <Box>
+                <Typography
+                  variant="h6"
+                  sx={{ color: "white", fontWeight: 600, mb: 1 }}
+                >
+                  {feature.title}
+                </Typography>
+                <Typography
+                  variant="body2"
+                  sx={{ color: "rgba(255,255,255,0.7)" }}
+                >
+                  {feature.description}
+                </Typography>
+              </Box>
             </Box>
-          </Box>
-        ))}
-      </Box>
+          ))}
+        </Box>
+      )}
     </Box>
   );
 };

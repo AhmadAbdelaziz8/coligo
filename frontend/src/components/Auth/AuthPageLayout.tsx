@@ -5,9 +5,21 @@ import BackButton from "./BackButton";
 
 interface AuthPageLayoutProps {
   children: React.ReactNode;
+  title: string;
+  subtitle: string;
+  features?: {
+    icon: string;
+    title: string;
+    description: string;
+  }[];
 }
 
-const AuthPageLayout: React.FC<AuthPageLayoutProps> = ({ children }) => {
+const AuthPageLayout: React.FC<AuthPageLayoutProps> = ({
+  children,
+  title,
+  subtitle,
+  features,
+}) => {
   return (
     <Box
       sx={{
@@ -21,7 +33,7 @@ const AuthPageLayout: React.FC<AuthPageLayoutProps> = ({ children }) => {
       <BackButton />
 
       {/* Left Side - Features */}
-      <AuthFeatures />
+      <AuthFeatures title={title} subtitle={subtitle} features={features} />
 
       {/* Right Side - Form Content */}
       <Box
