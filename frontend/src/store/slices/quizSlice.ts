@@ -76,7 +76,7 @@ const quizSlice = createSlice({
       })
       .addCase(fetchQuizzes.fulfilled, (state, action) => {
         state.loading = false;
-        state.quizzes = action.payload;
+        state.quizzes = action.payload.data;
         state.error = null;
       })
       .addCase(fetchQuizzes.rejected, (state, action) => {

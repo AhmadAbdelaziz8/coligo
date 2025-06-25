@@ -2,12 +2,16 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import { Box } from "@mui/material";
 import { useAppSelector } from "./hooks/redux";
 import Layout from "./components/Layout/Layout";
-import LandingPage from "./pages/Landing/LandingPage";
+import LandingPage from "./pages/LandingPage";
 import LoginPage from "./pages/Auth/LoginPage";
 import RegisterPage from "./pages/Auth/RegisterPage";
-import DashboardPage from "./pages/Dashboard/DashboardPage";
-import QuizzesPage from "./pages/Quizzes/QuizzesPage";
-import AnnouncementsPage from "./pages/Announcements/AnnouncementsPage";
+import DashboardPage from "./pages/DashboardPage";
+import SchedulePage from "./pages/SchedulePage";
+import CoursesPage from "./pages/CoursesPage";
+import GradebookPage from "./pages/GradebookPage";
+import PerformancePage from "./pages/PerformancePage";
+import QuizzesPage from "./pages/QuizzesPage";
+import AnnouncementsPage from "./pages/AnnouncementsPage";
 import ProtectedRoute from "./components/Auth/ProtectedRoute";
 
 function App() {
@@ -42,6 +46,10 @@ function App() {
         <Route path="/" element={<ProtectedRoute />}>
           <Route path="/" element={<Layout />}>
             <Route path="dashboard" element={<DashboardPage />} />
+            <Route path="schedule" element={<SchedulePage />} />
+            <Route path="courses" element={<CoursesPage />} />
+            <Route path="gradebook" element={<GradebookPage />} />
+            <Route path="performance" element={<PerformancePage />} />
             <Route path="quizzes" element={<QuizzesPage />} />
             <Route path="announcements" element={<AnnouncementsPage />} />
           </Route>

@@ -1,5 +1,6 @@
 import React from "react";
-import { Box, Container, Typography, Grid, Paper } from "@mui/material";
+import { Box, Container, Typography, Paper } from "@mui/material";
+import Grid from "@mui/material/Grid";
 
 const stats = [
   {
@@ -60,7 +61,7 @@ const Stats: React.FC = () => {
 
         <Grid container spacing={4}>
           {stats.map((stat, index) => (
-            <Grid item xs={12} sm={6} md={3} key={index}>
+            <Grid xs={12} sm={6} md={3} key={index}>
               <Paper
                 elevation={0}
                 sx={{

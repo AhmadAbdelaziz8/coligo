@@ -1,10 +1,10 @@
 import React from "react";
 import { Box } from "@mui/material";
-import Header from "../../components/Landing/Header";
-import Hero from "../../components/Landing/Hero";
-import Features from "../../components/Landing/Features";
-import Stats from "../../components/Landing/Stats";
-import Footer from "../../components/Landing/Footer";
+import Header from "../components/Landing/Header";
+import Hero from "../components/Landing/Hero";
+import Features from "../components/Landing/Features";
+import Stats from "../components/Landing/Stats";
+import Footer from "../components/Landing/Footer";
 
 const LandingPage: React.FC = () => {
   return (

@@ -3,11 +3,11 @@ import {
   Box,
   Container,
   Typography,
-  Grid,
   Card,
   CardContent,
   Avatar,
 } from "@mui/material";
+import Grid from "@mui/material/Grid";
 import {
   Quiz,
   Announcement,
@@ -93,7 +93,7 @@ const Features: React.FC = () => {
 
         <Grid container spacing={4}>
           {features.map((feature, index) => (
-            <Grid item xs={12} md={6} lg={4} key={index}>
+            <Grid xs={12} md={6} lg={4} key={index}>
               <Card
                 sx={{
                   height: "100%",

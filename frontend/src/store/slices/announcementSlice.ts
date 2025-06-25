@@ -56,7 +56,7 @@ const announcementSlice = createSlice({
       })
       .addCase(fetchAnnouncements.fulfilled, (state, action) => {
         state.loading = false;
-        state.announcements = action.payload;
+        state.announcements = action.payload.data;
         state.error = null;
       })
       .addCase(fetchAnnouncements.rejected, (state, action) => {
