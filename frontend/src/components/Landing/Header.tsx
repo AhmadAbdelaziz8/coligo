@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   AppBar,
   Toolbar,
@@ -21,6 +21,18 @@ const Header: React.FC = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  // Handle scroll effect for dynamic transparency
+  useEffect(() => {
+    const handleScroll = () => {
+      const isScrolled = window.scrollY > 50;
+      setScrolled(isScrolled);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   const menuItems = [
     { label: "Features", action: () => scrollToSection("features") },
@@ -44,11 +56,20 @@ const Header: React.FC = () => {
     <>
       <AppBar
         position="fixed"
+        elevation={0}
         sx={{
-          background: "rgba(255, 255, 255, 0.95)",
-          backdropFilter: "blur(10px)",
-          boxShadow: "0 2px 20px rgba(0,0,0,0.1)",
+          background: scrolled
+            ? "rgba(255, 255, 255, 0.95)"
+            : "rgba(255, 255, 255, 0.8)",
+          backdropFilter: scrolled ? "blur(20px)" : "blur(10px)",
+          borderBottom: scrolled
+            ? "1px solid rgba(255, 255, 255, 0.2)"
+            : "1px solid transparent",
+          boxShadow: scrolled
+            ? "0 4px 30px rgba(0,0,0,0.1)"
+            : "0 2px 20px rgba(0,0,0,0.05)",
           color: "text.primary",
+          transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
         }}
       >
         <Toolbar sx={{ justifyContent: "space-between" }}>
@@ -57,11 +78,17 @@ const Header: React.FC = () => {
             variant="h5"
             sx={{
               fontWeight: 700,
-              background: "linear-gradient(45deg, #667eea, #764ba2)",
+              background: scrolled
+                ? "linear-gradient(45deg, #667eea, #764ba2)"
+                : "linear-gradient(45deg, #667eea, #764ba2)",
               backgroundClip: "text",
               WebkitBackgroundClip: "text",
               WebkitTextFillColor: "transparent",
               cursor: "pointer",
+              transition: "all 0.3s ease",
+              "&:hover": {
+                transform: "scale(1.05)",
+              },
             }}
             onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
           >

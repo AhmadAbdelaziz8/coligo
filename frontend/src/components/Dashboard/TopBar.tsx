@@ -17,12 +17,12 @@ import {
 import {
   Search,
   Notifications,
-  Mail,
   Logout,
   Person,
   Settings,
   KeyboardArrowDown,
   Menu as MenuIcon,
+  Home,
 } from "@mui/icons-material";
 import { useAppSelector, useAppDispatch } from "../../hooks/redux";
 import { logoutUser } from "../../store/slices/authSlice";
@@ -151,7 +151,10 @@ const TopBar: React.FC<TopBarProps> = ({
             },
           }}
         >
-          <Badge color="error" sx={{ "& .MuiBadge-badge": { fontSize: "10px" } }}>
+          <Badge
+            color="error"
+            sx={{ "& .MuiBadge-badge": { fontSize: "10px" } }}
+          >
             <Notifications sx={{ fontSize: { xs: 20, sm: 24 } }} />
           </Badge>
         </IconButton>
@@ -236,6 +239,18 @@ const TopBar: React.FC<TopBarProps> = ({
             },
           }}
         >
+          <MenuItem
+            onClick={() => {
+              navigate("/");
+              handleClose();
+            }}
+          >
+            <ListItemIcon>
+              <Home sx={{ color: "#2d5a87" }} />
+            </ListItemIcon>
+            <ListItemText primary="Back to Home" />
+          </MenuItem>
+
           <MenuItem onClick={handleClose}>
             <ListItemIcon>
               <Person sx={{ color: "#2d5a87" }} />

@@ -31,7 +31,7 @@ const Footer: React.FC = () => {
           </Typography>
 
           <Typography variant="body2" sx={{ opacity: 0.7 }}>
-            © 2024 Coligo. All rights reserved.
+            © 2025 Coligo, All rights reserved.
           </Typography>
         </Box>
       </Container>

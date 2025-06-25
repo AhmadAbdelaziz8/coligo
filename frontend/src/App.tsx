@@ -13,7 +13,6 @@ import PerformancePage from "./pages/PerformancePage";
 import QuizzesPage from "./pages/QuizzesPage";
 import AnnouncementsPage from "./pages/AnnouncementsPage";
 import ProtectedRoute from "./components/Auth/ProtectedRoute";
-import QuizAttemptPage from "./pages/QuizAttemptPage";
 
 function App() {
   const { isAuthenticated } = useAppSelector((state) => state.auth);
@@ -21,11 +20,14 @@ function App() {
   return (
     <Box className="min-h-screen">
       <Routes>
-        {/* Landing Page*/}
+        {/* Landing Page - accessible by everyone */}
+        <Route path="/" element={<LandingPage />} />
+
+        {/* Auto-redirect for authenticated users who visit root with no specific intent */}
         <Route
-          path="/"
+          path="/home"
           element={
-            isAuthenticated ? <Navigate to="/dashboard" /> : <LandingPage />
+            isAuthenticated ? <Navigate to="/dashboard" /> : <Navigate to="/" />
           }
         />
 
@@ -52,7 +54,6 @@ function App() {
             <Route path="gradebook" element={<GradebookPage />} />
             <Route path="performance" element={<PerformancePage />} />
             <Route path="quizzes" element={<QuizzesPage />} />
-            <Route path="quizzes/:id" element={<QuizAttemptPage />} />
             <Route path="announcements" element={<AnnouncementsPage />} />
           </Route>
         </Route>

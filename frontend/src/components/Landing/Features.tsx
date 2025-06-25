@@ -7,7 +7,6 @@ import {
   CardContent,
   Avatar,
 } from "@mui/material";
-import Grid from "@mui/material/Grid";
 import {
   Quiz,
   Announcement,
@@ -91,9 +90,35 @@ const Features: React.FC = () => {
           </Typography>
         </Box>
 
-        <Grid container spacing={4}>
+        <Box
+          sx={{
+            display: "flex",
+            flexWrap: "wrap",
+            gap: 4,
+            justifyContent: "center",
+          }}
+        >
           {features.map((feature, index) => (
-            <Grid xs={12} md={6} lg={4} key={index}>
+            <Box
+              key={index}
+              sx={{
+                flex: {
+                  xs: "1 1 100%", // Full width on mobile
+                  md: "1 1 calc(50% - 16px)", // Half width on medium screens
+                  lg: "1 1 calc(33.333% - 22px)", // Third width on large screens
+                },
+                minWidth: {
+                  xs: "100%",
+                  md: "300px",
+                  lg: "280px",
+                },
+                maxWidth: {
+                  xs: "100%",
+                  md: "calc(50% - 16px)",
+                  lg: "calc(33.333% - 22px)",
+                },
+              }}
+            >
               <Card
                 sx={{
                   height: "100%",
@@ -143,9 +168,9 @@ const Features: React.FC = () => {
                   </Typography>
                 </CardContent>
               </Card>
-            </Grid>
+            </Box>
           ))}
-        </Grid>
+        </Box>
       </Container>
     </Box>
   );

@@ -8,18 +8,19 @@ import Footer from "../components/Landing/Footer";
 
 const LandingPage: React.FC = () => {
   return (
+    // headder
     <Box>
       <Header />
-      {/* Add padding top to account for fixed header */}
+      {/* body */}
       <Box sx={{ pt: { xs: 7, md: 8 } }}>
         <Hero />
-
+        {/* features */}
         <Box id="features">
           <Features />
         </Box>
-
+        {/* stats */}
         <Stats />
-
+        {/* footer */}
         <Box id="contact">
           <Footer />
         </Box>

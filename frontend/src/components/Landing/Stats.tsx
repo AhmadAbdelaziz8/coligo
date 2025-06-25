@@ -1,6 +1,5 @@
 import React from "react";
 import { Box, Container, Typography, Paper } from "@mui/material";
-import Grid from "@mui/material/Grid";
 
 const stats = [
   {
@@ -59,9 +58,35 @@ const Stats: React.FC = () => {
           </Typography>
         </Box>
 
-        <Grid container spacing={4}>
+        <Box
+          sx={{
+            display: "flex",
+            flexWrap: "wrap",
+            gap: 4,
+            justifyContent: "center",
+          }}
+        >
           {stats.map((stat, index) => (
-            <Grid xs={12} sm={6} md={3} key={index}>
+            <Box
+              key={index}
+              sx={{
+                flex: {
+                  xs: "1 1 100%", // Full width on mobile
+                  sm: "1 1 calc(50% - 16px)", // Half width on small screens
+                  md: "1 1 calc(25% - 12px)", // Quarter width on medium+ screens
+                },
+                minWidth: {
+                  xs: "100%",
+                  sm: "250px",
+                  md: "200px",
+                },
+                maxWidth: {
+                  xs: "100%",
+                  sm: "calc(50% - 16px)",
+                  md: "calc(25% - 12px)",
+                },
+              }}
+            >
               <Paper
                 elevation={0}
                 sx={{
@@ -73,6 +98,7 @@ const Stats: React.FC = () => {
                   borderRadius: 3,
                   color: "white",
                   transition: "all 0.3s ease",
+                  height: "100%",
                   "&:hover": {
                     background: "rgba(255,255,255,0.15)",
                     transform: "translateY(-5px)",
@@ -107,9 +133,9 @@ const Stats: React.FC = () => {
                   {stat.description}
                 </Typography>
               </Paper>
-            </Grid>
+            </Box>
           ))}
-        </Grid>
+        </Box>
       </Container>
     </Box>
   );
