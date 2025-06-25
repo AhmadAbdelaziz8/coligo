@@ -1,7 +1,10 @@
 import React from "react";
 import { Box, Typography, Button, Paper } from "@mui/material";
+import { useTranslation } from "react-i18next";
 
 const ExamBanner: React.FC = () => {
+  const { t } = useTranslation();
+
   return (
     <Paper
       elevation={0}
@@ -41,7 +44,7 @@ const ExamBanner: React.FC = () => {
               letterSpacing: { xs: "1px", md: "2px" },
             }}
           >
-            EXAMS TIME
+            {t("exam.title")}
           </Typography>
 
           <Typography
@@ -54,8 +57,7 @@ const ExamBanner: React.FC = () => {
               maxWidth: { xs: "100%", md: "500px" },
             }}
           >
-            Here we are. Are you ready to fight? Don't worry, we prepared some
-            tips to be ready for your exams.
+            {t("exam.description")}
           </Typography>
 
           <Typography
@@ -68,7 +70,7 @@ const ExamBanner: React.FC = () => {
               display: { xs: "none", sm: "block" }, // Hide quote on very small screens
             }}
           >
-            "Nothing happens until something moves" - Albert Einstein
+            "{t("exam.quote")}" - {t("exam.quoteAuthor")}
           </Typography>
 
           <Button
@@ -89,7 +91,7 @@ const ExamBanner: React.FC = () => {
               },
             }}
           >
-            View exams tips
+            {t("exam.viewTips")}
           </Button>
         </Box>
 

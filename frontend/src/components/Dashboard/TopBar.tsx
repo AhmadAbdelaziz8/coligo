@@ -27,6 +27,7 @@ import {
 import { useAppSelector, useAppDispatch } from "../../hooks/redux";
 import { logoutUser } from "../../store/slices/authSlice";
 import { useNavigate } from "react-router-dom";
+import { LanguageSwitcher } from "../LanguageSwitcher";
 
 interface TopBarProps {
   handleDrawerToggle?: () => void;
@@ -138,6 +139,9 @@ const TopBar: React.FC<TopBarProps> = ({
         >
           <Search />
         </IconButton>
+
+        {/* Language Switcher */}
+        <LanguageSwitcher size="small" />
 
         {/* Notifications */}
         <IconButton
