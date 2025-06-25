@@ -13,8 +13,9 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material";
-import { Menu as MenuIcon, Close } from "@mui/icons-material";
+import { Menu as MenuIcon, Close, Dashboard } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
+import { useAppSelector } from "../../hooks/redux";
 
 const Header: React.FC = () => {
   const navigate = useNavigate();
@@ -22,6 +23,7 @@ const Header: React.FC = () => {
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const { isAuthenticated } = useAppSelector((state) => state.auth);
 
   // Handle scroll effect for dynamic transparency
   useEffect(() => {
@@ -105,8 +107,14 @@ const Header: React.FC = () => {
                   sx={{
                     color: "text.primary",
                     fontWeight: 500,
+                    borderRadius: 2,
+                    px: 2,
+                    py: 1,
+                    transition: "all 0.3s ease",
                     "&:hover": {
                       background: "rgba(102, 126, 234, 0.1)",
+                      transform: "translateY(-2px)",
+                      boxShadow: "0 4px 12px rgba(102, 126, 234, 0.2)",
                     },
                   }}
                 >
@@ -120,30 +128,71 @@ const Header: React.FC = () => {
           <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
             {!isMobile && (
               <>
-                <Button
-                  variant="text"
-                  onClick={() => navigate("/login")}
-                  sx={{
-                    color: "text.primary",
-                    fontWeight: 500,
-                  }}
-                >
-                  Sign In
-                </Button>
-                <Button
-                  variant="contained"
-                  onClick={() => navigate("/register")}
-                  sx={{
-                    background: "linear-gradient(45deg, #667eea, #764ba2)",
-                    fontWeight: 600,
-                    px: 3,
-                    "&:hover": {
-                      background: "linear-gradient(45deg, #5a6fd8, #6a4190)",
-                    },
-                  }}
-                >
-                  Get Started
-                </Button>
+                {isAuthenticated ? (
+                  <Button
+                    variant="contained"
+                    onClick={() => navigate("/dashboard")}
+                    startIcon={<Dashboard />}
+                    sx={{
+                      background: "linear-gradient(45deg, #667eea, #764ba2)",
+                      fontWeight: 600,
+                      px: 3,
+                      py: 1,
+                      borderRadius: 3,
+                      boxShadow: "0 4px 20px rgba(102, 126, 234, 0.3)",
+                      transition: "all 0.3s ease",
+                      "&:hover": {
+                        background: "linear-gradient(45deg, #5a6fd8, #6a4190)",
+                        transform: "translateY(-3px)",
+                        boxShadow: "0 8px 30px rgba(102, 126, 234, 0.4)",
+                      },
+                    }}
+                  >
+                    Dashboard
+                  </Button>
+                ) : (
+                  <>
+                    <Button
+                      variant="text"
+                      onClick={() => navigate("/login")}
+                      sx={{
+                        color: "text.primary",
+                        fontWeight: 500,
+                        borderRadius: 2,
+                        px: 2,
+                        py: 1,
+                        transition: "all 0.3s ease",
+                        "&:hover": {
+                          background: "rgba(0, 0, 0, 0.05)",
+                          transform: "translateY(-2px)",
+                        },
+                      }}
+                    >
+                      Sign In
+                    </Button>
+                    <Button
+                      variant="contained"
+                      onClick={() => navigate("/register")}
+                      sx={{
+                        background: "linear-gradient(45deg, #667eea, #764ba2)",
+                        fontWeight: 600,
+                        px: 3,
+                        py: 1,
+                        borderRadius: 3,
+                        boxShadow: "0 4px 20px rgba(102, 126, 234, 0.3)",
+                        transition: "all 0.3s ease",
+                        "&:hover": {
+                          background:
+                            "linear-gradient(45deg, #5a6fd8, #6a4190)",
+                          transform: "translateY(-3px)",
+                          boxShadow: "0 8px 30px rgba(102, 126, 234, 0.4)",
+                        },
+                      }}
+                    >
+                      Get Started
+                    </Button>
+                  </>
+                )}
               </>
             )}
 
@@ -199,18 +248,38 @@ const Header: React.FC = () => {
               <ListItemText primary={item.label} />
             </ListItem>
           ))}
-          <ListItem
-            onClick={() => navigate("/login")}
-            sx={{ cursor: "pointer" }}
-          >
-            <ListItemText primary="Sign In" />
-          </ListItem>
-          <ListItem
-            onClick={() => navigate("/register")}
-            sx={{ cursor: "pointer" }}
-          >
-            <ListItemText primary="Get Started" />
-          </ListItem>
+          {isAuthenticated ? (
+            <ListItem
+              onClick={() => {
+                navigate("/dashboard");
+                setMobileMenuOpen(false);
+              }}
+              sx={{ cursor: "pointer" }}
+            >
+              <ListItemText primary="Dashboard" />
+            </ListItem>
+          ) : (
+            <>
+              <ListItem
+                onClick={() => {
+                  navigate("/login");
+                  setMobileMenuOpen(false);
+                }}
+                sx={{ cursor: "pointer" }}
+              >
+                <ListItemText primary="Sign In" />
+              </ListItem>
+              <ListItem
+                onClick={() => {
+                  navigate("/register");
+                  setMobileMenuOpen(false);
+                }}
+                sx={{ cursor: "pointer" }}
+              >
+                <ListItemText primary="Get Started" />
+              </ListItem>
+            </>
+          )}
         </List>
       </Drawer>
     </>
