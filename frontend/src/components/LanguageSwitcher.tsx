@@ -1,22 +1,23 @@
 import React from "react";
 import { FormControl, Select, MenuItem, Box, Typography } from "@mui/material";
+import type { SelectChangeEvent } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import { supportedLanguages } from "../i18n/i18n";
 
 interface LanguageSwitcherProps {
-  variant?: "text" | "outlined" | "filled";
+  variant?: "outlined" | "filled" | "standard";
   size?: "small" | "medium";
   showLabel?: boolean;
 }
 
-export const LanguageSwitcher: React.FC<LanguageSwitcherProps> = ({
+const LanguageSwitcher: React.FC<LanguageSwitcherProps> = ({
   variant = "outlined",
   size = "small",
   showLabel = false,
 }) => {
   const { i18n, t } = useTranslation();
 
-  const handleLanguageChange = (event: SelectChangeEvent) => {
+  const handleLanguageChange = (event: SelectChangeEvent<string>) => {
     i18n.changeLanguage(event.target.value);
   };
 
@@ -57,3 +58,6 @@ export const LanguageSwitcher: React.FC<LanguageSwitcherProps> = ({
     </Box>
   );
 };
+
+export { LanguageSwitcher };
+export default LanguageSwitcher;

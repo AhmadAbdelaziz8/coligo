@@ -65,6 +65,9 @@ export const logoutUser = createAsyncThunk("auth/logout", async () => {
   return null;
 });
 
+// Export logout as an alias for logoutUser for compatibility
+export const logout = logoutUser;
+
 const authSlice = createSlice({
   name: "auth",
   initialState,

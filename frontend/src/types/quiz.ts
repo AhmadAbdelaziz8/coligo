@@ -1,9 +1,9 @@
 export interface QuizQuestion {
-  _id: string;
-  question: string;
-  type: "multiple-choice" | "true-false" | "short-answer";
-  options?: string[];
-  correctAnswer: string | number;
+  _id?: string;
+  questionText: string;
+  type?: "multiple-choice" | "true-false" | "short-answer";
+  options: string[];
+  correctAnswer: number;
   points: number;
 }
 
@@ -13,10 +13,11 @@ export interface Quiz {
   topic: string;
   course: string;
   questions: QuizQuestion[];
-  timeLimit: number;
-  totalPoints: number;
+  duration: number; // in minutes
+  totalMarks: number;
   isActive: boolean;
   dueDate: string;
+  instructions?: string;
   createdBy: string;
   createdAt: string;
   updatedAt: string;

@@ -1,17 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { quizAPI } from "../../services/api";
-
-interface Quiz {
-  _id: string;
-  title: string;
-  topic: string;
-  course: string;
-  questions: unknown[];
-  timeLimit: number;
-  totalPoints: number;
-  isActive: boolean;
-  dueDate: string;
-}
+import type { Quiz } from "../../types/quiz";
 
 interface QuizState {
   quizzes: Quiz[];
@@ -56,6 +45,48 @@ export const fetchQuizById = createAsyncThunk(
   }
 );
 
+export const createQuiz = createAsyncThunk(
+  "quiz/createQuiz",
+  async (quizData: any, { rejectWithValue }) => {
+    try {
+      const response = await quizAPI.createQuiz(quizData);
+      return response;
+    } catch (error: unknown) {
+      const message =
+        error instanceof Error ? error.message : "Failed to create quiz";
+      return rejectWithValue(message);
+    }
+  }
+);
+
+export const updateQuiz = createAsyncThunk(
+  "quiz/updateQuiz",
+  async ({ id, data }: { id: string; data: any }, { rejectWithValue }) => {
+    try {
+      const response = await quizAPI.updateQuiz(id, data);
+      return response;
+    } catch (error: unknown) {
+      const message =
+        error instanceof Error ? error.message : "Failed to update quiz";
+      return rejectWithValue(message);
+    }
+  }
+);
+
+export const deleteQuiz = createAsyncThunk(
+  "quiz/deleteQuiz",
+  async (quizId: string, { rejectWithValue }) => {
+    try {
+      await quizAPI.deleteQuiz(quizId);
+      return quizId;
+    } catch (error: unknown) {
+      const message =
+        error instanceof Error ? error.message : "Failed to delete quiz";
+      return rejectWithValue(message);
+    }
+  }
+);
+
 const quizSlice = createSlice({
   name: "quiz",
   initialState,
@@ -76,7 +107,7 @@ const quizSlice = createSlice({
       })
       .addCase(fetchQuizzes.fulfilled, (state, action) => {
         state.loading = false;
-        state.quizzes = action.payload.data;
+        state.quizzes = action.payload;
         state.error = null;
       })
       .addCase(fetchQuizzes.rejected, (state, action) => {
@@ -94,6 +125,52 @@ const quizSlice = createSlice({
         state.error = null;
       })
       .addCase(fetchQuizById.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      })
+      // Create quiz cases
+      .addCase(createQuiz.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(createQuiz.fulfilled, (state, action) => {
+        state.loading = false;
+        state.quizzes.unshift(action.payload);
+        state.error = null;
+      })
+      .addCase(createQuiz.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      })
+      // Update quiz cases
+      .addCase(updateQuiz.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(updateQuiz.fulfilled, (state, action) => {
+        state.loading = false;
+        const index = state.quizzes.findIndex(q => q._id === action.payload._id);
+        if (index !== -1) {
+          state.quizzes[index] = action.payload;
+        }
+        state.currentQuiz = action.payload;
+        state.error = null;
+      })
+      .addCase(updateQuiz.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      })
+      // Delete quiz cases
+      .addCase(deleteQuiz.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(deleteQuiz.fulfilled, (state, action) => {
+        state.loading = false;
+        state.quizzes = state.quizzes.filter(q => q._id !== action.payload);
+        state.error = null;
+      })
+      .addCase(deleteQuiz.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
       });

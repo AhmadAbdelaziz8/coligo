@@ -1,7 +1,27 @@
-const API_BASE_URL = "http://localhost:5001/api";
+const API_BASE_URL = "http://localhost:5001";
 
-// Simple fetch wrapper with auth token
-const apiRequest = async (endpoint: string, options: RequestInit = {}) => {
+// Types
+interface ApiResponse<T> {
+  success: boolean;
+  message: string;
+  data: T;
+}
+
+interface AuthResponse {
+  user: {
+    _id: string;
+    name: string;
+    email: string;
+    role: "student" | "admin";
+  };
+  token: string;
+}
+
+// Utility function for API requests
+const apiRequest = async <T>(
+  endpoint: string,
+  options: RequestInit = {}
+): Promise<T> => {
   const token = localStorage.getItem("token");
 
   const config: RequestInit = {
@@ -15,6 +35,7 @@ const apiRequest = async (endpoint: string, options: RequestInit = {}) => {
 
   const response = await fetch(`${API_BASE_URL}${endpoint}`, config);
 
+  // Handle token expiration
   if (response.status === 401) {
     localStorage.removeItem("token");
     window.location.href = "/login";
@@ -22,8 +43,12 @@ const apiRequest = async (endpoint: string, options: RequestInit = {}) => {
   }
 
   if (!response.ok) {
-    const error = await response.json();
-    throw new Error(error.message || "Request failed");
+    const errorData = await response
+      .json()
+      .catch(() => ({ message: "Request failed" }));
+    throw new Error(
+      errorData.message || `HTTP error! status: ${response.status}`
+    );
   }
 
   return response.json();
@@ -31,58 +56,95 @@ const apiRequest = async (endpoint: string, options: RequestInit = {}) => {
 
 // Auth API
 export const authAPI = {
-  login: async (credentials: { email: string; password: string }) => {
-    return apiRequest("/auth/login", {
-      method: "POST",
-      body: JSON.stringify(credentials),
-    });
-  },
-
-  register: async (userData: {
+  register: async (data: {
     name: string;
     email: string;
     password: string;
-  }) => {
-    return apiRequest("/auth/register", {
+    role?: "student" | "admin";
+  }): Promise<AuthResponse> => {
+    return apiRequest("/api/auth/register", {
       method: "POST",
-      body: JSON.stringify(userData),
+      body: JSON.stringify(data),
     });
   },
 
-  getProfile: async () => {
-    return apiRequest("/auth/profile");
+  login: async (data: {
+    email: string;
+    password: string;
+  }): Promise<AuthResponse> => {
+    return apiRequest("/api/auth/login", {
+      method: "POST",
+      body: JSON.stringify(data),
+    });
   },
 };
 
 // Quiz API
 export const quizAPI = {
   getQuizzes: async () => {
-    return apiRequest("/quizzes");
+    return apiRequest("/api/quizzes");
   },
 
-  getQuizById: async (quizId: string) => {
-    return apiRequest(`/quizzes/${quizId}`);
+  getQuizById: async (id: string) => {
+    return apiRequest(`/api/quizzes/${id}`);
   },
 
-  submitAttempt: async (quizId: string, answers: Record<string, unknown>) => {
-    return apiRequest(`/quizzes/${quizId}/attempt`, {
+  createQuiz: async (data: any) => {
+    return apiRequest("/api/quizzes", {
       method: "POST",
-      body: JSON.stringify({ answers }),
+      body: JSON.stringify(data),
     });
   },
 
-  getAttempts: async () => {
-    return apiRequest("/quiz-attempts");
+  updateQuiz: async (id: string, data: any) => {
+    return apiRequest(`/api/quizzes/${id}`, {
+      method: "PUT",
+      body: JSON.stringify(data),
+    });
+  },
+
+  deleteQuiz: async (id: string) => {
+    return apiRequest(`/api/quizzes/${id}`, {
+      method: "DELETE",
+    });
   },
 };
 
 // Announcement API
 export const announcementAPI = {
-  getAnnouncements: async () => {
-    return apiRequest("/announcements");
+  getAnnouncements: async (): Promise<ApiResponse<any[]>> => {
+    return apiRequest("/api/announcements");
   },
 
-  getAnnouncementById: async (announcementId: string) => {
-    return apiRequest(`/announcements/${announcementId}`);
+  getAnnouncementById: async (id: string): Promise<ApiResponse<any>> => {
+    return apiRequest(`/api/announcements/${id}`);
+  },
+
+  createAnnouncement: async (data: {
+    title: string;
+    content: string;
+    instructor: string;
+    instructorAvatar?: string;
+  }): Promise<ApiResponse<any>> => {
+    return apiRequest("/api/announcements", {
+      method: "POST",
+      body: JSON.stringify(data),
+    });
+  },
+
+  updateAnnouncement: async (
+    id: string,
+    data: any
+  ): Promise<ApiResponse<any>> => {
+    return apiRequest(`/api/announcements/${id}`, {
+      method: "PUT",
+      body: JSON.stringify(data),
+    });
+  },
+
+  deleteAnnouncement: async (id: string) => {
+    return apiRequest(`/api/announcements/${id}`, {
+      method: "DELETE",
+    });
   },
 };

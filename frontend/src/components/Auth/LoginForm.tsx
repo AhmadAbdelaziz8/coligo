@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   Box,
   Typography,
@@ -8,34 +8,27 @@ import {
   FormControlLabel,
   Link,
   Paper,
+  Alert,
 } from "@mui/material";
-import { useNavigate } from "react-router-dom";
-import { useAppDispatch, useAppSelector } from "../../hooks/redux";
-import { loginUser } from "../../store/slices/authSlice";
 
-const LoginForm: React.FC = () => {
-  const navigate = useNavigate();
-  const dispatch = useAppDispatch();
-  const { loading, error } = useAppSelector((state) => state.auth);
-
-  const [credentials, setCredentials] = useState({
-    email: "",
-    password: "",
-  });
-  const [rememberMe, setRememberMe] = useState(false);
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    dispatch(loginUser(credentials));
+interface LoginFormProps {
+  formData: {
+    email: string;
+    password: string;
   };
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onSubmit: (e: React.FormEvent) => void;
+  loading: boolean;
+  error: string | null;
+}
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setCredentials({
-      ...credentials,
-      [e.target.name]: e.target.value,
-    });
-  };
-
+const LoginForm: React.FC<LoginFormProps> = ({
+  formData,
+  onChange,
+  onSubmit,
+  loading,
+  error,
+}) => {
   return (
     <Paper
       elevation={0}
@@ -61,7 +54,13 @@ const LoginForm: React.FC = () => {
         Sign in
       </Typography>
 
-      <form onSubmit={handleSubmit}>
+      {error && (
+        <Alert severity="error" sx={{ mb: 3 }}>
+          {error}
+        </Alert>
+      )}
+
+      <form onSubmit={onSubmit}>
         {/* Email Field */}
         <Box sx={{ mb: 3 }}>
           <Typography
@@ -74,8 +73,8 @@ const LoginForm: React.FC = () => {
             fullWidth
             name="email"
             placeholder="your@email.com"
-            value={credentials.email}
-            onChange={handleChange}
+            value={formData.email}
+            onChange={onChange}
             required
             sx={{
               "& .MuiOutlinedInput-root": {
@@ -133,8 +132,8 @@ const LoginForm: React.FC = () => {
             name="password"
             type="password"
             placeholder="••••••"
-            value={credentials.password}
-            onChange={handleChange}
+            value={formData.password}
+            onChange={onChange}
             required
             sx={{
               "& .MuiOutlinedInput-root": {
@@ -164,8 +163,6 @@ const LoginForm: React.FC = () => {
         <FormControlLabel
           control={
             <Checkbox
-              checked={rememberMe}
-              onChange={(e) => setRememberMe(e.target.checked)}
               sx={{
                 color: "rgba(255,255,255,0.5)",
                 "&.Mui-checked": {
@@ -198,28 +195,32 @@ const LoginForm: React.FC = () => {
             textTransform: "none",
             mb: 3,
             "&:hover": {
-              backgroundColor: "rgba(255,255,255,0.9)",
+              backgroundColor: "#f5f5f5",
             },
             "&:disabled": {
-              backgroundColor: "rgba(255,255,255,0.5)",
+              backgroundColor: "rgba(255,255,255,0.7)",
+              color: "rgba(45,90,135,0.7)",
             },
           }}
         >
           {loading ? "Signing in..." : "Sign in"}
         </Button>
 
-        {/* Sign Up Link */}
+        {/* Register Link */}
         <Typography
           variant="body2"
-          sx={{ textAlign: "center", color: "rgba(255,255,255,0.8)" }}
+          sx={{
+            color: "rgba(255,255,255,0.8)",
+            textAlign: "center",
+          }}
         >
           Don't have an account?{" "}
           <Link
-            onClick={() => navigate("/register")}
+            href="/register"
             sx={{
               color: "#4fc3f7",
               textDecoration: "none",
-              cursor: "pointer",
+              fontWeight: 500,
               "&:hover": {
                 textDecoration: "underline",
               },
@@ -229,23 +230,6 @@ const LoginForm: React.FC = () => {
           </Link>
         </Typography>
       </form>
-
-      {error && (
-        <Typography
-          variant="body2"
-          sx={{
-            color: "#ff5252",
-            textAlign: "center",
-            mt: 2,
-            p: 2,
-            backgroundColor: "rgba(255,82,82,0.1)",
-            borderRadius: 1,
-            border: "1px solid rgba(255,82,82,0.2)",
-          }}
-        >
-          {error}
-        </Typography>
-      )}
     </Paper>
   );
 };
