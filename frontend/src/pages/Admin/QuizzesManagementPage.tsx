@@ -272,11 +272,13 @@ const QuizzesManagementPage: React.FC = () => {
     value: string
   ) => {
     const updatedQuestions = [...formData.questions];
-    updatedQuestions[questionIndex] = {
-      ...updatedQuestions[questionIndex],
-      options: [...updatedQuestions[questionIndex].options],
-    };
-    updatedQuestions[questionIndex].options[optionIndex] = value;
+    if (updatedQuestions[questionIndex]) {
+      updatedQuestions[questionIndex] = {
+        ...updatedQuestions[questionIndex],
+        options: [...updatedQuestions[questionIndex].options],
+      };
+      updatedQuestions[questionIndex].options[optionIndex] = value;
+    }
     setFormData({ ...formData, questions: updatedQuestions });
   };
 

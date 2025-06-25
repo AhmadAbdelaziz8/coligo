@@ -1,12 +1,5 @@
 import React from "react";
-import {
-  Box,
-  Typography,
-  Paper,
-  Avatar,
-  Chip,
-  Divider,
-} from "@mui/material";
+import { Box, Typography, Paper, Avatar, Chip, Divider } from "@mui/material";
 import {
   Campaign as CampaignIcon,
   AccessTime as TimeIcon,
@@ -43,7 +36,9 @@ const AnnouncementCard: React.FC<AnnouncementCardProps> = ({
     <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
       <Avatar
         sx={{ bgcolor: "#667eea", width: 32, height: 32, mr: 2 }}
-        src={announcement.instructorAvatar}
+        {...(announcement.instructorAvatar && {
+          src: announcement.instructorAvatar,
+        })}
       >
         <CampaignIcon />
       </Avatar>
@@ -91,4 +86,4 @@ const AnnouncementCard: React.FC<AnnouncementCardProps> = ({
   </Paper>
 );
 
-export default AnnouncementCard; 
+export default AnnouncementCard;

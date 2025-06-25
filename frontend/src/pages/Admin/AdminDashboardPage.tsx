@@ -1,32 +1,31 @@
 import React, { useEffect } from "react";
 import {
   Box,
-  Grid,
+  Typography,
   Card,
   CardContent,
-  Typography,
+  Grid,
+  Button,
   Avatar,
   List,
   ListItem,
-  ListItemText,
   ListItemAvatar,
+  ListItemText,
   Chip,
-  Button,
   Paper,
 } from "@mui/material";
 import {
-  Quiz as QuizIcon,
-  Announcement as AnnouncementIcon,
-  People as PeopleIcon,
+  School as SchoolIcon,
+  Assignment as AssignmentIcon,
   TrendingUp as TrendingUpIcon,
   Add as AddIcon,
-  School as SchoolIcon,
+  Quiz as QuizIcon,
+  Announcement as AnnouncementIcon,
 } from "@mui/icons-material";
-import { useTranslation } from "react-i18next";
-import { useAppSelector, useAppDispatch } from "../../hooks/redux";
+import { useNavigate } from "react-router-dom";
+import { useAppDispatch, useAppSelector } from "../../hooks/redux";
 import { fetchQuizzes } from "../../store/slices/quizSlice";
 import { fetchAnnouncements } from "../../store/slices/announcementSlice";
-import { useNavigate } from "react-router-dom";
 
 interface StatCardProps {
   title: string;
@@ -135,7 +134,7 @@ const AdminDashboardPage: React.FC = () => {
     {
       title: "Active Students",
       value: "248",
-      icon: <PeopleIcon />,
+      icon: <AssignmentIcon />,
       color: "#4caf50",
       trend: "+12% this week",
     },
@@ -452,7 +451,7 @@ const AdminDashboardPage: React.FC = () => {
             <Button
               fullWidth
               variant="outlined"
-              startIcon={<PeopleIcon />}
+              startIcon={<AssignmentIcon />}
               sx={{
                 py: 2,
                 borderRadius: 2,
