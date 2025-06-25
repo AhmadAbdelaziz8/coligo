@@ -200,6 +200,8 @@ const AnnouncementsManagementPage: React.FC = () => {
           severity: "success",
         });
       }
+      // Refetch announcements to ensure the list is updated
+      dispatch(fetchAnnouncements());
       handleCloseDialog();
     } catch (error: any) {
       setSnackbar({
@@ -216,6 +218,7 @@ const AnnouncementsManagementPage: React.FC = () => {
     ) {
       try {
         await dispatch(deleteAnnouncement(announcement._id)).unwrap();
+        dispatch(fetchAnnouncements());
         setSnackbar({
           open: true,
           message: "Announcement deleted successfully!",

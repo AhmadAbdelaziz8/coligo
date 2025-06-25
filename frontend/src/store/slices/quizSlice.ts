@@ -107,7 +107,21 @@ const quizSlice = createSlice({
       })
       .addCase(fetchQuizzes.fulfilled, (state, action) => {
         state.loading = false;
-        state.quizzes = action.payload;
+        // Handle different API response formats
+        const payload = action.payload;
+        if (Array.isArray(payload)) {
+          state.quizzes = payload;
+        } else if (payload && Array.isArray(payload.data)) {
+          state.quizzes = payload.data;
+        } else if (
+          payload &&
+          payload.quizzes &&
+          Array.isArray(payload.quizzes)
+        ) {
+          state.quizzes = payload.quizzes;
+        } else {
+          state.quizzes = [];
+        }
         state.error = null;
       })
       .addCase(fetchQuizzes.rejected, (state, action) => {
@@ -149,7 +163,9 @@ const quizSlice = createSlice({
       })
       .addCase(updateQuiz.fulfilled, (state, action) => {
         state.loading = false;
-        const index = state.quizzes.findIndex(q => q._id === action.payload._id);
+        const index = state.quizzes.findIndex(
+          (q) => q._id === action.payload._id
+        );
         if (index !== -1) {
           state.quizzes[index] = action.payload;
         }
@@ -167,7 +183,7 @@ const quizSlice = createSlice({
       })
       .addCase(deleteQuiz.fulfilled, (state, action) => {
         state.loading = false;
-        state.quizzes = state.quizzes.filter(q => q._id !== action.payload);
+        state.quizzes = state.quizzes.filter((q) => q._id !== action.payload);
         state.error = null;
       })
       .addCase(deleteQuiz.rejected, (state, action) => {

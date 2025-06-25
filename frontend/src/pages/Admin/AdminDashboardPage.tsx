@@ -110,10 +110,12 @@ const AdminDashboardPage: React.FC = () => {
   }, [dispatch]);
 
   // Calculate statistics
-  const activeQuizzes = quizzes.filter((quiz) => quiz.isActive).length;
-  const totalQuizzes = quizzes.length;
-  const recentAnnouncements = announcements.slice(0, 5);
-  const recentQuizzes = quizzes.slice(0, 5);
+  const quizzesArray = Array.isArray(quizzes) ? quizzes : [];
+  const announcementsArray = Array.isArray(announcements) ? announcements : [];
+  const activeQuizzes = quizzesArray.filter((quiz) => quiz.isActive).length;
+  const totalQuizzes = quizzesArray.length;
+  const recentAnnouncements = announcementsArray.slice(0, 5);
+  const recentQuizzes = quizzesArray.slice(0, 5);
 
   const stats = [
     {
@@ -125,7 +127,7 @@ const AdminDashboardPage: React.FC = () => {
     },
     {
       title: "Announcements",
-      value: announcements.length,
+      value: announcementsArray.length,
       icon: <AnnouncementIcon />,
       color: "#ff9800",
       trend: "This month",
@@ -171,14 +173,21 @@ const AdminDashboardPage: React.FC = () => {
       </Grid>
 
       {/* Main Content */}
-      <Grid container spacing={3}>
+      <Box
+        sx={{
+          display: "flex",
+          gap: 3,
+          flexDirection: { xs: "column", md: "row" },
+        }}
+      >
         {/* Recent Quizzes */}
-        <Grid item xs={12} lg={6}>
+        <Box sx={{ flex: "0 0 auto", minWidth: { md: "400px" } }}>
           <Paper
             sx={{
               p: 3,
               borderRadius: 3,
               boxShadow: "0 4px 20px rgba(0,0,0,0.08)",
+              height: "fit-content",
             }}
           >
             <Box
@@ -199,7 +208,7 @@ const AdminDashboardPage: React.FC = () => {
                 variant="contained"
                 startIcon={<AddIcon />}
                 size="small"
-                onClick={() => navigate("/admin/quizzes/create")}
+                onClick={() => navigate("/admin/quizzes")}
                 sx={{
                   background:
                     "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
@@ -208,7 +217,7 @@ const AdminDashboardPage: React.FC = () => {
                   fontWeight: 600,
                 }}
               >
-                Create Quiz
+                Manage Quizzes
               </Button>
             </Box>
 
@@ -272,15 +281,16 @@ const AdminDashboardPage: React.FC = () => {
               </Typography>
             )}
           </Paper>
-        </Grid>
+        </Box>
 
         {/* Recent Announcements */}
-        <Grid item xs={12} lg={6}>
+        <Box sx={{ flex: 1 }}>
           <Paper
             sx={{
               p: 3,
               borderRadius: 3,
               boxShadow: "0 4px 20px rgba(0,0,0,0.08)",
+              height: "fit-content",
             }}
           >
             <Box
@@ -301,7 +311,7 @@ const AdminDashboardPage: React.FC = () => {
                 variant="contained"
                 startIcon={<AddIcon />}
                 size="small"
-                onClick={() => navigate("/admin/announcements/create")}
+                onClick={() => navigate("/admin/announcements")}
                 sx={{
                   background:
                     "linear-gradient(135deg, #f093fb 0%, #f5576c 100%)",
@@ -310,7 +320,7 @@ const AdminDashboardPage: React.FC = () => {
                   fontWeight: 600,
                 }}
               >
-                Create Post
+                Manage Posts
               </Button>
             </Box>
 
@@ -381,8 +391,8 @@ const AdminDashboardPage: React.FC = () => {
               </Typography>
             )}
           </Paper>
-        </Grid>
-      </Grid>
+        </Box>
+      </Box>
 
       {/* Quick Actions */}
       <Paper

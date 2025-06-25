@@ -95,7 +95,7 @@ const AdminLayout: React.FC = () => {
             textShadow: '0 2px 4px rgba(0,0,0,0.3)'
           }}
         >
-          📚 Coligo Admin
+          Coligo Admin
         </Typography>
         <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.8)' }}>
           Learning Management System

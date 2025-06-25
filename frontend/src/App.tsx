@@ -6,8 +6,10 @@ import {
 } from "react-router-dom";
 import { ThemeProvider, CssBaseline, createTheme } from "@mui/material";
 import { Provider } from "react-redux";
+import { useEffect } from "react";
 import { store } from "./store/store";
-import { useAppSelector } from "./hooks/redux";
+import { useAppSelector, useAppDispatch } from "./hooks/redux";
+import { restoreAuth } from "./store/slices/authSlice";
 import "./i18n/i18n";
 
 // Layouts
@@ -58,6 +60,13 @@ const AdminRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 };
 
 const AppContent: React.FC = () => {
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    // Restore authentication state on app startup
+    dispatch(restoreAuth());
+  }, [dispatch]);
+
   return (
     <Router>
       <Routes>

@@ -137,7 +137,17 @@ const announcementSlice = createSlice({
       })
       .addCase(fetchAnnouncements.fulfilled, (state, action) => {
         state.loading = false;
-        state.announcements = action.payload;
+        // Handle different API response formats
+        const payload = action.payload;
+        if (Array.isArray(payload)) {
+          state.announcements = payload;
+        } else if (payload && Array.isArray(payload.data)) {
+          state.announcements = payload.data;
+        } else if (payload && payload.announcements && Array.isArray(payload.announcements)) {
+          state.announcements = payload.announcements;
+        } else {
+          state.announcements = [];
+        }
         state.error = null;
       })
       .addCase(fetchAnnouncements.rejected, (state, action) => {

@@ -10,6 +10,9 @@ const WhatsDueSection: React.FC = () => {
     error: quizzesError,
   } = useAppSelector((state) => state.quiz);
 
+  // Ensure quizzes is always an array
+  const quizzesArray = Array.isArray(quizzes) ? quizzes : [];
+
   return (
     <Box
       sx={{
@@ -65,10 +68,14 @@ const WhatsDueSection: React.FC = () => {
           <CircularProgress />
         ) : quizzesError ? (
           <Alert severity="error">{quizzesError}</Alert>
-        ) : (
-          quizzes
+        ) : quizzesArray.length > 0 ? (
+          quizzesArray
             .slice(0, 2)
             .map((quiz) => <TaskCard key={quiz._id} quiz={quiz} />)
+        ) : (
+          <Typography variant="body2" color="text.secondary" sx={{ textAlign: 'center', py: 2 }}>
+            No quizzes available
+          </Typography>
         )}
       </Box>
     </Box>

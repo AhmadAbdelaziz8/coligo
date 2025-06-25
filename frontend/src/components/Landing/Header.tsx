@@ -23,7 +23,7 @@ const Header: React.FC = () => {
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const { isAuthenticated } = useAppSelector((state) => state.auth);
+  const { isAuthenticated, user } = useAppSelector((state) => state.auth);
 
   // Handle scroll effect for dynamic transparency
   useEffect(() => {
@@ -52,6 +52,15 @@ const Header: React.FC = () => {
 
   const handleMobileMenuToggle = () => {
     setMobileMenuOpen(!mobileMenuOpen);
+  };
+
+  const handleDashboardClick = () => {
+    // Redirect based on user role
+    if (user?.role === 'admin') {
+      navigate("/admin");
+    } else {
+      navigate("/dashboard");
+    }
   };
 
   return (
@@ -131,7 +140,7 @@ const Header: React.FC = () => {
                 {isAuthenticated ? (
                   <Button
                     variant="contained"
-                    onClick={() => navigate("/dashboard")}
+                    onClick={handleDashboardClick}
                     startIcon={<Dashboard />}
                     sx={{
                       background: "linear-gradient(45deg, #667eea, #764ba2)",
@@ -148,7 +157,7 @@ const Header: React.FC = () => {
                       },
                     }}
                   >
-                    Dashboard
+                    {user?.role === 'admin' ? 'Admin Panel' : 'Dashboard'}
                   </Button>
                 ) : (
                   <>
@@ -233,13 +242,10 @@ const Header: React.FC = () => {
           ))}
           {isAuthenticated ? (
             <ListItem
-              onClick={() => {
-                navigate("/dashboard");
-                setMobileMenuOpen(false);
-              }}
+              onClick={handleDashboardClick}
               sx={{ cursor: "pointer" }}
             >
-              <ListItemText primary="Dashboard" />
+              <ListItemText primary={user?.role === 'admin' ? 'Admin Panel' : 'Dashboard'} />
             </ListItem>
           ) : (
             <>

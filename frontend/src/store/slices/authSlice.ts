@@ -16,13 +16,29 @@ interface AuthState {
   error: string | null;
 }
 
-const initialState: AuthState = {
-  user: null,
-  token: localStorage.getItem("token"),
-  isAuthenticated: !!localStorage.getItem("token"),
-  loading: false,
-  error: null,
+// Initialize state from localStorage
+const getInitialState = (): AuthState => {
+  const token = localStorage.getItem("token");
+  const userStr = localStorage.getItem("user");
+  
+  let user = null;
+  try {
+    user = userStr ? JSON.parse(userStr) : null;
+  } catch (error) {
+    // If user data is corrupted, clear it
+    localStorage.removeItem("user");
+  }
+
+  return {
+    user,
+    token,
+    isAuthenticated: !!(token && user),
+    loading: false,
+    error: null,
+  };
 };
+
+const initialState: AuthState = getInitialState();
 
 // Async thunks
 export const loginUser = createAsyncThunk(
@@ -34,6 +50,7 @@ export const loginUser = createAsyncThunk(
     try {
       const response = await authAPI.login(credentials);
       localStorage.setItem("token", response.token);
+      localStorage.setItem("user", JSON.stringify(response.user));
       return response;
     } catch (error: unknown) {
       const message = error instanceof Error ? error.message : "Login failed";
@@ -51,6 +68,7 @@ export const registerUser = createAsyncThunk(
     try {
       const response = await authAPI.register(userData);
       localStorage.setItem("token", response.token);
+      localStorage.setItem("user", JSON.stringify(response.user));
       return response;
     } catch (error: unknown) {
       const message =
@@ -62,6 +80,7 @@ export const registerUser = createAsyncThunk(
 
 export const logoutUser = createAsyncThunk("auth/logout", async () => {
   localStorage.removeItem("token");
+  localStorage.removeItem("user");
   return null;
 });
 
@@ -74,6 +93,26 @@ const authSlice = createSlice({
   reducers: {
     clearError: (state) => {
       state.error = null;
+    },
+    restoreAuth: (state) => {
+      const token = localStorage.getItem("token");
+      const userStr = localStorage.getItem("user");
+      
+      if (token && userStr) {
+        try {
+          const user = JSON.parse(userStr);
+          state.user = user;
+          state.token = token;
+          state.isAuthenticated = true;
+        } catch (error) {
+          // Clear corrupted data
+          localStorage.removeItem("token");
+          localStorage.removeItem("user");
+          state.user = null;
+          state.token = null;
+          state.isAuthenticated = false;
+        }
+      }
     },
   },
   extraReducers: (builder) => {
@@ -123,5 +162,5 @@ const authSlice = createSlice({
   },
 });
 
-export const { clearError } = authSlice.actions;
+export const { clearError, restoreAuth } = authSlice.actions;
 export default authSlice.reducer;

@@ -87,6 +87,9 @@ const QuizzesManagementPage: React.FC = () => {
   const dispatch = useAppDispatch();
   const { quizzes, loading, error } = useAppSelector((state) => state.quiz);
 
+  // Ensure quizzes is always an array
+  const quizzesArray = Array.isArray(quizzes) ? quizzes : [];
+
   const [openDialog, setOpenDialog] = useState(false);
   const [editingQuiz, setEditingQuiz] = useState<Quiz | null>(null);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -169,15 +172,9 @@ const QuizzesManagementPage: React.FC = () => {
 
   const handleSubmit = async () => {
     try {
-      const quizData = {
-        ...formData,
-        dueDate: new Date(formData.dueDate).toISOString(),
-        isActive: true,
-      };
-
       if (editingQuiz) {
         await dispatch(
-          updateQuiz({ id: editingQuiz._id, data: quizData })
+          updateQuiz({ id: editingQuiz._id, data: formData })
         ).unwrap();
         setSnackbar({
           open: true,
@@ -185,13 +182,15 @@ const QuizzesManagementPage: React.FC = () => {
           severity: "success",
         });
       } else {
-        await dispatch(createQuiz(quizData)).unwrap();
+        await dispatch(createQuiz(formData)).unwrap();
         setSnackbar({
           open: true,
           message: "Quiz created successfully!",
           severity: "success",
         });
       }
+      // Refetch quizzes to ensure the list is updated
+      dispatch(fetchQuizzes());
       handleCloseDialog();
     } catch (error: any) {
       setSnackbar({
@@ -206,6 +205,8 @@ const QuizzesManagementPage: React.FC = () => {
     if (window.confirm(`Are you sure you want to delete "${quiz.title}"?`)) {
       try {
         await dispatch(deleteQuiz(quiz._id)).unwrap();
+        // Refetch quizzes to ensure the list is updated
+        dispatch(fetchQuizzes());
         setSnackbar({
           open: true,
           message: "Quiz deleted successfully!",
@@ -271,6 +272,10 @@ const QuizzesManagementPage: React.FC = () => {
     value: string
   ) => {
     const updatedQuestions = [...formData.questions];
+    updatedQuestions[questionIndex] = {
+      ...updatedQuestions[questionIndex],
+      options: [...updatedQuestions[questionIndex].options],
+    };
     updatedQuestions[questionIndex].options[optionIndex] = value;
     setFormData({ ...formData, questions: updatedQuestions });
   };
@@ -343,7 +348,7 @@ const QuizzesManagementPage: React.FC = () => {
                     variant="h4"
                     sx={{ fontWeight: 700, color: "#667eea" }}
                   >
-                    {quizzes.length}
+                    {quizzesArray.length}
                   </Typography>
                   <Typography variant="body2" color="text.secondary">
                     Total Quizzes
@@ -374,7 +379,7 @@ const QuizzesManagementPage: React.FC = () => {
                     variant="h4"
                     sx={{ fontWeight: 700, color: "#4caf50" }}
                   >
-                    {quizzes.filter((q) => q.isActive).length}
+                    {quizzesArray.filter((q) => q.isActive).length}
                   </Typography>
                   <Typography variant="body2" color="text.secondary">
                     Active Quizzes
@@ -406,8 +411,10 @@ const QuizzesManagementPage: React.FC = () => {
                     sx={{ fontWeight: 700, color: "#ff9800" }}
                   >
                     {Math.round(
-                      quizzes.reduce((acc, quiz) => acc + quiz.duration, 0) /
-                        quizzes.length
+                      quizzesArray.reduce(
+                        (acc, quiz) => acc + quiz.duration,
+                        0
+                      ) / quizzesArray.length
                     ) || 0}
                   </Typography>
                   <Typography variant="body2" color="text.secondary">
@@ -431,7 +438,7 @@ const QuizzesManagementPage: React.FC = () => {
       >
         <Box sx={{ p: 3, borderBottom: "1px solid #e2e8f0" }}>
           <Typography variant="h6" sx={{ fontWeight: 600, color: "#1a365d" }}>
-            All Quizzes ({quizzes.length})
+            All Quizzes ({quizzesArray.length})
           </Typography>
         </Box>
 
@@ -463,7 +470,7 @@ const QuizzesManagementPage: React.FC = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {quizzes.map((quiz) => (
+              {quizzesArray.map((quiz) => (
                 <TableRow
                   key={quiz._id}
                   sx={{ "&:hover": { bgcolor: "#f7fafc" } }}
@@ -517,7 +524,7 @@ const QuizzesManagementPage: React.FC = () => {
                   </TableCell>
                 </TableRow>
               ))}
-              {quizzes.length === 0 && (
+              {quizzesArray.length === 0 && (
                 <TableRow>
                   <TableCell colSpan={7} sx={{ textAlign: "center", py: 4 }}>
                     <Typography color="text.secondary">
