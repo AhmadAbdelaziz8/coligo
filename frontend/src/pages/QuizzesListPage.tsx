@@ -21,6 +21,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../hooks/redux";
 import { fetchQuizzes } from "../store/slices/quizSlice";
+import { EmptyFeedback } from "../components/common";
 
 const QuizzesListPage: React.FC = () => {
   const navigate = useNavigate();
@@ -257,31 +258,7 @@ const QuizzesListPage: React.FC = () => {
 
       {/* Empty State */}
       {!loading && !error && quizzes.length === 0 && (
-        <Box
-          sx={{
-            textAlign: "center",
-            py: { xs: 6, md: 8 },
-            px: 2,
-          }}
-        >
-          <QuizIcon
-            sx={{
-              fontSize: { xs: 64, md: 80 },
-              color: "text.secondary",
-              mb: 2,
-            }}
-          />
-          <Typography
-            variant={isMobile ? "h6" : "h5"}
-            color="text.secondary"
-            sx={{ mb: 1 }}
-          >
-            No Quizzes Available
-          </Typography>
-          <Typography variant="body2" color="text.secondary">
-            Check back later for new quizzes to test your knowledge!
-          </Typography>
-        </Box>
+        <EmptyFeedback type="exams" />
       )}
     </Container>
   );

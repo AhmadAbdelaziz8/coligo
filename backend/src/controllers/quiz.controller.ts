@@ -34,10 +34,6 @@ export const getAllQuizzesController = async (
 ): Promise<void> => {
   try {
     const quizzes = await getAllQuizzes();
-    if (quizzes.length === 0) {
-      res.status(404).json({ success: false, message: "No quizzes found" });
-      return;
-    }
     res
       .status(200)
       .json({ success: true, data: quizzes, count: quizzes.length });

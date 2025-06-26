@@ -5,13 +5,12 @@ import {
   CircularProgress,
   Alert,
   Container,
-  Paper,
   Stack,
 } from "@mui/material";
-import { Campaign as CampaignIcon } from "@mui/icons-material";
 import { useAppDispatch, useAppSelector } from "../hooks/redux";
 import { fetchAnnouncements } from "../store/slices/announcementSlice";
 import AnnouncementCard from "../components/Announcements/AnnouncementCard";
+import { EmptyFeedback } from "../components/common";
 
 const AnnouncementsPage: React.FC = () => {
   // get the announcements from the store
@@ -50,23 +49,7 @@ const AnnouncementsPage: React.FC = () => {
           {error}
         </Alert>
       ) : announcements.length === 0 ? (
-        <Paper
-          sx={{
-            p: 4,
-            textAlign: "center",
-            borderRadius: 3,
-            bgcolor: "#f8fafc",
-            border: "1px solid #e2e8f0",
-          }}
-        >
-          <CampaignIcon sx={{ fontSize: 48, color: "#cbd5e1", mb: 2 }} />
-          <Typography variant="h6" color="text.secondary" sx={{ mb: 1 }}>
-            No announcements yet
-          </Typography>
-          <Typography variant="body2" color="text.secondary">
-            Check back later for updates from your instructors
-          </Typography>
-        </Paper>
+        <EmptyFeedback type="announcements" />
       ) : (
         <Stack spacing={3}>
           {announcements.map((announcement) => (

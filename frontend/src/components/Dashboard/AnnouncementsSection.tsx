@@ -3,6 +3,7 @@ import { Box, Typography, CircularProgress, Alert } from "@mui/material";
 import { Link } from "react-router-dom";
 import AnnouncementCard from "./AnnouncementCard";
 import { useAppSelector } from "../../hooks/redux";
+import { EmptyFeedback } from "../common";
 
 const AnnouncementsSection: React.FC = () => {
   const {
@@ -76,6 +77,10 @@ const AnnouncementsSection: React.FC = () => {
         ) : announcementsError ? (
           <Box sx={{ width: "100%" }}>
             <Alert severity="error">{announcementsError}</Alert>
+          </Box>
+        ) : announcements.length === 0 ? (
+          <Box sx={{ width: "100%" }}>
+            <EmptyFeedback type="announcements" className="mt-4" />
           </Box>
         ) : (
           announcements.slice(0, 6).map((announcement) => (

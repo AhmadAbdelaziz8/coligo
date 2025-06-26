@@ -2,6 +2,7 @@ import React from "react";
 import { Box, Typography, CircularProgress, Alert } from "@mui/material";
 import TaskCard from "./TaskCard";
 import { useAppSelector } from "../../hooks/redux";
+import { EmptyFeedback } from "../common";
 
 const WhatsDueSection: React.FC = () => {
   const {
@@ -73,9 +74,9 @@ const WhatsDueSection: React.FC = () => {
             .slice(0, 2)
             .map((quiz) => <TaskCard key={quiz._id} quiz={quiz} />)
         ) : (
-          <Typography variant="body2" color="text.secondary" sx={{ textAlign: 'center', py: 2 }}>
-            No quizzes available
-          </Typography>
+          <Box sx={{ mt: 2 }}>
+            <EmptyFeedback type="exams" className="scale-90" />
+          </Box>
         )}
       </Box>
     </Box>
