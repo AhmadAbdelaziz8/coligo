@@ -3,6 +3,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 import mongoose from "mongoose";
 import connectDB from "./config/db";
+import swaggerUi from "swagger-ui-express";
 // swagger for documentation
 import { swaggerSpec } from "./config/swagger";
 // import routes
@@ -35,21 +36,8 @@ app.get("/api/health", (req, res) => {
   });
 });
 
-// Serve the Swagger spec as JSON for frontend consumption
-app.get("/api-docs/swagger.json", (req, res) => {
-  res.setHeader("Content-Type", "application/json");
-  res.setHeader("Access-Control-Allow-Origin", "*"); // Allow frontend to access
-  res.send(swaggerSpec);
-});
-
-// Simple API docs info endpoint
-app.get("/api-docs", (req, res) => {
-  res.json({
-    message: "API Documentation available as JSON",
-    swaggerJson: "/api-docs/swagger.json",
-    info: "Use swagger-ui-react in frontend to display documentation",
-  });
-});
+// Serve Swagger UI
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 // public authentication route
 app.use("/api/auth", authRoute);
