@@ -30,7 +30,7 @@ export const fetchQuizzes = createAsyncThunk<
 >("quiz/fetchQuizzes", async (_, { rejectWithValue }) => {
   try {
     const response = await quizAPI.getQuizzes();
-    return response.data; // Assuming API returns { data: Quiz[] }
+    return Array.isArray(response) ? response : response.data || [];
   } catch (error: unknown) {
     const message =
       error instanceof Error ? error.message : "Failed to fetch quizzes";
@@ -45,7 +45,7 @@ export const fetchQuizById = createAsyncThunk<
 >("quiz/fetchQuizById", async (quizId: string, { rejectWithValue }) => {
   try {
     const response = await quizAPI.getQuizById(quizId);
-    return response.data; // Assuming API returns { data: Quiz }
+    return response.data || response;
   } catch (error: unknown) {
     const message =
       error instanceof Error ? error.message : "Failed to fetch quiz";
@@ -60,7 +60,7 @@ export const createQuiz = createAsyncThunk<
 >("quiz/createQuiz", async (quizData, { rejectWithValue }) => {
   try {
     const response = await quizAPI.createQuiz(quizData);
-    return response.data; // Assuming API returns { data: Quiz }
+    return response.data || response;
   } catch (error: unknown) {
     const message =
       error instanceof Error ? error.message : "Failed to create quiz";
@@ -75,7 +75,7 @@ export const updateQuiz = createAsyncThunk<
 >("quiz/updateQuiz", async ({ id, data }, { rejectWithValue }) => {
   try {
     const response = await quizAPI.updateQuiz(id, data);
-    return response.data; // Assuming API returns { data: Quiz }
+    return response.data || response;
   } catch (error: unknown) {
     const message =
       error instanceof Error ? error.message : "Failed to update quiz";
@@ -123,7 +123,7 @@ const quizSlice = createSlice({
       })
       .addCase(fetchQuizzes.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload as string;
+        state.error = action.payload || "Failed to fetch quizzes";
       })
       // Fetch quiz by ID cases
       .addCase(fetchQuizById.pending, (state) => {
@@ -137,7 +137,7 @@ const quizSlice = createSlice({
       })
       .addCase(fetchQuizById.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload as string;
+        state.error = action.payload || "Failed to fetch quiz";
       })
       // Create quiz cases
       .addCase(createQuiz.pending, (state) => {
@@ -151,7 +151,7 @@ const quizSlice = createSlice({
       })
       .addCase(createQuiz.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload as string;
+        state.error = action.payload || "Failed to create quiz";
       })
       // Update quiz cases
       .addCase(updateQuiz.pending, (state) => {
@@ -171,7 +171,7 @@ const quizSlice = createSlice({
       })
       .addCase(updateQuiz.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload as string;
+        state.error = action.payload || "Failed to update quiz";
       })
       // Delete quiz cases
       .addCase(deleteQuiz.pending, (state) => {
@@ -185,7 +185,7 @@ const quizSlice = createSlice({
       })
       .addCase(deleteQuiz.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload as string;
+        state.error = action.payload || "Failed to delete quiz";
       });
   },
 });
