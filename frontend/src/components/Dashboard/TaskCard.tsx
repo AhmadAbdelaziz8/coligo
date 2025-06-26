@@ -32,7 +32,14 @@ const TaskCard: React.FC<TaskCardProps> = ({ quiz }) => {
     >
       <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
         <QuizIcon sx={{ color: "#2d5a87", mr: 1.5 }} />
-        <Typography variant="h6" sx={{ fontWeight: 600, color: "#2d5a87" }}>
+        <Typography
+          variant="h6"
+          sx={{
+            fontWeight: 600,
+            color: "#2d5a87",
+            fontSize: { xs: "1rem", sm: "1.2rem" },
+          }}
+        >
           {title}
         </Typography>
       </Box>
@@ -66,6 +73,8 @@ const TaskCard: React.FC<TaskCardProps> = ({ quiz }) => {
         sx={{
           backgroundColor: "#4fc3f7",
           "&:hover": { backgroundColor: "#29b6f6" },
+          py: 1.5,
+          fontSize: { xs: "0.8rem", sm: "0.9rem" },
         }}
       >
         Start Quiz

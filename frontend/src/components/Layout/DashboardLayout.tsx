@@ -31,7 +31,7 @@ const DashboardLayout: React.FC = () => {
         }}
       >
         <TopBar handleDrawerToggle={handleDrawerToggle} isMobile={isMobile} />
-        <Box sx={{ p: { xs: 2, sm: 3 } }}>
+        <Box sx={{ px: { xs: 2, sm: 3 }, py: { xs: 2, sm: 3 } }}>
           <Outlet />
         </Box>
       </Box>

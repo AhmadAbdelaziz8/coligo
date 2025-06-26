@@ -26,7 +26,7 @@ const DashboardPage: React.FC = () => {
           display: "flex",
           flexDirection: { xs: "column", lg: "row" },
           gap: { xs: 3, lg: 4 },
-          alignItems: "flex-start",
+          alignItems: { xs: "center", lg: "flex-start" },
         }}
       >
         {/* Announcements Section */}

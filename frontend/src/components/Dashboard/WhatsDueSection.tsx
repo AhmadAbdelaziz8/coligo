@@ -36,7 +36,7 @@ const WhatsDueSection: React.FC = () => {
           sx={{
             fontWeight: 600,
             color: "#2d5a87",
-            fontSize: { xs: "1.25rem", md: "1.5rem" },
+            fontSize: { xs: "1.1rem", md: "1.5rem" },
           }}
         >
           What's due

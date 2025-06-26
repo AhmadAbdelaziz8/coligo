@@ -1,9 +1,15 @@
 import React from "react";
 import { Box, Typography, Button, Paper } from "@mui/material";
 import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
 
 const ExamBanner: React.FC = () => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
+
+  const handleViewTips = () => {
+    navigate("/dashboard/exams");
+  };
 
   return (
     <Paper
@@ -40,8 +46,8 @@ const ExamBanner: React.FC = () => {
               fontWeight: 700,
               color: "#1565c0",
               mb: { xs: 1.5, md: 2 },
-              fontSize: { xs: "2rem", sm: "2.5rem", md: "42px" },
-              letterSpacing: { xs: "1px", md: "2px" },
+              fontSize: { xs: "1.6rem", sm: "2.2rem", md: "2.5rem" },
+              letterSpacing: { xs: "0.5px", md: "1px" },
             }}
           >
             {t("exam.title")}
@@ -52,7 +58,7 @@ const ExamBanner: React.FC = () => {
             sx={{
               color: "#424242",
               mb: { xs: 2, md: 3 },
-              fontSize: { xs: "14px", sm: "16px" },
+              fontSize: { xs: "0.8rem", sm: "0.9rem" },
               lineHeight: 1.6,
               maxWidth: { xs: "100%", md: "500px" },
             }}
@@ -75,6 +81,7 @@ const ExamBanner: React.FC = () => {
 
           <Button
             variant="contained"
+            onClick={handleViewTips}
             sx={{
               backgroundColor: "#4fc3f7",
               color: "white",
@@ -82,7 +89,7 @@ const ExamBanner: React.FC = () => {
               py: { xs: 1.2, sm: 1.5 },
               borderRadius: 3,
               fontWeight: 600,
-              fontSize: { xs: "14px", sm: "16px" },
+              fontSize: { xs: "0.8rem", sm: "0.9rem" },
               textTransform: "none",
               boxShadow: "0 4px 15px rgba(79, 195, 247, 0.3)",
               "&:hover": {
@@ -98,11 +105,12 @@ const ExamBanner: React.FC = () => {
         {/* Right Illustration */}
         <Box
           sx={{
-            flex: { xs: 0, md: 1 },
-            display: { xs: "none", md: "flex" }, // Hide illustration on mobile
+            flex: { xs: 1, md: 0.8 },
+            display: "flex",
             justifyContent: "center",
             alignItems: "center",
             position: "relative",
+            mt: { xs: 2, md: 0 },
           }}
         >
           {/* Study Illustration - Using CSS to create a similar design */}
@@ -114,6 +122,7 @@ const ExamBanner: React.FC = () => {
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
+              display: { xs: "none", md: "flex" },
             }}
           >
             {/* Laptop */}

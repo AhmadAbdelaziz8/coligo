@@ -32,7 +32,7 @@ const AnnouncementsSection: React.FC = () => {
           sx={{
             fontWeight: 600,
             color: "#2d5a87",
-            fontSize: { xs: "1.25rem", md: "1.5rem" },
+            fontSize: { xs: "1.1rem", md: "1.5rem" },
           }}
         >
           Announcements
@@ -88,11 +88,6 @@ const AnnouncementsSection: React.FC = () => {
                   md: "1 1 calc(33.333% - 16px)", // 3 cards per row on medium+
                 },
                 minWidth: { xs: "280px", sm: "300px" },
-                maxWidth: {
-                  xs: "100%",
-                  sm: "calc(50% - 12px)",
-                  md: "calc(33.333% - 16px)",
-                },
               }}
             >
               <AnnouncementCard announcement={announcement} />

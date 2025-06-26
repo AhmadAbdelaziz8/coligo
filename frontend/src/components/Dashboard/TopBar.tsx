@@ -60,7 +60,7 @@ const TopBar: React.FC<TopBarProps> = ({
   return (
     <Box
       sx={{
-        height: 80,
+        height: 70,
         background: "white",
         borderBottom: "1px solid #e0e0e0",
         display: "flex",
@@ -86,11 +86,11 @@ const TopBar: React.FC<TopBarProps> = ({
 
         {/* Welcome Message */}
         <Typography
-          variant="h4"
+          variant="h6"
           sx={{
             fontWeight: 600,
             color: "#2d5a87",
-            fontSize: { xs: "1.25rem", sm: "1.5rem", md: "1.75rem" },
+            fontSize: { xs: "1rem", sm: "1.25rem" },
           }}
         >
           Welcome {user?.name || "Student"},

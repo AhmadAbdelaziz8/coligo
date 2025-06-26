@@ -16,6 +16,8 @@ import {
   TrendingUp,
   Campaign,
   Home,
+  School,
+  Quiz as QuizIcon,
 } from "@mui/icons-material";
 import { useNavigate, useLocation } from "react-router-dom";
 
@@ -33,27 +35,37 @@ const menuItems = [
   {
     text: "Schedule",
     icon: Schedule,
-    path: "/schedule",
+    path: "/dashboard/schedule",
   },
   {
     text: "Courses",
     icon: MenuBook,
-    path: "/courses",
+    path: "/dashboard/courses",
   },
   {
     text: "Gradebook",
     icon: Grade,
-    path: "/gradebook",
+    path: "/dashboard/gradebook",
   },
   {
     text: "Performance",
     icon: TrendingUp,
-    path: "/performance",
+    path: "/dashboard/performance",
   },
   {
-    text: "Announcement",
+    text: "Announcements",
     icon: Campaign,
-    path: "/announcements",
+    path: "/dashboard/announcements",
+  },
+  {
+    text: "Exams",
+    icon: School,
+    path: "/dashboard/exams",
+  },
+  {
+    text: "Quizzes",
+    icon: QuizIcon,
+    path: "/dashboard/quizzes",
   },
 ];
 
@@ -112,7 +124,7 @@ const Sidebar: React.FC<SidebarProps> = ({
       {/* Menu Items */}
       <List sx={{ pt: 2, px: 1, flex: 1 }}>
         {menuItems.map((item, index) => {
-          const isActive = location.pathname === item.path;
+          const isActive = location.pathname.startsWith(item.path);
 
           return (
             <ListItem
