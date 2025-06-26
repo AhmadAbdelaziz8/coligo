@@ -68,9 +68,10 @@ app.post("/api/seed", async (req, res) => {
     });
   } catch (error) {
     console.error("Seed error:", error);
-    res
-      .status(500)
-      .json({ error: "Failed to seed database", details: error.message });
+    res.status(500).json({
+      error: "Failed to seed database",
+      details: error instanceof Error ? error.message : "Unknown error",
+    });
   }
 });
 
@@ -81,8 +82,17 @@ app.use("/api/auth", authRoute);
 app.use("/api/quizzes", authMiddleware, quizRoute);
 app.use("/api/announcements", authMiddleware, announcementRoute);
 
-// connection to the database
-connectDB();
+// Initialize database connection
+const initializeDatabase = async () => {
+  try {
+    await connectDB();
+  } catch (error) {
+    console.error("Database initialization failed:", error);
+  }
+};
+
+// Initialize database connection
+initializeDatabase();
 
 const PORT = process.env.PORT || 3000;
 
