@@ -31,6 +31,9 @@ import AdminDashboardPage from "./pages/Admin/AdminDashboardPage";
 import QuizzesManagementPage from "./pages/Admin/QuizzesManagementPage";
 import AnnouncementsManagementPage from "./pages/Admin/AnnouncementsManagementPage";
 
+// API Documentation
+import ApiDocsPage from "./pages/ApiDocsPage";
+
 // Components
 import ProtectedRoute from "./components/Auth/ProtectedRoute";
 
@@ -73,6 +76,7 @@ const AppContent: React.FC = () => {
         <Route path="/login" element={<AuthPage />} />
         <Route path="/register" element={<AuthPage />} />
         <Route path="/auth" element={<Navigate to="/login" replace />} />
+        <Route path="/api-docs" element={<ApiDocsPage />} />
 
         {/* Student Dashboard Routes */}
         <Route

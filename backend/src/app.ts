@@ -4,7 +4,6 @@ import dotenv from "dotenv";
 import mongoose from "mongoose";
 import connectDB from "./config/db";
 // swagger for documentation
-import swaggerUi from "swagger-ui-express";
 import { swaggerSpec } from "./config/swagger";
 // import routes
 import quizRoute from "./routes/quiz.route";
@@ -40,53 +39,20 @@ app.get("/api/health", (req, res) => {
   });
 });
 
-// swagger documentation with CDN assets
-const swaggerHtml = `
-<!DOCTYPE html>
-<html>
-<head>
-  <title>Coligo API Documentation</title>
-  <link rel="stylesheet" type="text/css" href="https://unpkg.com/swagger-ui-dist@5.0.1/swagger-ui.css" />
-  <style>
-    .swagger-ui .topbar { display: none !important; }
-  </style>
-</head>
-<body>
-  <div id="swagger-ui"></div>
-  <script src="https://unpkg.com/swagger-ui-dist@5.0.1/swagger-ui-bundle.js"></script>
-  <script src="https://unpkg.com/swagger-ui-dist@5.0.1/swagger-ui-standalone-preset.js"></script>
-  <script>
-    window.onload = function() {
-      const ui = SwaggerUIBundle({
-        url: window.location.origin + '/api-docs/swagger.json',
-        dom_id: '#swagger-ui',
-        deepLinking: true,
-        presets: [
-          SwaggerUIBundle.presets.apis,
-          SwaggerUIStandalonePreset
-        ],
-        plugins: [
-          SwaggerUIBundle.plugins.DownloadUrl
-        ],
-        layout: "StandaloneLayout",
-        persistAuthorization: true
-      });
-    };
-  </script>
-</body>
-</html>
-`;
-
-// Serve the Swagger spec as JSON
+// Serve the Swagger spec as JSON for frontend consumption
 app.get("/api-docs/swagger.json", (req, res) => {
   res.setHeader("Content-Type", "application/json");
+  res.setHeader("Access-Control-Allow-Origin", "*"); // Allow frontend to access
   res.send(swaggerSpec);
 });
 
-// Serve custom Swagger UI HTML
+// Simple API docs info endpoint
 app.get("/api-docs", (req, res) => {
-  res.setHeader("Content-Type", "text/html");
-  res.send(swaggerHtml);
+  res.json({
+    message: "API Documentation available as JSON",
+    swaggerJson: "/api-docs/swagger.json",
+    info: "Use swagger-ui-react in frontend to display documentation",
+  });
 });
 
 // Seed endpoint for initial data population
