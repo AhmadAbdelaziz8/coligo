@@ -1,6 +1,12 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import { quizAPI } from "../../services/api";
 import type { Quiz } from "../../types/quiz";
+
+export type CreateQuizData = Omit<
+  Quiz,
+  "_id" | "createdAt" | "updatedAt" | "createdBy" | "isActive"
+>;
+export type UpdateQuizData = Partial<CreateQuizData>;
 
 interface QuizState {
   quizzes: Quiz[];
@@ -17,12 +23,12 @@ const initialState: QuizState = {
 };
 
 // Async thunks
-export const fetchQuizzes = createAsyncThunk(
+export const fetchQuizzes = createAsyncThunk<Quiz[]>(
   "quiz/fetchQuizzes",
   async (_, { rejectWithValue }) => {
     try {
       const response = await quizAPI.getQuizzes();
-      return response;
+      return response.data; // Assuming API returns { data: Quiz[] }
     } catch (error: unknown) {
       const message =
         error instanceof Error ? error.message : "Failed to fetch quizzes";
@@ -31,12 +37,12 @@ export const fetchQuizzes = createAsyncThunk(
   }
 );
 
-export const fetchQuizById = createAsyncThunk(
+export const fetchQuizById = createAsyncThunk<Quiz, string>(
   "quiz/fetchQuizById",
   async (quizId: string, { rejectWithValue }) => {
     try {
       const response = await quizAPI.getQuizById(quizId);
-      return response;
+      return response.data; // Assuming API returns { data: Quiz }
     } catch (error: unknown) {
       const message =
         error instanceof Error ? error.message : "Failed to fetch quiz";
@@ -45,12 +51,12 @@ export const fetchQuizById = createAsyncThunk(
   }
 );
 
-export const createQuiz = createAsyncThunk(
+export const createQuiz = createAsyncThunk<Quiz, CreateQuizData>(
   "quiz/createQuiz",
-  async (quizData: any, { rejectWithValue }) => {
+  async (quizData, { rejectWithValue }) => {
     try {
       const response = await quizAPI.createQuiz(quizData);
-      return response;
+      return response.data; // Assuming API returns { data: Quiz }
     } catch (error: unknown) {
       const message =
         error instanceof Error ? error.message : "Failed to create quiz";
@@ -59,21 +65,21 @@ export const createQuiz = createAsyncThunk(
   }
 );
 
-export const updateQuiz = createAsyncThunk(
-  "quiz/updateQuiz",
-  async ({ id, data }: { id: string; data: any }, { rejectWithValue }) => {
-    try {
-      const response = await quizAPI.updateQuiz(id, data);
-      return response;
-    } catch (error: unknown) {
-      const message =
-        error instanceof Error ? error.message : "Failed to update quiz";
-      return rejectWithValue(message);
-    }
+export const updateQuiz = createAsyncThunk<
+  Quiz,
+  { id: string; data: UpdateQuizData }
+>("quiz/updateQuiz", async ({ id, data }, { rejectWithValue }) => {
+  try {
+    const response = await quizAPI.updateQuiz(id, data);
+    return response.data; // Assuming API returns { data: Quiz }
+  } catch (error: unknown) {
+    const message =
+      error instanceof Error ? error.message : "Failed to update quiz";
+    return rejectWithValue(message);
   }
-);
+});
 
-export const deleteQuiz = createAsyncThunk(
+export const deleteQuiz = createAsyncThunk<string, string>(
   "quiz/deleteQuiz",
   async (quizId: string, { rejectWithValue }) => {
     try {
@@ -105,22 +111,9 @@ const quizSlice = createSlice({
         state.loading = true;
         state.error = null;
       })
-      .addCase(fetchQuizzes.fulfilled, (state, action) => {
+      .addCase(fetchQuizzes.fulfilled, (state, action: PayloadAction<Quiz[]>) => {
         state.loading = false;
-        const payload = action.payload as any;
-        if (Array.isArray(payload)) {
-          state.quizzes = payload;
-        } else if (payload && Array.isArray(payload.data)) {
-          state.quizzes = payload.data;
-        } else if (
-          payload &&
-          payload.quizzes &&
-          Array.isArray(payload.quizzes)
-        ) {
-          state.quizzes = payload.quizzes;
-        } else {
-          state.quizzes = [];
-        }
+        state.quizzes = action.payload;
         state.error = null;
       })
       .addCase(fetchQuizzes.rejected, (state, action) => {
@@ -132,11 +125,14 @@ const quizSlice = createSlice({
         state.loading = true;
         state.error = null;
       })
-      .addCase(fetchQuizById.fulfilled, (state, action) => {
-        state.loading = false;
-        state.currentQuiz = action.payload as Quiz;
-        state.error = null;
-      })
+      .addCase(
+        fetchQuizById.fulfilled,
+        (state, action: PayloadAction<Quiz>) => {
+          state.loading = false;
+          state.currentQuiz = action.payload;
+          state.error = null;
+        }
+      )
       .addCase(fetchQuizById.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
@@ -146,9 +142,9 @@ const quizSlice = createSlice({
         state.loading = true;
         state.error = null;
       })
-      .addCase(createQuiz.fulfilled, (state, action) => {
+      .addCase(createQuiz.fulfilled, (state, action: PayloadAction<Quiz>) => {
         state.loading = false;
-        state.quizzes.unshift(action.payload as Quiz);
+        state.quizzes.unshift(action.payload);
         state.error = null;
       })
       .addCase(createQuiz.rejected, (state, action) => {
@@ -160,14 +156,15 @@ const quizSlice = createSlice({
         state.loading = true;
         state.error = null;
       })
-      .addCase(updateQuiz.fulfilled, (state, action) => {
+      .addCase(updateQuiz.fulfilled, (state, action: PayloadAction<Quiz>) => {
         state.loading = false;
-        const payload = action.payload as Quiz;
-        const index = state.quizzes.findIndex((q) => q._id === payload._id);
+        const index = state.quizzes.findIndex(
+          (q) => q._id === action.payload._id
+        );
         if (index !== -1) {
-          state.quizzes[index] = payload;
+          state.quizzes[index] = action.payload;
         }
-        state.currentQuiz = payload;
+        state.currentQuiz = action.payload;
         state.error = null;
       })
       .addCase(updateQuiz.rejected, (state, action) => {
@@ -179,11 +176,16 @@ const quizSlice = createSlice({
         state.loading = true;
         state.error = null;
       })
-      .addCase(deleteQuiz.fulfilled, (state, action) => {
-        state.loading = false;
-        state.quizzes = state.quizzes.filter((q) => q._id !== action.payload);
-        state.error = null;
-      })
+      .addCase(
+        deleteQuiz.fulfilled,
+        (state, action: PayloadAction<string>) => {
+          state.loading = false;
+          state.quizzes = state.quizzes.filter(
+            (q) => q._id !== action.payload
+          );
+          state.error = null;
+        }
+      )
       .addCase(deleteQuiz.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;

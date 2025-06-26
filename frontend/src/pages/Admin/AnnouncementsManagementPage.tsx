@@ -24,6 +24,8 @@ import {
   Alert,
   Snackbar,
   Avatar,
+  useTheme,
+  useMediaQuery,
   Container,
 } from "@mui/material";
 import {
@@ -262,6 +264,40 @@ const AnnouncementsManagementPage: React.FC = () => {
     setSnackbar({ ...snackbar, open: false });
   };
 
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+
+  const announcementsArray: Announcement[] = Array.isArray(announcements)
+    ? announcements
+    : [];
+
+  const stats = [
+    {
+      title: "Total Announcements",
+      value: announcementsArray.length,
+      icon: <AnnouncementIcon sx={{ fontSize: "inherit" }} />,
+      color: "#1976d2",
+      bgColor: "linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%)",
+    },
+    {
+      title: "This Month",
+      value: announcementsArray.filter(
+        (a) => new Date(a.createdAt).getMonth() === new Date().getMonth()
+      ).length,
+      icon: <TodayIcon sx={{ fontSize: "inherit" }} />,
+      color: "#388e3c",
+      bgColor: "linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%)",
+    },
+    {
+      title: "By You",
+      value: announcementsArray.filter((a) => a.instructor === user?.name)
+        .length,
+      icon: <PersonIcon sx={{ fontSize: "inherit" }} />,
+      color: "#f57c00",
+      bgColor: "linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%)",
+    },
+  ];
+
   if (loading) {
     return (
       <Box sx={{ p: 3 }}>
@@ -271,488 +307,276 @@ const AnnouncementsManagementPage: React.FC = () => {
   }
 
   return (
-    <Container
-      maxWidth={false}
-      sx={{ py: { xs: 2, sm: 3 }, px: { xs: 2, sm: 3 } }}
-    >
-      {/* Header Section */}
-      <Box sx={{ mb: 4 }}>
-        <Typography
-          variant="h4"
-          sx={{
-            fontWeight: 700,
-            color: "#1a365d",
-            mb: 2,
-            fontSize: { xs: "1.5rem", sm: "2rem", md: "2.125rem" },
-          }}
-        >
-          Announcements Management
-        </Typography>
-        <Typography variant="body1" color="text.secondary" sx={{ mb: 3 }}>
-          Create and manage announcements for your students.
-        </Typography>
-
-        {/* Statistics Cards */}
-        <Box
-          sx={{
-            display: "flex",
-            flexWrap: "wrap",
-            gap: { xs: 2, sm: 3 },
-            mb: 4,
-          }}
-        >
-          <Box
-            sx={{
-              flex: {
-                xs: "1 1 100%",
-                sm: "1 1 calc(50% - 12px)",
-                md: "1 1 calc(33.333% - 16px)",
-              },
-              minWidth: 0,
-            }}
-          >
-            <StatCard
-              title="Total Announcements"
-              value={Array.isArray(announcements) ? announcements.length : 0}
-              icon={<AnnouncementIcon />}
-              color="#ff9800"
-              bgColor="linear-gradient(135deg, #ff9800 0%, #f57c00 100%)"
-            />
-          </Box>
-          <Box
-            sx={{
-              flex: {
-                xs: "1 1 100%",
-                sm: "1 1 calc(50% - 12px)",
-                md: "1 1 calc(33.333% - 16px)",
-              },
-              minWidth: 0,
-            }}
-          >
-            <StatCard
-              title="This Week"
-              value={
-                Array.isArray(announcements)
-                  ? announcements.filter((ann) => {
-                      const weekAgo = new Date();
-                      weekAgo.setDate(weekAgo.getDate() - 7);
-                      return new Date(ann.createdAt) > weekAgo;
-                    }).length
-                  : 0
-              }
-              icon={<TodayIcon />}
-              color="#4caf50"
-              bgColor="linear-gradient(135deg, #4caf50 0%, #45a049 100%)"
-            />
-          </Box>
-          <Box
-            sx={{
-              flex: {
-                xs: "1 1 100%",
-                sm: "1 1 100%",
-                md: "1 1 calc(33.333% - 16px)",
-              },
-              minWidth: 0,
-            }}
-          >
-            <StatCard
-              title="Active Instructor"
-              value={user?.name || "Admin"}
-              icon={<PersonIcon />}
-              color="#2196f3"
-              bgColor="linear-gradient(135deg, #2196f3 0%, #1976d2 100%)"
-            />
-          </Box>
-        </Box>
-      </Box>
-
-      {/* Main Content */}
-      <Paper
+    <Container maxWidth="xl" sx={{ py: { xs: 3, md: 5 } }}>
+      <Box
         sx={{
-          borderRadius: 3,
-          boxShadow: "0 4px 20px rgba(0,0,0,0.08)",
-          overflow: "hidden",
+          display: "flex",
+          flexDirection: { xs: "column", md: "row" },
+          alignItems: { xs: "stretch", md: "center" },
+          justifyContent: "space-between",
+          mb: 4,
+          gap: 2,
         }}
       >
-        {/* Toolbar */}
-        <Box
-          sx={{
-            p: { xs: 2, sm: 3 },
-            borderBottom: "1px solid #e2e8f0",
-            display: "flex",
-            flexDirection: { xs: "column", sm: "row" },
-            alignItems: { xs: "stretch", sm: "center" },
-            justifyContent: "space-between",
-            gap: { xs: 2, sm: 0 },
-          }}
-        >
+        <Box>
           <Typography
-            variant="h6"
+            variant="h4"
             sx={{
-              fontWeight: 600,
-              color: "#1a365d",
-              fontSize: { xs: "1.1rem", sm: "1.25rem" },
+              fontWeight: 700,
+              color: "primary.main",
+              fontSize: { xs: "1.8rem", sm: "2.2rem" },
             }}
           >
-            All Announcements (
-            {Array.isArray(announcements) ? announcements.length : 0})
+            Announcements
           </Typography>
+          <Typography color="text.secondary">
+            Create, manage, and share announcements.
+          </Typography>
+        </Box>
+        {!isMobile && (
           <Button
             variant="contained"
             startIcon={<AddIcon />}
             onClick={() => handleOpenDialog()}
             sx={{
-              background: "linear-gradient(135deg, #ff9800 0%, #f57c00 100%)",
-              borderRadius: 2,
-              textTransform: "none",
-              fontWeight: 600,
-              px: { xs: 2, sm: 3 },
-              py: { xs: 1.5, sm: 1 },
+              px: 3,
+              py: 1.5,
+              borderRadius: "12px",
+              boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
             }}
           >
-            Create Announcement
+            New Announcement
           </Button>
-        </Box>
+        )}
+      </Box>
 
-        {/* Mobile Card View for xs and sm screens */}
-        <Box sx={{ display: { xs: "block", md: "none" } }}>
-          {loading ? (
-            <Box sx={{ p: 4, textAlign: "center" }}>
-              <Typography>Loading announcements...</Typography>
-            </Box>
-          ) : !Array.isArray(announcements) || announcements.length === 0 ? (
-            <Box sx={{ p: 4, textAlign: "center" }}>
-              <Typography color="text.secondary">
-                No announcements found. Create your first announcement!
-              </Typography>
-            </Box>
-          ) : (
-            <Box sx={{ p: 2 }}>
-              {announcements.map((announcement) => (
-                <Card
-                  key={announcement._id}
-                  sx={{ mb: 2, border: "1px solid #e2e8f0" }}
-                >
-                  <CardContent>
-                    <Box
-                      sx={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                        alignItems: "flex-start",
-                        mb: 2,
-                      }}
-                    >
-                      <Box sx={{ flex: 1 }}>
-                        <Typography
-                          variant="h6"
-                          sx={{ fontWeight: 600, mb: 1, fontSize: "1rem" }}
-                        >
-                          {announcement.title}
-                        </Typography>
-                        <Typography
-                          variant="body2"
-                          color="text.secondary"
-                          sx={{
-                            mb: 2,
-                            display: "-webkit-box",
-                            WebkitLineClamp: 3,
-                            WebkitBoxOrient: "vertical",
-                            overflow: "hidden",
-                            textOverflow: "ellipsis",
-                          }}
-                        >
-                          {announcement.content}
-                        </Typography>
-                        <Box
-                          sx={{
-                            display: "flex",
-                            alignItems: "center",
-                            gap: 1,
-                            flexWrap: "wrap",
-                          }}
-                        >
-                          <Avatar
-                            sx={{ width: 24, height: 24, bgcolor: "#ff9800" }}
-                          >
-                            <PersonIcon sx={{ fontSize: 16 }} />
-                          </Avatar>
-                          <Typography variant="caption" color="text.secondary">
-                            By {announcement.instructor}
-                          </Typography>
-                          <Typography variant="caption" color="text.secondary">
-                            •{" "}
-                            {new Date(
-                              announcement.createdAt
-                            ).toLocaleDateString()}
-                          </Typography>
-                        </Box>
-                      </Box>
-                      <IconButton
-                        onClick={(e) => handleMenuClick(e, announcement)}
-                        size="small"
-                      >
-                        <MoreVertIcon />
-                      </IconButton>
-                    </Box>
-                  </CardContent>
-                </Card>
-              ))}
-            </Box>
-          )}
-        </Box>
+      {/* Stats Cards */}
+      <Box
+        sx={{
+          display: "grid",
+          gridTemplateColumns: {
+            xs: "1fr",
+            sm: "repeat(2, 1fr)",
+            md: "repeat(3, 1fr)",
+          },
+          gap: { xs: 2, md: 3 },
+          mb: 4,
+        }}
+      >
+        {stats.map((stat) => (
+          <StatCard {...stat} key={stat.title} />
+        ))}
+      </Box>
 
-        {/* Desktop Table View */}
-        <Box sx={{ display: { xs: "none", md: "block" } }}>
-          <TableContainer>
-            <Table>
-              <TableHead sx={{ backgroundColor: "#f8fafc" }}>
-                <TableRow>
-                  <TableCell sx={{ fontWeight: 600, color: "#1a365d" }}>
-                    Announcement
-                  </TableCell>
-                  <TableCell sx={{ fontWeight: 600, color: "#1a365d" }}>
-                    Instructor
-                  </TableCell>
-                  <TableCell sx={{ fontWeight: 600, color: "#1a365d" }}>
-                    Created
-                  </TableCell>
-                  <TableCell
+      <Paper
+        sx={{
+          p: { xs: 2, md: 3 },
+          borderRadius: "16px",
+          boxShadow: "0 8px 32px rgba(0,0,0,0.05)",
+        }}
+      >
+        {isMobile ? (
+          <Box>
+            {announcementsArray.map((announcement) => (
+              <Card key={announcement._id} sx={{ mb: 2, borderRadius: "12px" }}>
+                <CardContent>
+                  <Box
                     sx={{
-                      fontWeight: 600,
-                      color: "#1a365d",
-                      textAlign: "center",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                      mb: 2,
                     }}
                   >
-                    Actions
-                  </TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {loading ? (
-                  <TableRow>
-                    <TableCell colSpan={4} sx={{ textAlign: "center", py: 4 }}>
-                      <Typography>Loading announcements...</Typography>
-                    </TableCell>
-                  </TableRow>
-                ) : !Array.isArray(announcements) ||
-                  announcements.length === 0 ? (
-                  <TableRow>
-                    <TableCell colSpan={4} sx={{ textAlign: "center", py: 4 }}>
-                      <Typography color="text.secondary">
-                        No announcements found. Create your first announcement!
-                      </Typography>
-                    </TableCell>
-                  </TableRow>
-                ) : (
-                  announcements.map((announcement) => (
-                    <TableRow
-                      key={announcement._id}
-                      sx={{ "&:hover": { backgroundColor: "#f8fafc" } }}
-                    >
-                      <TableCell sx={{ maxWidth: "400px" }}>
+                    <Box sx={{ display: "flex", alignItems: "center" }}>
+                      <Avatar
+                        src={announcement.instructorAvatar || undefined}
+                        sx={{
+                          width: 40,
+                          height: 40,
+                          mr: 2,
+                          bgcolor: "#2196f3",
+                        }}
+                      >
+                        {announcement.instructor
+                          ? announcement.instructor.charAt(0)
+                          : "A"}
+                      </Avatar>
+                      <Box>
                         <Typography
-                          variant="subtitle2"
-                          sx={{ fontWeight: 600, mb: 1 }}
+                          variant="subtitle1"
+                          sx={{ fontWeight: "bold" }}
                         >
                           {announcement.title}
                         </Typography>
-                        <Typography
-                          variant="body2"
-                          color="text.secondary"
-                          sx={{
-                            display: "-webkit-box",
-                            WebkitLineClamp: 2,
-                            WebkitBoxOrient: "vertical",
-                            overflow: "hidden",
-                            textOverflow: "ellipsis",
-                          }}
-                        >
-                          {announcement.content}
-                        </Typography>
-                      </TableCell>
-                      <TableCell>
-                        <Box
-                          sx={{ display: "flex", alignItems: "center", gap: 1 }}
-                        >
-                          <Avatar
-                            sx={{ width: 32, height: 32, bgcolor: "#ff9800" }}
-                          >
-                            <PersonIcon sx={{ fontSize: 18 }} />
-                          </Avatar>
-                          <Typography variant="body2">
-                            {announcement.instructor}
-                          </Typography>
-                        </Box>
-                      </TableCell>
-                      <TableCell>
-                        <Typography variant="body2">
+                        <Typography variant="caption" color="text.secondary">
                           {new Date(
                             announcement.createdAt
                           ).toLocaleDateString()}
                         </Typography>
-                      </TableCell>
-                      <TableCell sx={{ textAlign: "center" }}>
-                        <IconButton
-                          onClick={(e) => handleMenuClick(e, announcement)}
-                          size="small"
-                        >
-                          <MoreVertIcon />
-                        </IconButton>
-                      </TableCell>
-                    </TableRow>
-                  ))
-                )}
+                      </Box>
+                    </Box>
+                    <IconButton
+                      onClick={(e) => handleMenuClick(e, announcement)}
+                    >
+                      <MoreVertIcon />
+                    </IconButton>
+                  </Box>
+                  <Typography
+                    variant="body2"
+                    color="text.secondary"
+                    sx={{
+                      display: "-webkit-box",
+                      WebkitLineClamp: 3,
+                      WebkitBoxOrient: "vertical",
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                      minHeight: 60,
+                    }}
+                  >
+                    {announcement.content}
+                  </Typography>
+                </CardContent>
+              </Card>
+            ))}
+          </Box>
+        ) : (
+          <TableContainer>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell>Title</TableCell>
+                  <TableCell>Instructor</TableCell>
+                  <TableCell>Date</TableCell>
+                  <TableCell>Actions</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {announcementsArray.map((announcement) => (
+                  <TableRow key={announcement._id}>
+                    <TableCell sx={{ fontWeight: 500 }}>
+                      {announcement.title}
+                    </TableCell>
+                    <TableCell>{announcement.instructor}</TableCell>
+                    <TableCell>
+                      {new Date(announcement.createdAt).toLocaleDateString()}
+                    </TableCell>
+                    <TableCell>
+                      <IconButton
+                        onClick={() => handleOpenDialog(announcement)}
+                      >
+                        <EditIcon />
+                      </IconButton>
+                      <IconButton
+                        onClick={() => handleDelete(announcement)}
+                        color="error"
+                      >
+                        <DeleteIcon />
+                      </IconButton>
+                    </TableCell>
+                  </TableRow>
+                ))}
               </TableBody>
             </Table>
           </TableContainer>
-        </Box>
+        )}
       </Paper>
-
-      {/* Floating Action Button for mobile */}
-      <Fab
-        color="primary"
-        aria-label="add announcement"
-        onClick={() => handleOpenDialog()}
-        sx={{
-          position: "fixed",
-          bottom: { xs: 16, sm: 24 },
-          right: { xs: 16, sm: 24 },
-          display: { xs: "flex", sm: "none" },
-          background: "linear-gradient(135deg, #ff9800 0%, #f57c00 100%)",
-        }}
-      >
-        <AddIcon />
-      </Fab>
-
-      {/* Actions Menu */}
+      {isMobile && (
+        <Fab
+          color="primary"
+          aria-label="add"
+          sx={{ position: "fixed", bottom: 16, right: 16 }}
+          onClick={() => handleOpenDialog()}
+        >
+          <AddIcon />
+        </Fab>
+      )}
       <Menu
         anchorEl={anchorEl}
         open={Boolean(anchorEl)}
         onClose={handleMenuClose}
       >
-        <MenuItem onClick={handleMenuClose}>
-          <ViewIcon sx={{ mr: 1, fontSize: 20 }} />
-          View Details
-        </MenuItem>
         <MenuItem
           onClick={() => {
-            if (selectedAnnouncement) handleOpenDialog(selectedAnnouncement);
+            if (selectedAnnouncement) {
+              handleOpenDialog(selectedAnnouncement);
+            }
             handleMenuClose();
           }}
         >
-          <EditIcon sx={{ mr: 1, fontSize: 20 }} />
-          Edit Announcement
+          <EditIcon sx={{ mr: 1 }} /> Edit
         </MenuItem>
         <MenuItem
           onClick={() => {
-            if (selectedAnnouncement) handleDelete(selectedAnnouncement);
+            if (selectedAnnouncement) {
+              handleDelete(selectedAnnouncement);
+            }
           }}
           sx={{ color: "error.main" }}
         >
-          <DeleteIcon sx={{ mr: 1, fontSize: 20 }} />
-          Delete Announcement
+          <DeleteIcon sx={{ mr: 1 }} /> Delete
         </MenuItem>
       </Menu>
 
-      {/* Create/Edit Dialog */}
       <Dialog
         open={openDialog}
         onClose={handleCloseDialog}
-        maxWidth="md"
         fullWidth
-        PaperProps={{
-          sx: { borderRadius: 3 },
-        }}
+        maxWidth="sm"
       >
-        <DialogTitle sx={{ pb: 1 }}>
-          <Typography variant="h6" sx={{ fontWeight: 600 }}>
-            {editingAnnouncement
-              ? "Edit Announcement"
-              : "Create New Announcement"}
-          </Typography>
+        <DialogTitle>
+          {editingAnnouncement ? "Edit Announcement" : "Create Announcement"}
         </DialogTitle>
         <DialogContent>
-          <Box sx={{ display: "flex", flexDirection: "column", gap: 3, mt: 1 }}>
-            <Box>
+          <Box component="form" sx={{ mt: 1 }}>
+            <TextField
+              label="Title"
+              fullWidth
+              value={formData.title}
+              onChange={(e) => handleFormChange("title", e.target.value)}
+              sx={{ mb: 2 }}
+            />
+            <TextField
+              label="Content"
+              fullWidth
+              multiline
+              rows={4}
+              value={formData.content}
+              onChange={(e) => handleFormChange("content", e.target.value)}
+              sx={{ mb: 2 }}
+            />
+            <Box display="flex" gap={2}>
               <TextField
+                label="Instructor"
                 fullWidth
-                label="Title"
-                value={formData.title}
-                onChange={(e) => handleFormChange("title", e.target.value)}
-                variant="outlined"
-                placeholder="Enter announcement title..."
+                value={formData.instructor}
+                onChange={(e) => handleFormChange("instructor", e.target.value)}
+                sx={{ flex: 1 }}
               />
-            </Box>
-            <Box
-              sx={{
-                display: "flex",
-                gap: 2,
-                flexDirection: { xs: "column", md: "row" },
-              }}
-            >
-              <Box sx={{ flex: 1 }}>
-                <TextField
-                  fullWidth
-                  label="Instructor Name"
-                  value={formData.instructor}
-                  onChange={(e) =>
-                    handleFormChange("instructor", e.target.value)
-                  }
-                  variant="outlined"
-                />
-              </Box>
-              <Box sx={{ flex: 1 }}>
-                <TextField
-                  fullWidth
-                  label="Instructor Avatar URL (Optional)"
-                  value={formData.instructorAvatar}
-                  onChange={(e) =>
-                    handleFormChange("instructorAvatar", e.target.value)
-                  }
-                  variant="outlined"
-                  placeholder="https://example.com/avatar.jpg"
-                />
-              </Box>
-            </Box>
-            <Box>
               <TextField
+                label="Avatar URL"
                 fullWidth
-                label="Content"
-                multiline
-                rows={6}
-                value={formData.content}
-                onChange={(e) => handleFormChange("content", e.target.value)}
-                variant="outlined"
-                placeholder="Write your announcement content here..."
+                value={formData.instructorAvatar}
+                onChange={(e) =>
+                  handleFormChange("instructorAvatar", e.target.value)
+                }
+                sx={{ flex: 1 }}
               />
             </Box>
           </Box>
         </DialogContent>
-        <DialogActions sx={{ p: 3 }}>
-          <Button onClick={handleCloseDialog} color="inherit">
-            Cancel
-          </Button>
-          <Button
-            onClick={handleSubmit}
-            variant="contained"
-            sx={{
-              background: "linear-gradient(135deg, #f093fb 0%, #f5576c 100%)",
-              textTransform: "none",
-              fontWeight: 600,
-            }}
-          >
-            {editingAnnouncement
-              ? "Update Announcement"
-              : "Create Announcement"}
+        <DialogActions sx={{ p: "0 24px 16px" }}>
+          <Button onClick={handleCloseDialog}>Cancel</Button>
+          <Button onClick={handleSubmit} variant="contained">
+            {editingAnnouncement ? "Update" : "Create"}
           </Button>
         </DialogActions>
       </Dialog>
-
-      {/* Snackbar */}
       <Snackbar
         open={snackbar.open}
         autoHideDuration={6000}
         onClose={handleSnackbarClose}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
       >
         <Alert
           onClose={handleSnackbarClose}

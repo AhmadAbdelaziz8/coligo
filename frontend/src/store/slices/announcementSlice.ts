@@ -33,7 +33,7 @@ const initialState: AnnouncementState = {
 };
 
 // Async thunks
-export const fetchAnnouncements = createAsyncThunk(
+export const fetchAnnouncements = createAsyncThunk<Announcement[]>(
   "announcement/fetchAnnouncements",
   async (_, { rejectWithValue }) => {
     try {
@@ -49,7 +49,7 @@ export const fetchAnnouncements = createAsyncThunk(
   }
 );
 
-export const fetchAnnouncementById = createAsyncThunk(
+export const fetchAnnouncementById = createAsyncThunk<Announcement, string>(
   "announcement/fetchAnnouncementById",
   async (announcementId: string, { rejectWithValue }) => {
     try {
@@ -65,7 +65,10 @@ export const fetchAnnouncementById = createAsyncThunk(
   }
 );
 
-export const createAnnouncement = createAsyncThunk(
+export const createAnnouncement = createAsyncThunk<
+  Announcement,
+  CreateAnnouncementRequest
+>(
   "announcement/createAnnouncement",
   async (announcementData: CreateAnnouncementRequest, { rejectWithValue }) => {
     try {
@@ -83,7 +86,10 @@ export const createAnnouncement = createAsyncThunk(
   }
 );
 
-export const updateAnnouncement = createAsyncThunk(
+export const updateAnnouncement = createAsyncThunk<
+  Announcement,
+  { id: string; data: Partial<CreateAnnouncementRequest> }
+>(
   "announcement/updateAnnouncement",
   async (
     { id, data }: { id: string; data: Partial<CreateAnnouncementRequest> },
@@ -102,7 +108,7 @@ export const updateAnnouncement = createAsyncThunk(
   }
 );
 
-export const deleteAnnouncement = createAsyncThunk(
+export const deleteAnnouncement = createAsyncThunk<string, string>(
   "announcement/deleteAnnouncement",
   async (announcementId: string, { rejectWithValue }) => {
     try {
@@ -137,20 +143,7 @@ const announcementSlice = createSlice({
       })
       .addCase(fetchAnnouncements.fulfilled, (state, action) => {
         state.loading = false;
-        const payload = action.payload as any;
-        if (Array.isArray(payload)) {
-          state.announcements = payload;
-        } else if (payload && Array.isArray(payload.data)) {
-          state.announcements = payload.data;
-        } else if (
-          payload &&
-          payload.announcements &&
-          Array.isArray(payload.announcements)
-        ) {
-          state.announcements = payload.announcements;
-        } else {
-          state.announcements = [];
-        }
+        state.announcements = action.payload;
         state.error = null;
       })
       .addCase(fetchAnnouncements.rejected, (state, action) => {
@@ -163,7 +156,7 @@ const announcementSlice = createSlice({
       })
       .addCase(fetchAnnouncementById.fulfilled, (state, action) => {
         state.loading = false;
-        state.currentAnnouncement = action.payload as Announcement;
+        state.currentAnnouncement = action.payload;
         state.error = null;
       })
       .addCase(fetchAnnouncementById.rejected, (state, action) => {
@@ -176,7 +169,7 @@ const announcementSlice = createSlice({
       })
       .addCase(createAnnouncement.fulfilled, (state, action) => {
         state.loading = false;
-        state.announcements.unshift(action.payload as Announcement);
+        state.announcements.unshift(action.payload);
         state.error = null;
       })
       .addCase(createAnnouncement.rejected, (state, action) => {
@@ -189,14 +182,13 @@ const announcementSlice = createSlice({
       })
       .addCase(updateAnnouncement.fulfilled, (state, action) => {
         state.loading = false;
-        const payload = action.payload as Announcement;
         const index = state.announcements.findIndex(
-          (a) => a._id === payload._id
+          (a) => a._id === action.payload._id
         );
         if (index !== -1) {
-          state.announcements[index] = payload;
+          state.announcements[index] = action.payload;
         }
-        state.currentAnnouncement = payload;
+        state.currentAnnouncement = action.payload;
         state.error = null;
       })
       .addCase(updateAnnouncement.rejected, (state, action) => {
