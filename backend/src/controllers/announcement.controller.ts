@@ -18,10 +18,11 @@ export const createAnnouncementController = async (
 
     // Basic validation
     if (!title || !content || !instructor) {
-      return res.status(400).json({
+      res.status(400).json({
         success: false,
         message: "Title, content, and instructor are required",
       });
+      return;
     }
 
     const announcement = await createAnnouncement({
@@ -57,10 +58,11 @@ export const getAllAnnouncementsController = async (
 
     // check if all the announcements exist
     if (!announcements) {
-      return res.status(404).json({
+      res.status(404).json({
         success: false,
         message: "Announcements not found",
       });
+      return;
     }
     res.status(200).json({
       success: true,
@@ -89,10 +91,11 @@ export const getAnnouncementByIdController = async (
     const announcement = await getAnnouncementById(id);
 
     if (!announcement) {
-      return res.status(404).json({
+      res.status(404).json({
         success: false,
         message: "Announcement not found",
       });
+      return;
     }
 
     res.status(200).json({
@@ -123,10 +126,11 @@ export const updateAnnouncementController = async (
     // Check if announcement exists
     const existingAnnouncement = await getAnnouncementById(id);
     if (!existingAnnouncement) {
-      return res.status(404).json({
+      res.status(404).json({
         success: false,
         message: "Announcement not found",
       });
+      return;
     }
 
     const updatedAnnouncement = await updateAnnouncement(id, {
@@ -163,10 +167,11 @@ export const deleteAnnouncementController = async (
     const deletedAnnouncement = await deleteAnnouncement(id);
 
     if (!deletedAnnouncement) {
-      return res.status(404).json({
+      res.status(404).json({
         success: false,
         message: "Announcement not found",
       });
+      return;
     }
 
     res.status(200).json({

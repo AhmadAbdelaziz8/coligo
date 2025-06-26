@@ -1,11 +1,8 @@
 import mongoose from "mongoose";
-import dotenv from "dotenv";
 import connectDB from "./config/db";
 import { Quiz } from "./models/quiz.model";
 import { Announcement } from "./models/announcement.model";
 import { seedQuizzes, seedAnnouncements } from "./config/seedData";
-
-dotenv.config();
 
 const importData = async () => {
   try {

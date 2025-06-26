@@ -1,6 +1,36 @@
 import jwt from "jsonwebtoken";
 import { User } from "../models/user.model";
-import { IUser, IUserSafe } from "../types/user.types";
+import { IUser, IUserSafe, IUserDocument } from "../types/user.types";
+
+// Helper function to generate JWT token
+const generateToken = (user: {
+  _id: any;
+  email: string;
+  role: string;
+}): string => {
+  const jwtSecret = process.env.JWT_SECRET;
+  if (!jwtSecret) {
+    throw new Error("JWT_SECRET not configured");
+  }
+
+  return jwt.sign(
+    {
+      userId: user._id,
+      email: user.email,
+      role: user.role,
+    },
+    jwtSecret,
+    { expiresIn: "7d" }
+  );
+};
+
+// Helper function to convert user to safe format
+const toUserSafe = (user: IUserDocument): IUserSafe => ({
+  _id: (user._id as any).toString(),
+  name: user.name,
+  email: user.email,
+  role: user.role,
+});
 
 export const registerUser = async (userData: {
   name: string;
@@ -24,31 +54,11 @@ export const registerUser = async (userData: {
     role,
   });
 
-  // return the user without the password
-  const userWithoutPassword: IUserSafe = {
-    _id: user._id.toString(),
-    name: user.name,
-    email: user.email,
-    role: user.role,
-  };
+  // Generate token and return safe user data
+  const token = generateToken(user);
+  const userSafe = toUserSafe(user);
 
-  const jwtSecret = process.env.JWT_SECRET;
-  if (!jwtSecret) {
-    throw new Error("JWT_SECRET not configured");
-  }
-
-  // Generate token
-  const token = jwt.sign(
-    {
-      userId: user._id,
-      email: user.email,
-      role: user.role,
-    },
-    jwtSecret,
-    { expiresIn: "7d" }
-  );
-
-  return { user: userWithoutPassword, token };
+  return { user: userSafe, token };
 };
 
 export const loginUser = async (credentials: {
@@ -69,31 +79,9 @@ export const loginUser = async (credentials: {
     throw new Error("Invalid credentials");
   }
 
-  const jwtSecret = process.env.JWT_SECRET;
-  if (!jwtSecret) {
-    throw new Error("JWT_SECRET not configured");
-  }
+  // Generate token and return safe user data
+  const token = generateToken(user);
+  const userSafe = toUserSafe(user);
 
-  // Generate token
-  const token = jwt.sign(
-    {
-      userId: user._id,
-      email: user.email,
-      role: user.role,
-    },
-    jwtSecret,
-    { expiresIn: "7d" }
-  );
-
-  const userSafe: IUserSafe = {
-    _id: user._id.toString(),
-    name: user.name,
-    email: user.email,
-    role: user.role,
-  };
-
-  return {
-    user: userSafe,
-    token,
-  };
+  return { user: userSafe, token };
 };

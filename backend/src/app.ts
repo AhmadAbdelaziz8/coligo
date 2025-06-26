@@ -1,4 +1,4 @@
-import express, { json } from "express";
+import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import mongoose from "mongoose";
@@ -12,10 +12,6 @@ import authRoute from "./routes/auth.route";
 // middleware
 import { authMiddleware } from "./middleware/auth.middleware";
 import { loggerMiddleware } from "./middleware/logger.middleware";
-// seeding
-import { Quiz } from "./models/quiz.model";
-import { Announcement } from "./models/announcement.model";
-import { seedQuizzes, seedAnnouncements } from "./config/seedData";
 
 dotenv.config();
 const app = express();
@@ -53,44 +49,6 @@ app.get("/api-docs", (req, res) => {
     swaggerJson: "/api-docs/swagger.json",
     info: "Use swagger-ui-react in frontend to display documentation",
   });
-});
-
-// Seed endpoint for initial data population
-app.post("/api/seed", async (req, res) => {
-  try {
-    if (!process.env.MONGO_URI) {
-      return res
-        .status(500)
-        .json({ error: "MONGO_URI environment variable not set" });
-    }
-
-    // Check if database is connected
-    if (mongoose.connection.readyState !== 1) {
-      return res.status(500).json({ error: "Database not connected" });
-    }
-
-    // Clear existing data
-    await Quiz.deleteMany();
-    await Announcement.deleteMany();
-
-    // Insert seed data
-    await Quiz.insertMany(seedQuizzes);
-    await Announcement.insertMany(seedAnnouncements);
-
-    res.json({
-      message: "Database seeded successfully!",
-      data: {
-        quizzes: seedQuizzes.length,
-        announcements: seedAnnouncements.length,
-      },
-    });
-  } catch (error) {
-    console.error("Seed error:", error);
-    res.status(500).json({
-      error: "Failed to seed database",
-      details: error instanceof Error ? error.message : "Unknown error",
-    });
-  }
 });
 
 // public authentication route

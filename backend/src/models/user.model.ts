@@ -2,7 +2,7 @@ import { Schema, model } from "mongoose";
 import bcrypt from "bcryptjs";
 import { IUser } from "../types/user.types";
 
-export const UserSchema = new Schema<IUser>(
+const UserSchema = new Schema<IUser>(
   {
     name: {
       type: String,
