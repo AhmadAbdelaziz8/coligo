@@ -81,22 +81,22 @@ export const authAPI = {
 
 // Quiz API
 export const quizAPI = {
-  getQuizzes: async () => {
+  getQuizzes: async (): Promise<ApiResponse<any[]>> => {
     return apiRequest("/api/quizzes");
   },
 
-  getQuizById: async (id: string) => {
+  getQuizById: async (id: string): Promise<ApiResponse<any>> => {
     return apiRequest(`/api/quizzes/${id}`);
   },
 
-  createQuiz: async (data: any) => {
+  createQuiz: async (data: any): Promise<ApiResponse<any>> => {
     return apiRequest("/api/quizzes", {
       method: "POST",
       body: JSON.stringify(data),
     });
   },
 
-  updateQuiz: async (id: string, data: any) => {
+  updateQuiz: async (id: string, data: any): Promise<ApiResponse<any>> => {
     return apiRequest(`/api/quizzes/${id}`, {
       method: "PUT",
       body: JSON.stringify(data),

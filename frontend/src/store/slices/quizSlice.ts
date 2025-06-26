@@ -23,51 +23,55 @@ const initialState: QuizState = {
 };
 
 // Async thunks
-export const fetchQuizzes = createAsyncThunk<Quiz[]>(
-  "quiz/fetchQuizzes",
-  async (_, { rejectWithValue }) => {
-    try {
-      const response = await quizAPI.getQuizzes();
-      return response.data; // Assuming API returns { data: Quiz[] }
-    } catch (error: unknown) {
-      const message =
-        error instanceof Error ? error.message : "Failed to fetch quizzes";
-      return rejectWithValue(message);
-    }
+export const fetchQuizzes = createAsyncThunk<
+  Quiz[],
+  void,
+  { rejectValue: string }
+>("quiz/fetchQuizzes", async (_, { rejectWithValue }) => {
+  try {
+    const response = await quizAPI.getQuizzes();
+    return response.data; // Assuming API returns { data: Quiz[] }
+  } catch (error: unknown) {
+    const message =
+      error instanceof Error ? error.message : "Failed to fetch quizzes";
+    return rejectWithValue(message);
   }
-);
+});
 
-export const fetchQuizById = createAsyncThunk<Quiz, string>(
-  "quiz/fetchQuizById",
-  async (quizId: string, { rejectWithValue }) => {
-    try {
-      const response = await quizAPI.getQuizById(quizId);
-      return response.data; // Assuming API returns { data: Quiz }
-    } catch (error: unknown) {
-      const message =
-        error instanceof Error ? error.message : "Failed to fetch quiz";
-      return rejectWithValue(message);
-    }
+export const fetchQuizById = createAsyncThunk<
+  Quiz,
+  string,
+  { rejectValue: string }
+>("quiz/fetchQuizById", async (quizId: string, { rejectWithValue }) => {
+  try {
+    const response = await quizAPI.getQuizById(quizId);
+    return response.data; // Assuming API returns { data: Quiz }
+  } catch (error: unknown) {
+    const message =
+      error instanceof Error ? error.message : "Failed to fetch quiz";
+    return rejectWithValue(message);
   }
-);
+});
 
-export const createQuiz = createAsyncThunk<Quiz, CreateQuizData>(
-  "quiz/createQuiz",
-  async (quizData, { rejectWithValue }) => {
-    try {
-      const response = await quizAPI.createQuiz(quizData);
-      return response.data; // Assuming API returns { data: Quiz }
-    } catch (error: unknown) {
-      const message =
-        error instanceof Error ? error.message : "Failed to create quiz";
-      return rejectWithValue(message);
-    }
+export const createQuiz = createAsyncThunk<
+  Quiz,
+  CreateQuizData,
+  { rejectValue: string }
+>("quiz/createQuiz", async (quizData, { rejectWithValue }) => {
+  try {
+    const response = await quizAPI.createQuiz(quizData);
+    return response.data; // Assuming API returns { data: Quiz }
+  } catch (error: unknown) {
+    const message =
+      error instanceof Error ? error.message : "Failed to create quiz";
+    return rejectWithValue(message);
   }
-);
+});
 
 export const updateQuiz = createAsyncThunk<
   Quiz,
-  { id: string; data: UpdateQuizData }
+  { id: string; data: UpdateQuizData },
+  { rejectValue: string }
 >("quiz/updateQuiz", async ({ id, data }, { rejectWithValue }) => {
   try {
     const response = await quizAPI.updateQuiz(id, data);
@@ -79,19 +83,20 @@ export const updateQuiz = createAsyncThunk<
   }
 });
 
-export const deleteQuiz = createAsyncThunk<string, string>(
-  "quiz/deleteQuiz",
-  async (quizId: string, { rejectWithValue }) => {
-    try {
-      await quizAPI.deleteQuiz(quizId);
-      return quizId;
-    } catch (error: unknown) {
-      const message =
-        error instanceof Error ? error.message : "Failed to delete quiz";
-      return rejectWithValue(message);
-    }
+export const deleteQuiz = createAsyncThunk<
+  string,
+  string,
+  { rejectValue: string }
+>("quiz/deleteQuiz", async (quizId: string, { rejectWithValue }) => {
+  try {
+    await quizAPI.deleteQuiz(quizId);
+    return quizId;
+  } catch (error: unknown) {
+    const message =
+      error instanceof Error ? error.message : "Failed to delete quiz";
+    return rejectWithValue(message);
   }
-);
+});
 
 const quizSlice = createSlice({
   name: "quiz",

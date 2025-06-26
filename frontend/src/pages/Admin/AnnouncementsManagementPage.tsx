@@ -32,7 +32,6 @@ import {
   Add as AddIcon,
   Edit as EditIcon,
   Delete as DeleteIcon,
-  Visibility as ViewIcon,
   MoreVert as MoreVertIcon,
   Announcement as AnnouncementIcon,
   Person as PersonIcon,
@@ -390,7 +389,7 @@ const AnnouncementsManagementPage: React.FC = () => {
                   >
                     <Box sx={{ display: "flex", alignItems: "center" }}>
                       <Avatar
-                        src={announcement.instructorAvatar || undefined}
+                        src={announcement.instructorAvatar || ""}
                         sx={{
                           width: 40,
                           height: 40,
