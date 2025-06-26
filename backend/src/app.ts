@@ -26,12 +26,31 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(loggerMiddleware);
 
+// Health check endpoint
+app.get("/api/health", (req, res) => {
+  res.json({
+    message: "API is running!",
+    timestamp: new Date().toISOString(),
+    env: {
+      nodeEnv: process.env.NODE_ENV,
+      hasMongoUri: !!process.env.MONGO_URI,
+      hasJwtSecret: !!process.env.JWT_SECRET,
+    },
+  });
+});
+
 // swagger documentation
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 // Seed endpoint for initial data population
 app.post("/api/seed", async (req, res) => {
   try {
+    if (!process.env.MONGO_URI) {
+      return res
+        .status(500)
+        .json({ error: "MONGO_URI environment variable not set" });
+    }
+
     // Clear existing data
     await Quiz.deleteMany();
     await Announcement.deleteMany();
@@ -49,7 +68,9 @@ app.post("/api/seed", async (req, res) => {
     });
   } catch (error) {
     console.error("Seed error:", error);
-    res.status(500).json({ error: "Failed to seed database" });
+    res
+      .status(500)
+      .json({ error: "Failed to seed database", details: error.message });
   }
 });
 
