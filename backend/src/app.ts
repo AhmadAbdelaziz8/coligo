@@ -39,18 +39,54 @@ app.get("/api/health", (req, res) => {
   });
 });
 
-// swagger documentation
-app.use(
-  "/api-docs",
-  swaggerUi.serve,
-  swaggerUi.setup(swaggerSpec, {
-    customCss: ".swagger-ui .topbar { display: none }",
-    customSiteTitle: "Coligo API Documentation",
-    swaggerOptions: {
-      persistAuthorization: true,
-    },
-  })
-);
+// swagger documentation with CDN assets
+const swaggerHtml = `
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Coligo API Documentation</title>
+  <link rel="stylesheet" type="text/css" href="https://unpkg.com/swagger-ui-dist@5.0.1/swagger-ui.css" />
+  <style>
+    .swagger-ui .topbar { display: none !important; }
+  </style>
+</head>
+<body>
+  <div id="swagger-ui"></div>
+  <script src="https://unpkg.com/swagger-ui-dist@5.0.1/swagger-ui-bundle.js"></script>
+  <script src="https://unpkg.com/swagger-ui-dist@5.0.1/swagger-ui-standalone-preset.js"></script>
+  <script>
+    window.onload = function() {
+      const ui = SwaggerUIBundle({
+        url: window.location.origin + '/api-docs/swagger.json',
+        dom_id: '#swagger-ui',
+        deepLinking: true,
+        presets: [
+          SwaggerUIBundle.presets.apis,
+          SwaggerUIStandalonePreset
+        ],
+        plugins: [
+          SwaggerUIBundle.plugins.DownloadUrl
+        ],
+        layout: "StandaloneLayout",
+        persistAuthorization: true
+      });
+    };
+  </script>
+</body>
+</html>
+`;
+
+// Serve the Swagger spec as JSON
+app.get("/api-docs/swagger.json", (req, res) => {
+  res.setHeader("Content-Type", "application/json");
+  res.send(swaggerSpec);
+});
+
+// Serve custom Swagger UI HTML
+app.get("/api-docs", (req, res) => {
+  res.setHeader("Content-Type", "text/html");
+  res.send(swaggerHtml);
+});
 
 // Seed endpoint for initial data population
 app.post("/api/seed", async (req, res) => {
