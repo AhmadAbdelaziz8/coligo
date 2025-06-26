@@ -16,7 +16,6 @@ import {
   DialogContent,
   DialogActions,
   TextField,
-  Grid,
   Card,
   CardContent,
   Fab,
@@ -26,7 +25,6 @@ import {
   Snackbar,
   Avatar,
   Container,
-  CardActions,
 } from "@mui/material";
 import {
   Add as AddIcon,
@@ -257,35 +255,8 @@ const AnnouncementsManagementPage: React.FC = () => {
   };
 
   const handleSnackbarClose = () => {
-    setSnackbar((prev) => ({ ...prev, open: false }));
+    setSnackbar({ ...snackbar, open: false });
   };
-
-  // Stats calculation
-  const stats = [
-    {
-      title: "Total Announcements",
-      value: announcements.length,
-      icon: <AnnouncementIcon />,
-      color: "#2196f3",
-      bgColor: "linear-gradient(135deg, #2196f320 0%, #2196f330 100%)",
-    },
-    {
-      title: "This Month",
-      value: announcements.filter(
-        (a) => new Date(a.createdAt).getMonth() === new Date().getMonth()
-      ).length,
-      icon: <TodayIcon />,
-      color: "#ff9800",
-      bgColor: "linear-gradient(135deg, #ff980020 0%, #ff980030 100%)",
-    },
-    {
-      title: "Active Instructors",
-      value: new Set(announcements.map((a) => a.instructor)).size,
-      icon: <PersonIcon />,
-      color: "#4caf50",
-      bgColor: "linear-gradient(135deg, #4caf5020 0%, #4caf5030 100%)",
-    },
-  ];
 
   if (loading) {
     return (
@@ -318,8 +289,24 @@ const AnnouncementsManagementPage: React.FC = () => {
         </Typography>
 
         {/* Statistics Cards */}
-        <Grid container spacing={{ xs: 2, sm: 3 }} sx={{ mb: 4 }}>
-          <Grid item xs={12} sm={6} md={4}>
+        <Box
+          sx={{
+            display: "flex",
+            flexWrap: "wrap",
+            gap: { xs: 2, sm: 3 },
+            mb: 4,
+          }}
+        >
+          <Box
+            sx={{
+              flex: {
+                xs: "1 1 100%",
+                sm: "1 1 calc(50% - 12px)",
+                md: "1 1 calc(33.333% - 16px)",
+              },
+              minWidth: 0,
+            }}
+          >
             <StatCard
               title="Total Announcements"
               value={Array.isArray(announcements) ? announcements.length : 0}
@@ -327,8 +314,17 @@ const AnnouncementsManagementPage: React.FC = () => {
               color="#ff9800"
               bgColor="linear-gradient(135deg, #ff9800 0%, #f57c00 100%)"
             />
-          </Grid>
-          <Grid item xs={12} sm={6} md={4}>
+          </Box>
+          <Box
+            sx={{
+              flex: {
+                xs: "1 1 100%",
+                sm: "1 1 calc(50% - 12px)",
+                md: "1 1 calc(33.333% - 16px)",
+              },
+              minWidth: 0,
+            }}
+          >
             <StatCard
               title="This Week"
               value={
@@ -344,8 +340,17 @@ const AnnouncementsManagementPage: React.FC = () => {
               color="#4caf50"
               bgColor="linear-gradient(135deg, #4caf50 0%, #45a049 100%)"
             />
-          </Grid>
-          <Grid item xs={12} sm={12} md={4}>
+          </Box>
+          <Box
+            sx={{
+              flex: {
+                xs: "1 1 100%",
+                sm: "1 1 100%",
+                md: "1 1 calc(33.333% - 16px)",
+              },
+              minWidth: 0,
+            }}
+          >
             <StatCard
               title="Active Instructor"
               value={user?.name || "Admin"}
@@ -353,8 +358,8 @@ const AnnouncementsManagementPage: React.FC = () => {
               color="#2196f3"
               bgColor="linear-gradient(135deg, #2196f3 0%, #1976d2 100%)"
             />
-          </Grid>
-        </Grid>
+          </Box>
+        </Box>
       </Box>
 
       {/* Main Content */}
@@ -663,8 +668,8 @@ const AnnouncementsManagementPage: React.FC = () => {
           </Typography>
         </DialogTitle>
         <DialogContent>
-          <Grid container spacing={3} sx={{ mt: 1 }}>
-            <Grid item xs={12}>
+          <Box sx={{ display: "flex", flexDirection: "column", gap: 3, mt: 1 }}>
+            <Box>
               <TextField
                 fullWidth
                 label="Title"
@@ -673,29 +678,39 @@ const AnnouncementsManagementPage: React.FC = () => {
                 variant="outlined"
                 placeholder="Enter announcement title..."
               />
-            </Grid>
-            <Grid item xs={12} md={6}>
-              <TextField
-                fullWidth
-                label="Instructor Name"
-                value={formData.instructor}
-                onChange={(e) => handleFormChange("instructor", e.target.value)}
-                variant="outlined"
-              />
-            </Grid>
-            <Grid item xs={12} md={6}>
-              <TextField
-                fullWidth
-                label="Instructor Avatar URL (Optional)"
-                value={formData.instructorAvatar}
-                onChange={(e) =>
-                  handleFormChange("instructorAvatar", e.target.value)
-                }
-                variant="outlined"
-                placeholder="https://example.com/avatar.jpg"
-              />
-            </Grid>
-            <Grid item xs={12}>
+            </Box>
+            <Box
+              sx={{
+                display: "flex",
+                gap: 2,
+                flexDirection: { xs: "column", md: "row" },
+              }}
+            >
+              <Box sx={{ flex: 1 }}>
+                <TextField
+                  fullWidth
+                  label="Instructor Name"
+                  value={formData.instructor}
+                  onChange={(e) =>
+                    handleFormChange("instructor", e.target.value)
+                  }
+                  variant="outlined"
+                />
+              </Box>
+              <Box sx={{ flex: 1 }}>
+                <TextField
+                  fullWidth
+                  label="Instructor Avatar URL (Optional)"
+                  value={formData.instructorAvatar}
+                  onChange={(e) =>
+                    handleFormChange("instructorAvatar", e.target.value)
+                  }
+                  variant="outlined"
+                  placeholder="https://example.com/avatar.jpg"
+                />
+              </Box>
+            </Box>
+            <Box>
               <TextField
                 fullWidth
                 label="Content"
@@ -706,8 +721,8 @@ const AnnouncementsManagementPage: React.FC = () => {
                 variant="outlined"
                 placeholder="Write your announcement content here..."
               />
-            </Grid>
-          </Grid>
+            </Box>
+          </Box>
         </DialogContent>
         <DialogActions sx={{ p: 3 }}>
           <Button onClick={handleCloseDialog} color="inherit">

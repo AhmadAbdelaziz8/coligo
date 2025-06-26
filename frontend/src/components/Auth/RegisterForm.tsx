@@ -149,6 +149,30 @@ const RegisterForm: React.FC<RegisterFormProps> = ({
           />
         </Box>
 
+        {/* Terms Agreement */}
+        <FormControlLabel
+          control={
+            <Checkbox
+              checked={agreeTerms}
+              onChange={(e) => onTermsChange(e.target.checked)}
+              sx={{
+                color: "rgba(255,255,255,0.5)",
+                "&.Mui-checked": {
+                  color: "#4fc3f7",
+                },
+              }}
+            />
+          }
+          label={
+            <Typography
+              sx={{ color: "rgba(255,255,255,0.8)", fontSize: "14px" }}
+            >
+              I agree to the Terms of Service and Privacy Policy
+            </Typography>
+          }
+          sx={{ mb: 3 }}
+        />
+
         {/* Create Account Button */}
         <Button
           type="submit"

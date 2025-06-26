@@ -17,7 +17,6 @@ import {
   DialogContent,
   DialogActions,
   TextField,
-  Grid,
   Card,
   CardContent,
   Fab,
@@ -59,7 +58,7 @@ interface Quiz {
   duration: number;
   totalMarks: number;
   isActive: boolean;
-  dueDate: string;
+  dueDate?: string;
   instructions?: string;
   createdBy: string;
   createdAt: string;
@@ -84,7 +83,7 @@ interface QuizFormData {
 
 const QuizzesManagementPage: React.FC = () => {
   const dispatch = useAppDispatch();
-  const { quizzes, loading, error } = useAppSelector((state) => state.quiz);
+  const { quizzes, loading } = useAppSelector((state) => state.quiz);
 
   // Ensure quizzes is always an array
   const quizzesArray = Array.isArray(quizzes) ? quizzes : [];
@@ -128,18 +127,11 @@ const QuizzesManagementPage: React.FC = () => {
         title: quiz.title,
         course: quiz.course,
         topic: quiz.topic,
-        dueDate: quiz.dueDate.split("T")[0], // Format for date input
+        dueDate: (quiz.dueDate ? quiz.dueDate.split("T")[0] : "") as string, // Format for date input
         duration: quiz.duration,
         totalMarks: quiz.totalMarks,
         instructions: quiz.instructions || "",
-        questions: quiz.questions || [
-          {
-            questionText: "",
-            options: ["", "", "", ""],
-            correctAnswer: 0,
-            points: 10,
-          },
-        ],
+        questions: quiz.questions,
       });
     } else {
       setEditingQuiz(null);
@@ -191,10 +183,10 @@ const QuizzesManagementPage: React.FC = () => {
       // Refetch quizzes to ensure the list is updated
       dispatch(fetchQuizzes());
       handleCloseDialog();
-    } catch (error: any) {
+    } catch (error: unknown) {
       setSnackbar({
         open: true,
-        message: error.message || "Operation failed!",
+        message: (error as Error).message || "Operation failed!",
         severity: "error",
       });
     }
@@ -211,10 +203,10 @@ const QuizzesManagementPage: React.FC = () => {
           message: "Quiz deleted successfully!",
           severity: "success",
         });
-      } catch (error: any) {
+      } catch (error: unknown) {
         setSnackbar({
           open: true,
-          message: error.message || "Delete failed!",
+          message: (error as Error).message || "Delete failed!",
           severity: "error",
         });
       }
@@ -261,8 +253,10 @@ const QuizzesManagementPage: React.FC = () => {
 
   const updateQuestion = (index: number, field: string, value: any) => {
     const updatedQuestions = [...formData.questions];
-    updatedQuestions[index] = { ...updatedQuestions[index], [field]: value };
-    setFormData({ ...formData, questions: updatedQuestions });
+    if (updatedQuestions[index]) {
+      (updatedQuestions[index] as any)[field] = value;
+      setFormData({ ...formData, questions: updatedQuestions });
+    }
   };
 
   const updateQuestionOption = (
@@ -315,8 +309,24 @@ const QuizzesManagementPage: React.FC = () => {
         </Typography>
 
         {/* Stats Cards */}
-        <Grid container spacing={{ xs: 2, sm: 3 }} sx={{ mb: 4 }}>
-          <Grid item xs={12} sm={6} md={4}>
+        <Box
+          sx={{
+            display: "flex",
+            flexWrap: "wrap",
+            gap: { xs: 2, sm: 3 },
+            mb: 4,
+          }}
+        >
+          <Box
+            sx={{
+              flex: {
+                xs: "1 1 100%",
+                sm: "1 1 calc(50% - 12px)",
+                md: "1 1 calc(33.333% - 16px)",
+              },
+              minWidth: 0,
+            }}
+          >
             <Card
               sx={{
                 background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
@@ -350,8 +360,17 @@ const QuizzesManagementPage: React.FC = () => {
                 </Box>
               </CardContent>
             </Card>
-          </Grid>
-          <Grid item xs={12} sm={6} md={4}>
+          </Box>
+          <Box
+            sx={{
+              flex: {
+                xs: "1 1 100%",
+                sm: "1 1 calc(50% - 12px)",
+                md: "1 1 calc(33.333% - 16px)",
+              },
+              minWidth: 0,
+            }}
+          >
             <Card
               sx={{
                 background: "linear-gradient(135deg, #4caf50 0%, #45a049 100%)",
@@ -385,8 +404,17 @@ const QuizzesManagementPage: React.FC = () => {
                 </Box>
               </CardContent>
             </Card>
-          </Grid>
-          <Grid item xs={12} sm={12} md={4}>
+          </Box>
+          <Box
+            sx={{
+              flex: {
+                xs: "1 1 100%",
+                sm: "1 1 100%",
+                md: "1 1 calc(33.333% - 16px)",
+              },
+              minWidth: 0,
+            }}
+          >
             <Card
               sx={{
                 background: "linear-gradient(135deg, #ff9800 0%, #f57c00 100%)",
@@ -423,8 +451,8 @@ const QuizzesManagementPage: React.FC = () => {
                 </Box>
               </CardContent>
             </Card>
-          </Grid>
-        </Grid>
+          </Box>
+        </Box>
       </Box>
 
       {/* Main Content */}
@@ -727,84 +755,108 @@ const QuizzesManagementPage: React.FC = () => {
           </Typography>
         </DialogTitle>
         <DialogContent>
-          <Grid container spacing={3} sx={{ mt: 1 }}>
-            <Grid item xs={12} md={6}>
-              <TextField
-                fullWidth
-                label="Quiz Title"
-                value={formData.title}
-                onChange={(e) =>
-                  setFormData({ ...formData, title: e.target.value })
-                }
-                variant="outlined"
-              />
-            </Grid>
-            <Grid item xs={12} md={6}>
-              <TextField
-                fullWidth
-                label="Course"
-                value={formData.course}
-                onChange={(e) =>
-                  setFormData({ ...formData, course: e.target.value })
-                }
-                variant="outlined"
-              />
-            </Grid>
-            <Grid item xs={12} md={6}>
-              <TextField
-                fullWidth
-                label="Topic"
-                value={formData.topic}
-                onChange={(e) =>
-                  setFormData({ ...formData, topic: e.target.value })
-                }
-                variant="outlined"
-              />
-            </Grid>
-            <Grid item xs={12} md={6}>
-              <TextField
-                fullWidth
-                label="Due Date"
-                type="date"
-                value={formData.dueDate}
-                onChange={(e) =>
-                  setFormData({ ...formData, dueDate: e.target.value })
-                }
-                variant="outlined"
-                InputLabelProps={{ shrink: true }}
-              />
-            </Grid>
-            <Grid item xs={12} md={4}>
-              <TextField
-                fullWidth
-                label="Duration (minutes)"
-                type="number"
-                value={formData.duration}
-                onChange={(e) =>
-                  setFormData({
-                    ...formData,
-                    duration: parseInt(e.target.value),
-                  })
-                }
-                variant="outlined"
-              />
-            </Grid>
-            <Grid item xs={12} md={4}>
-              <TextField
-                fullWidth
-                label="Total Marks"
-                type="number"
-                value={formData.totalMarks}
-                onChange={(e) =>
-                  setFormData({
-                    ...formData,
-                    totalMarks: parseInt(e.target.value),
-                  })
-                }
-                variant="outlined"
-              />
-            </Grid>
-            <Grid item xs={12}>
+          <Box sx={{ display: "flex", flexDirection: "column", gap: 3, mt: 1 }}>
+            <Box
+              sx={{
+                display: "flex",
+                gap: 2,
+                flexDirection: { xs: "column", md: "row" },
+              }}
+            >
+              <Box sx={{ flex: 1 }}>
+                <TextField
+                  fullWidth
+                  label="Quiz Title"
+                  value={formData.title}
+                  onChange={(e) =>
+                    setFormData({ ...formData, title: e.target.value })
+                  }
+                  variant="outlined"
+                />
+              </Box>
+              <Box sx={{ flex: 1 }}>
+                <TextField
+                  fullWidth
+                  label="Course"
+                  value={formData.course}
+                  onChange={(e) =>
+                    setFormData({ ...formData, course: e.target.value })
+                  }
+                  variant="outlined"
+                />
+              </Box>
+            </Box>
+            <Box
+              sx={{
+                display: "flex",
+                gap: 2,
+                flexDirection: { xs: "column", md: "row" },
+              }}
+            >
+              <Box sx={{ flex: 1 }}>
+                <TextField
+                  fullWidth
+                  label="Topic"
+                  value={formData.topic}
+                  onChange={(e) =>
+                    setFormData({ ...formData, topic: e.target.value })
+                  }
+                  variant="outlined"
+                />
+              </Box>
+              <Box sx={{ flex: 1 }}>
+                <TextField
+                  fullWidth
+                  label="Due Date"
+                  type="date"
+                  value={formData.dueDate}
+                  onChange={(e) =>
+                    setFormData({ ...formData, dueDate: e.target.value })
+                  }
+                  variant="outlined"
+                  InputLabelProps={{ shrink: true }}
+                />
+              </Box>
+            </Box>
+            <Box
+              sx={{
+                display: "flex",
+                gap: 2,
+                flexDirection: { xs: "column", md: "row" },
+              }}
+            >
+              <Box sx={{ flex: 1 }}>
+                <TextField
+                  fullWidth
+                  label="Duration (minutes)"
+                  type="number"
+                  value={formData.duration}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      duration: parseInt(e.target.value),
+                    })
+                  }
+                  variant="outlined"
+                />
+              </Box>
+              <Box sx={{ flex: 1 }}>
+                <TextField
+                  fullWidth
+                  label="Total Marks"
+                  type="number"
+                  value={formData.totalMarks}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      totalMarks: parseInt(e.target.value),
+                    })
+                  }
+                  variant="outlined"
+                />
+              </Box>
+            </Box>
+            <Box>
               <TextField
                 fullWidth
                 label="Instructions"
@@ -816,10 +868,10 @@ const QuizzesManagementPage: React.FC = () => {
                 }
                 variant="outlined"
               />
-            </Grid>
+            </Box>
 
             {/* Questions Section */}
-            <Grid item xs={12}>
+            <Box>
               <Box
                 sx={{
                   display: "flex",
@@ -879,9 +931,17 @@ const QuizzesManagementPage: React.FC = () => {
                     sx={{ mb: 2 }}
                   />
 
-                  <Grid container spacing={2}>
+                  <Box
+                    sx={{ display: "flex", flexWrap: "wrap", gap: 2, mb: 2 }}
+                  >
                     {question.options.map((option, optionIndex) => (
-                      <Grid item xs={12} md={6} key={optionIndex}>
+                      <Box
+                        key={optionIndex}
+                        sx={{
+                          flex: { xs: "1 1 100%", md: "1 1 calc(50% - 8px)" },
+                          minWidth: 0,
+                        }}
+                      >
                         <TextField
                           fullWidth
                           label={`Option ${optionIndex + 1}`}
@@ -895,12 +955,18 @@ const QuizzesManagementPage: React.FC = () => {
                           }
                           variant="outlined"
                         />
-                      </Grid>
+                      </Box>
                     ))}
-                  </Grid>
+                  </Box>
 
-                  <Grid container spacing={2} sx={{ mt: 1 }}>
-                    <Grid item xs={12} md={6}>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      gap: 2,
+                      flexDirection: { xs: "column", md: "row" },
+                    }}
+                  >
+                    <Box sx={{ flex: 1 }}>
                       <TextField
                         fullWidth
                         select
@@ -922,8 +988,8 @@ const QuizzesManagementPage: React.FC = () => {
                           </option>
                         ))}
                       </TextField>
-                    </Grid>
-                    <Grid item xs={12} md={6}>
+                    </Box>
+                    <Box sx={{ flex: 1 }}>
                       <TextField
                         fullWidth
                         label="Points"
@@ -938,12 +1004,12 @@ const QuizzesManagementPage: React.FC = () => {
                         }
                         variant="outlined"
                       />
-                    </Grid>
-                  </Grid>
+                    </Box>
+                  </Box>
                 </Paper>
               ))}
-            </Grid>
-          </Grid>
+            </Box>
+          </Box>
         </DialogContent>
         <DialogActions sx={{ p: 3 }}>
           <Button onClick={handleCloseDialog} color="inherit">

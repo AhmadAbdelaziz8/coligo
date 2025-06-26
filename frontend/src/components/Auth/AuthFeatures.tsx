@@ -10,7 +10,7 @@ interface Feature {
 interface AuthFeaturesProps {
   title: string;
   subtitle: string;
-  features?: Feature[];
+  features?: Feature[] | undefined;
 }
 
 const AuthFeatures: React.FC<AuthFeaturesProps> = ({

@@ -108,7 +108,7 @@ const quizSlice = createSlice({
       .addCase(fetchQuizzes.fulfilled, (state, action) => {
         state.loading = false;
         // Handle different API response formats
-        const payload = action.payload;
+        const payload = action.payload as any;
         if (Array.isArray(payload)) {
           state.quizzes = payload;
         } else if (payload && Array.isArray(payload.data)) {
@@ -135,7 +135,7 @@ const quizSlice = createSlice({
       })
       .addCase(fetchQuizById.fulfilled, (state, action) => {
         state.loading = false;
-        state.currentQuiz = action.payload;
+        state.currentQuiz = action.payload as Quiz;
         state.error = null;
       })
       .addCase(fetchQuizById.rejected, (state, action) => {
@@ -149,7 +149,7 @@ const quizSlice = createSlice({
       })
       .addCase(createQuiz.fulfilled, (state, action) => {
         state.loading = false;
-        state.quizzes.unshift(action.payload);
+        state.quizzes.unshift(action.payload as Quiz);
         state.error = null;
       })
       .addCase(createQuiz.rejected, (state, action) => {
@@ -163,13 +163,12 @@ const quizSlice = createSlice({
       })
       .addCase(updateQuiz.fulfilled, (state, action) => {
         state.loading = false;
-        const index = state.quizzes.findIndex(
-          (q) => q._id === action.payload._id
-        );
+        const payload = action.payload as Quiz;
+        const index = state.quizzes.findIndex((q) => q._id === payload._id);
         if (index !== -1) {
-          state.quizzes[index] = action.payload;
+          state.quizzes[index] = payload;
         }
-        state.currentQuiz = action.payload;
+        state.currentQuiz = payload;
         state.error = null;
       })
       .addCase(updateQuiz.rejected, (state, action) => {

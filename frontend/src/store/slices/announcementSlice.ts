@@ -138,12 +138,16 @@ const announcementSlice = createSlice({
       .addCase(fetchAnnouncements.fulfilled, (state, action) => {
         state.loading = false;
         // Handle different API response formats
-        const payload = action.payload;
+        const payload = action.payload as any;
         if (Array.isArray(payload)) {
           state.announcements = payload;
         } else if (payload && Array.isArray(payload.data)) {
           state.announcements = payload.data;
-        } else if (payload && payload.announcements && Array.isArray(payload.announcements)) {
+        } else if (
+          payload &&
+          payload.announcements &&
+          Array.isArray(payload.announcements)
+        ) {
           state.announcements = payload.announcements;
         } else {
           state.announcements = [];

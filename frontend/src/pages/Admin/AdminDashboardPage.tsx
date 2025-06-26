@@ -4,7 +4,6 @@ import {
   Typography,
   Card,
   CardContent,
-  Grid,
   Button,
   Avatar,
   List,
@@ -170,13 +169,30 @@ const AdminDashboardPage: React.FC = () => {
         </Typography>
       </Box>
 
-      <Grid container spacing={{ xs: 2, sm: 3 }} sx={{ mb: 4 }}>
+      <Box
+        sx={{
+          display: "flex",
+          flexWrap: "wrap",
+          gap: { xs: 2, sm: 3 },
+          mb: 4,
+        }}
+      >
         {stats.map((stat, index) => (
-          <Grid item xs={12} sm={6} md={3} key={index}>
+          <Box
+            key={index}
+            sx={{
+              flex: {
+                xs: "1 1 100%",
+                sm: "1 1 calc(50% - 12px)",
+                md: "1 1 calc(25% - 18px)",
+              },
+              minWidth: 0,
+            }}
+          >
             <StatCard {...stat} />
-          </Grid>
+          </Box>
         ))}
-      </Grid>
+      </Box>
 
       <Box
         sx={{
