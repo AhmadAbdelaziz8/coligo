@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { quizAPI } from "../../services/api";
 import type { Quiz } from "../../types/quiz";
 
@@ -111,7 +111,7 @@ const quizSlice = createSlice({
         state.loading = true;
         state.error = null;
       })
-      .addCase(fetchQuizzes.fulfilled, (state, action: PayloadAction<Quiz[]>) => {
+      .addCase(fetchQuizzes.fulfilled, (state, action) => {
         state.loading = false;
         state.quizzes = action.payload;
         state.error = null;
@@ -125,14 +125,11 @@ const quizSlice = createSlice({
         state.loading = true;
         state.error = null;
       })
-      .addCase(
-        fetchQuizById.fulfilled,
-        (state, action: PayloadAction<Quiz>) => {
-          state.loading = false;
-          state.currentQuiz = action.payload;
-          state.error = null;
-        }
-      )
+      .addCase(fetchQuizById.fulfilled, (state, action) => {
+        state.loading = false;
+        state.currentQuiz = action.payload;
+        state.error = null;
+      })
       .addCase(fetchQuizById.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
@@ -142,7 +139,7 @@ const quizSlice = createSlice({
         state.loading = true;
         state.error = null;
       })
-      .addCase(createQuiz.fulfilled, (state, action: PayloadAction<Quiz>) => {
+      .addCase(createQuiz.fulfilled, (state, action) => {
         state.loading = false;
         state.quizzes.unshift(action.payload);
         state.error = null;
@@ -156,7 +153,7 @@ const quizSlice = createSlice({
         state.loading = true;
         state.error = null;
       })
-      .addCase(updateQuiz.fulfilled, (state, action: PayloadAction<Quiz>) => {
+      .addCase(updateQuiz.fulfilled, (state, action) => {
         state.loading = false;
         const index = state.quizzes.findIndex(
           (q) => q._id === action.payload._id
@@ -176,16 +173,11 @@ const quizSlice = createSlice({
         state.loading = true;
         state.error = null;
       })
-      .addCase(
-        deleteQuiz.fulfilled,
-        (state, action: PayloadAction<string>) => {
-          state.loading = false;
-          state.quizzes = state.quizzes.filter(
-            (q) => q._id !== action.payload
-          );
-          state.error = null;
-        }
-      )
+      .addCase(deleteQuiz.fulfilled, (state, action) => {
+        state.loading = false;
+        state.quizzes = state.quizzes.filter((q) => q._id !== action.payload);
+        state.error = null;
+      })
       .addCase(deleteQuiz.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;

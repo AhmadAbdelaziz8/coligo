@@ -20,7 +20,6 @@ import AdminLayout from "./components/Layout/AdminLayout";
 import LandingPage from "./pages/LandingPage";
 import AuthPage from "./pages/AuthPage";
 import DashboardPage from "./pages/DashboardPage";
-import QuizzesPage from "./pages/QuizzesPage";
 import AnnouncementsPage from "./pages/AnnouncementsPage";
 import CoursesPage from "./pages/CoursesPage";
 import SchedulePage from "./pages/SchedulePage";
@@ -85,7 +84,6 @@ const AppContent: React.FC = () => {
           }
         >
           <Route index element={<DashboardPage />} />
-          <Route path="quizzes" element={<QuizzesPage />} />
           <Route path="announcements" element={<AnnouncementsPage />} />
           <Route path="courses" element={<CoursesPage />} />
           <Route path="schedule" element={<SchedulePage />} />
