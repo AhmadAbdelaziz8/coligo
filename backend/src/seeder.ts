@@ -15,7 +15,11 @@ const importData = async () => {
 
     await Quiz.insertMany(seedQuizzes);
     await Announcement.insertMany(seedAnnouncements);
-    await User.insertMany(seedUsers);
+
+    // Use create to trigger password hashing middleware
+    for (const user of seedUsers) {
+      await User.create(user);
+    }
 
     console.log("Data Imported!");
     console.log("Test Users Created:");

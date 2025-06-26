@@ -89,8 +89,7 @@ const AdminLayout: React.FC = () => {
 
   const handleLogout = () => {
     dispatch(logout());
-    navigate("/login");
-    handleMenuClose();
+    navigate("/");
   };
 
   const drawer = (
@@ -110,9 +109,6 @@ const AdminLayout: React.FC = () => {
           }}
         >
           Coligo Admin
-        </Typography>
-        <Typography variant="caption" sx={{ color: "rgba(255,255,255,0.8)" }}>
-          Learning Management System
         </Typography>
       </Box>
 
@@ -240,12 +236,7 @@ const AdminLayout: React.FC = () => {
           <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
             <LanguageSwitcher />
 
-            <IconButton color="inherit">
-              <Badge badgeContent={3} color="error">
-                <NotificationsIcon />
-              </Badge>
-            </IconButton>
-
+   
             <IconButton
               onClick={handleMenuClick}
               color="inherit"
@@ -270,12 +261,6 @@ const AdminLayout: React.FC = () => {
               transformOrigin={{ horizontal: "right", vertical: "top" }}
               anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
             >
-              <MenuItem onClick={handleMenuClose}>
-                <ListItemIcon>
-                  <SettingsIcon fontSize="small" />
-                </ListItemIcon>
-                Profile Settings
-              </MenuItem>
               <MenuItem onClick={handleLogout}>
                 <ListItemIcon>
                   <LogoutIcon fontSize="small" />

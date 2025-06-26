@@ -5,7 +5,6 @@ import {
   TextField,
   InputAdornment,
   IconButton,
-  Badge,
   Avatar,
   Stack,
   Menu,
@@ -16,10 +15,7 @@ import {
 } from "@mui/material";
 import {
   Search,
-  Notifications,
   Logout,
-  Person,
-  Settings,
   KeyboardArrowDown,
   Menu as MenuIcon,
   Home,
@@ -143,26 +139,6 @@ const TopBar: React.FC<TopBarProps> = ({
         {/* Language Switcher */}
         <LanguageSwitcher size="small" />
 
-        {/* Notifications */}
-        <IconButton
-          sx={{
-            backgroundColor: "#4fc3f7",
-            color: "white",
-            width: { xs: 40, sm: 45 },
-            height: { xs: 40, sm: 45 },
-            "&:hover": {
-              backgroundColor: "#29b6f6",
-            },
-          }}
-        >
-          <Badge
-            color="error"
-            sx={{ "& .MuiBadge-badge": { fontSize: "10px" } }}
-          >
-            <Notifications sx={{ fontSize: { xs: 20, sm: 24 } }} />
-          </Badge>
-        </IconButton>
-
         {/* User Profile with Dropdown */}
         <Box
           sx={{
@@ -253,20 +229,6 @@ const TopBar: React.FC<TopBarProps> = ({
               <Home sx={{ color: "#2d5a87" }} />
             </ListItemIcon>
             <ListItemText primary="Back to Home" />
-          </MenuItem>
-
-          <MenuItem onClick={handleClose}>
-            <ListItemIcon>
-              <Person sx={{ color: "#2d5a87" }} />
-            </ListItemIcon>
-            <ListItemText primary="My Profile" />
-          </MenuItem>
-
-          <MenuItem onClick={handleClose}>
-            <ListItemIcon>
-              <Settings sx={{ color: "#2d5a87" }} />
-            </ListItemIcon>
-            <ListItemText primary="Settings" />
           </MenuItem>
 
           <Divider />
