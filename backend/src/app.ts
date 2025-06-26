@@ -40,7 +40,17 @@ app.get("/api/health", (req, res) => {
 });
 
 // swagger documentation
-app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+app.use(
+  "/api-docs",
+  swaggerUi.serve,
+  swaggerUi.setup(swaggerSpec, {
+    customCss: ".swagger-ui .topbar { display: none }",
+    customSiteTitle: "Coligo API Documentation",
+    swaggerOptions: {
+      persistAuthorization: true,
+    },
+  })
+);
 
 // Seed endpoint for initial data population
 app.post("/api/seed", async (req, res) => {
