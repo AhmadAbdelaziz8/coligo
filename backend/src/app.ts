@@ -12,6 +12,10 @@ import authRoute from "./routes/auth.route";
 // middleware
 import { authMiddleware } from "./middleware/auth.middleware";
 import { loggerMiddleware } from "./middleware/logger.middleware";
+// seeding
+import { Quiz } from "./models/quiz.model";
+import { Announcement } from "./models/announcement.model";
+import { seedQuizzes, seedAnnouncements } from "./config/seedData";
 
 dotenv.config();
 const app = express();
@@ -25,6 +29,30 @@ app.use(loggerMiddleware);
 // swagger documentation
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
+// Seed endpoint for initial data population
+app.post("/api/seed", async (req, res) => {
+  try {
+    // Clear existing data
+    await Quiz.deleteMany();
+    await Announcement.deleteMany();
+
+    // Insert seed data
+    await Quiz.insertMany(seedQuizzes);
+    await Announcement.insertMany(seedAnnouncements);
+
+    res.json({
+      message: "Database seeded successfully!",
+      data: {
+        quizzes: seedQuizzes.length,
+        announcements: seedAnnouncements.length,
+      },
+    });
+  } catch (error) {
+    console.error("Seed error:", error);
+    res.status(500).json({ error: "Failed to seed database" });
+  }
+});
+
 // public authentication route
 app.use("/api/auth", authRoute);
 
@@ -37,6 +65,11 @@ connectDB();
 
 const PORT = process.env.PORT || 3000;
 
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-});
+if (process.env.NODE_ENV !== "production" || !process.env.VERCEL) {
+  app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+  });
+}
+
+// Export the Express app for Vercel
+export default app;
