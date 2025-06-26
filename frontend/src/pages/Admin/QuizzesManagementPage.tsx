@@ -286,7 +286,8 @@ const QuizzesManagementPage: React.FC = () => {
   return (
     <Box
       sx={{
-        p: { xs: 2, sm: 3 },
+        px: { xs: 2, sm: 3 },
+        py: { xs: 3, md: 4 },
         minHeight: "100vh",
         backgroundColor: "#f8fafc",
       }}
@@ -330,6 +331,12 @@ const QuizzesManagementPage: React.FC = () => {
             <Card
               sx={{
                 background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+                transition:
+                  "transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out",
+                "&:hover": {
+                  transform: "translateY(-5px)",
+                  boxShadow: "0 10px 20px rgba(102, 126, 234, 0.3)",
+                },
               }}
             >
               <CardContent>
@@ -374,6 +381,12 @@ const QuizzesManagementPage: React.FC = () => {
             <Card
               sx={{
                 background: "linear-gradient(135deg, #4caf50 0%, #45a049 100%)",
+                transition:
+                  "transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out",
+                "&:hover": {
+                  transform: "translateY(-5px)",
+                  boxShadow: "0 10px 20px rgba(76, 175, 80, 0.3)",
+                },
               }}
             >
               <CardContent>
@@ -418,6 +431,12 @@ const QuizzesManagementPage: React.FC = () => {
             <Card
               sx={{
                 background: "linear-gradient(135deg, #ff9800 0%, #f57c00 100%)",
+                transition:
+                  "transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out",
+                "&:hover": {
+                  transform: "translateY(-5px)",
+                  boxShadow: "0 10px 20px rgba(255, 152, 0, 0.3)",
+                },
               }}
             >
               <CardContent>
@@ -519,7 +538,16 @@ const QuizzesManagementPage: React.FC = () => {
               {quizzesArray.map((quiz) => (
                 <Card
                   key={quiz._id}
-                  sx={{ mb: 2, border: "1px solid #e2e8f0" }}
+                  sx={{
+                    mb: 2,
+                    border: "1px solid #e2e8f0",
+                    transition:
+                      "transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out",
+                    "&:hover": {
+                      transform: "translateY(-3px)",
+                      boxShadow: "0 4px 12px rgba(0,0,0,0.08)",
+                    },
+                  }}
                 >
                   <CardContent sx={{ pb: 1 }}>
                     <Box
@@ -647,6 +675,7 @@ const QuizzesManagementPage: React.FC = () => {
                   quizzesArray.map((quiz) => (
                     <TableRow
                       key={quiz._id}
+                      hover
                       sx={{ "&:hover": { backgroundColor: "#f8fafc" } }}
                     >
                       <TableCell>
@@ -971,6 +1000,7 @@ const QuizzesManagementPage: React.FC = () => {
                         fullWidth
                         select
                         label="Correct Answer"
+                        id={`correct-answer-select-${index}`}
                         value={question.correctAnswer}
                         onChange={(e) =>
                           updateQuestion(

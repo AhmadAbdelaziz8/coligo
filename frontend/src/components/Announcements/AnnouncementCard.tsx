@@ -32,7 +32,6 @@ const AnnouncementCard: React.FC<AnnouncementCardProps> = ({
       },
     }}
   >
-    {/* Header */}
     <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
       <Avatar
         sx={{ bgcolor: "#667eea", width: 32, height: 32, mr: 2 }}
@@ -72,7 +71,6 @@ const AnnouncementCard: React.FC<AnnouncementCardProps> = ({
 
     <Divider sx={{ mb: 2 }} />
 
-    {/* Content */}
     <Typography
       variant="body1"
       sx={{

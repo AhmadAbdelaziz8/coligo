@@ -19,7 +19,6 @@ const AnnouncementsSection: React.FC = () => {
         order: { xs: 1, lg: 1 },
       }}
     >
-      {/* Announcements Header */}
       <Box
         sx={{
           display: "flex",
@@ -55,7 +54,6 @@ const AnnouncementsSection: React.FC = () => {
         </Typography>
       </Box>
 
-      {/* Announcements Container */}
       <Box
         sx={{
           display: "flex",

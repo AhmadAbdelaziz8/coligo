@@ -100,7 +100,6 @@ const AdminLayout: React.FC = () => {
         background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
       }}
     >
-      {/* Logo */}
       <Box sx={{ p: 3, textAlign: "center" }}>
         <Typography
           variant="h5"
@@ -119,7 +118,6 @@ const AdminLayout: React.FC = () => {
 
       <Divider sx={{ borderColor: "rgba(255,255,255,0.2)" }} />
 
-      {/* Navigation Menu */}
       <List sx={{ px: 2, py: 1 }}>
         {menuItems.map((item) => {
           const isActive =
@@ -171,7 +169,6 @@ const AdminLayout: React.FC = () => {
         })}
       </List>
 
-      {/* User Info */}
       <Box sx={{ mt: "auto", p: 2 }}>
         <Box
           sx={{
@@ -209,7 +206,6 @@ const AdminLayout: React.FC = () => {
 
   return (
     <Box sx={{ display: "flex", minHeight: "100vh" }}>
-      {/* App Bar */}
       <AppBar
         position="fixed"
         sx={{
@@ -291,7 +287,6 @@ const AdminLayout: React.FC = () => {
         </Toolbar>
       </AppBar>
 
-      {/* Sidebar */}
       <Box
         component="nav"
         sx={{ width: { md: drawerWidth }, flexShrink: { md: 0 } }}
@@ -315,7 +310,6 @@ const AdminLayout: React.FC = () => {
         </Drawer>
       </Box>
 
-      {/* Main Content */}
       <Box
         component="main"
         sx={{

@@ -16,16 +16,14 @@ interface AuthState {
   error: string | null;
 }
 
-// Initialize state from localStorage
 const getInitialState = (): AuthState => {
   const token = localStorage.getItem("token");
   const userStr = localStorage.getItem("user");
-  
+
   let user = null;
   try {
     user = userStr ? JSON.parse(userStr) : null;
   } catch (error) {
-    // If user data is corrupted, clear it
     localStorage.removeItem("user");
   }
 
@@ -40,7 +38,6 @@ const getInitialState = (): AuthState => {
 
 const initialState: AuthState = getInitialState();
 
-// Async thunks
 export const loginUser = createAsyncThunk(
   "auth/login",
   async (
@@ -84,7 +81,6 @@ export const logoutUser = createAsyncThunk("auth/logout", async () => {
   return null;
 });
 
-// Export logout as an alias for logoutUser for compatibility
 export const logout = logoutUser;
 
 const authSlice = createSlice({
@@ -97,7 +93,7 @@ const authSlice = createSlice({
     restoreAuth: (state) => {
       const token = localStorage.getItem("token");
       const userStr = localStorage.getItem("user");
-      
+
       if (token && userStr) {
         try {
           const user = JSON.parse(userStr);
@@ -105,7 +101,6 @@ const authSlice = createSlice({
           state.token = token;
           state.isAuthenticated = true;
         } catch (error) {
-          // Clear corrupted data
           localStorage.removeItem("token");
           localStorage.removeItem("user");
           state.user = null;
@@ -117,7 +112,6 @@ const authSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      // Login cases
       .addCase(loginUser.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -134,7 +128,6 @@ const authSlice = createSlice({
         state.error = action.payload as string;
         state.isAuthenticated = false;
       })
-      // Register cases
       .addCase(registerUser.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -151,7 +144,6 @@ const authSlice = createSlice({
         state.error = action.payload as string;
         state.isAuthenticated = false;
       })
-      // Logout cases
       .addCase(logoutUser.fulfilled, (state) => {
         state.user = null;
         state.token = null;

@@ -4,7 +4,6 @@ import SwaggerUI from "swagger-ui-react";
 import "swagger-ui-react/swagger-ui.css";
 
 const ApiDocsPage: React.FC = () => {
-  // Get the backend URL from environment or use the deployed URL
   const backendUrl =
     import.meta.env.VITE_BACKEND_URL ||
     "https://coligo-backend-ff6djrh69-ahmad-abdelazizs-projects.vercel.app";

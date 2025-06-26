@@ -85,7 +85,16 @@ const StatCard: React.FC<StatCardProps> = ({
   color,
   bgColor,
 }) => (
-  <Card sx={{ background: bgColor }}>
+  <Card
+    sx={{
+      background: bgColor,
+      transition: "transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out",
+      "&:hover": {
+        transform: "translateY(-5px)",
+        boxShadow: `0 10px 20px rgba(0,0,0,0.08)`,
+      },
+    }}
+  >
     <CardContent>
       <Box
         sx={{
@@ -377,7 +386,19 @@ const AnnouncementsManagementPage: React.FC = () => {
         {isMobile ? (
           <Box>
             {announcementsArray.map((announcement) => (
-              <Card key={announcement._id} sx={{ mb: 2, borderRadius: "12px" }}>
+              <Card
+                key={announcement._id}
+                sx={{
+                  mb: 2,
+                  borderRadius: "12px",
+                  transition:
+                    "transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out",
+                  "&:hover": {
+                    transform: "translateY(-3px)",
+                    boxShadow: "0 4px 12px rgba(0,0,0,0.08)",
+                  },
+                }}
+              >
                 <CardContent>
                   <Box
                     sx={{
@@ -452,7 +473,7 @@ const AnnouncementsManagementPage: React.FC = () => {
               </TableHead>
               <TableBody>
                 {announcementsArray.map((announcement) => (
-                  <TableRow key={announcement._id}>
+                  <TableRow key={announcement._id} hover>
                     <TableCell sx={{ fontWeight: 500 }}>
                       {announcement.title}
                     </TableCell>

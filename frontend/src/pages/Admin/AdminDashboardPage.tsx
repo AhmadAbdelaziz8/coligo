@@ -46,10 +46,15 @@ const StatCard: React.FC<StatCardProps> = ({
   <Card
     sx={{
       height: "100%",
-      background: `linear-gradient(135deg, ${color}10 0%, ${color}20 100%)`,
+      background: `linear-gradient(135deg, ${color}20 0%, ${color}40 100%)`,
+      transition: "transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out",
+      "&:hover": {
+        transform: "translateY(-5px)",
+        boxShadow: `0 10px 20px ${color}30`,
+      },
     }}
   >
-    <CardContent>
+    <CardContent sx={{ p: { xs: 2, sm: 3 } }}>
       <Box
         sx={{
           display: "flex",
@@ -150,7 +155,12 @@ const AdminDashboardPage: React.FC = () => {
 
   return (
     <Box
-      sx={{ p: { xs: 2, sm: 3 }, background: "#f8fafc", minHeight: "100vh" }}
+      sx={{
+        px: { xs: 2, sm: 3 },
+        py: { xs: 3, md: 4 },
+        background: "#f8fafc",
+        minHeight: "100vh",
+      }}
     >
       <Box sx={{ mb: 4 }}>
         <Typography
@@ -171,33 +181,25 @@ const AdminDashboardPage: React.FC = () => {
 
       <Box
         sx={{
-          display: "flex",
-          flexWrap: "wrap",
-          gap: { xs: 2, sm: 3 },
-          mb: 4,
+          display: "grid",
+          gridTemplateColumns: {
+            xs: "1fr",
+            sm: "repeat(2, 1fr)",
+            md: "repeat(4, 1fr)",
+          },
+          gap: 3,
+          mb: { xs: 3, md: 4 },
         }}
       >
         {stats.map((stat, index) => (
-          <Box
-            key={index}
-            sx={{
-              flex: {
-                xs: "1 1 100%",
-                sm: "1 1 calc(50% - 12px)",
-                md: "1 1 calc(25% - 18px)",
-              },
-              minWidth: 0,
-            }}
-          >
-            <StatCard {...stat} />
-          </Box>
+          <StatCard {...stat} key={index} />
         ))}
       </Box>
 
       <Box
         sx={{
           display: "flex",
-          gap: { xs: 2, sm: 3 },
+          gap: { xs: 3, sm: 3 },
           flexDirection: { xs: "column", lg: "row" },
         }}
       >
@@ -258,7 +260,7 @@ const AdminDashboardPage: React.FC = () => {
                     key={announcement._id}
                     sx={{
                       px: { xs: 1, sm: 2 },
-                      py: { xs: 1, sm: 1.5 },
+                      py: { xs: 1.5, sm: 2 },
                       border: "1px solid #e2e8f0",
                       borderRadius: 2,
                       mb: 1,
@@ -376,7 +378,7 @@ const AdminDashboardPage: React.FC = () => {
                     key={quiz._id}
                     sx={{
                       px: { xs: 1, sm: 2 },
-                      py: { xs: 1, sm: 1.5 },
+                      py: { xs: 1.5, sm: 2 },
                       border: "1px solid #e2e8f0",
                       borderRadius: 2,
                       mb: 1,
