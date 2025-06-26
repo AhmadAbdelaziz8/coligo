@@ -59,7 +59,7 @@ initializeDatabase();
 
 const PORT = process.env.PORT || 3000;
 
-// Only start the server in development (not on Vercel)
+// Only start the server in development
 if (process.env.NODE_ENV !== "production" && !process.env.VERCEL) {
   app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
