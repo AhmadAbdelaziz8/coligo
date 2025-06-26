@@ -7,7 +7,7 @@ const ApiDocsPage: React.FC = () => {
   // Get the backend URL from environment or use the deployed URL
   const backendUrl =
     import.meta.env.VITE_BACKEND_URL ||
-    "https://coligo-backend-8d557os1x-ahmad-abdelazizs-projects.vercel.app";
+    "https://coligo-backend-ff6djrh69-ahmad-abdelazizs-projects.vercel.app";
 
   return (
     <Container maxWidth={false} sx={{ py: 3 }}>
