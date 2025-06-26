@@ -1,6 +1,7 @@
 import express, { json } from "express";
 import cors from "cors";
 import dotenv from "dotenv";
+import mongoose from "mongoose";
 import connectDB from "./config/db";
 // swagger for documentation
 import swaggerUi from "swagger-ui-express";
@@ -97,6 +98,11 @@ app.post("/api/seed", async (req, res) => {
         .json({ error: "MONGO_URI environment variable not set" });
     }
 
+    // Check if database is connected
+    if (mongoose.connection.readyState !== 1) {
+      return res.status(500).json({ error: "Database not connected" });
+    }
+
     // Clear existing data
     await Quiz.deleteMany();
     await Announcement.deleteMany();
@@ -142,7 +148,8 @@ initializeDatabase();
 
 const PORT = process.env.PORT || 3000;
 
-if (process.env.NODE_ENV !== "production" || !process.env.VERCEL) {
+// Only start the server in development (not on Vercel)
+if (process.env.NODE_ENV !== "production" && !process.env.VERCEL) {
   app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
   });
