@@ -27,7 +27,6 @@ import {
   People as PeopleIcon,
   Settings as SettingsIcon,
   Logout as LogoutIcon,
-  Notifications as NotificationsIcon,
   School as SchoolIcon,
   Description as DocumentationIcon,
 } from "@mui/icons-material";

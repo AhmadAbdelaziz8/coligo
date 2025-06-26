@@ -4,8 +4,8 @@ A modern, full-stack Learning Management System built with React, TypeScript, an
 
 ## 🚀 Live Demo
 
-**Frontend**: https://colligo-frontend-mwp1h6lsv-ahmad-abdelazizs-projects.vercel.app  
-**Backend API**: https://coligo-backend-4x93nbvda-ahmad-abdelazizs-projects.vercel.app
+**Frontend**: https://frontend-ebon-five-46.vercel.app/
+**Backend API**: https://coligo-backend.vercel.app/
 
 ## 🧪 Test Credentials
 
