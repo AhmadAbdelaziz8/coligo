@@ -14,12 +14,7 @@ import {
   People,
   School,
   Quiz,
-  Assessment,
   MenuBook,
-  EmojiEvents,
-  Schedule,
-  Assignment,
-  Class,
 } from "@mui/icons-material";
 
 const Stats: React.FC = () => {

@@ -16,7 +16,6 @@ import {
   TrendingUp,
   Campaign,
   Home,
-  School,
   Quiz as QuizIcon,
 } from "@mui/icons-material";
 import { useNavigate, useLocation } from "react-router-dom";

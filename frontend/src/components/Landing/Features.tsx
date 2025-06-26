@@ -13,16 +13,11 @@ import {
 import {
   Quiz,
   Announcement,
-  Analytics,
   Schedule,
   Group,
-  Security,
   Assessment,
-  BookmarkBorder,
-  TrendingUp,
-  School,
   EmojiEvents,
-  Assignment,
+  School,
 } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 
@@ -34,7 +29,7 @@ const features = [
       "Take comprehensive quizzes with instant feedback, detailed explanations, and progress tracking to enhance your learning experience.",
     color: "#2196F3",
     category: "Assessment",
-    benefits: ["Instant Feedback", "Progress Tracking", "Multiple Formats"]
+    benefits: ["Instant Feedback", "Progress Tracking", "Multiple Formats"],
   },
   {
     icon: Assessment,
@@ -43,7 +38,7 @@ const features = [
       "Monitor your academic performance with detailed analytics, grade trends, and personalized insights to improve your studies.",
     color: "#4CAF50",
     category: "Analytics",
-    benefits: ["Grade Tracking", "Performance Insights", "Goal Setting"]
+    benefits: ["Grade Tracking", "Performance Insights", "Goal Setting"],
   },
   {
     icon: Announcement,
@@ -52,7 +47,7 @@ const features = [
       "Stay updated with the latest course announcements, assignment deadlines, and important notifications from your instructors.",
     color: "#FF9800",
     category: "Communication",
-    benefits: ["Instant Updates", "Priority Alerts", "Mobile Notifications"]
+    benefits: ["Instant Updates", "Priority Alerts", "Mobile Notifications"],
   },
   {
     icon: Schedule,
@@ -61,7 +56,7 @@ const features = [
       "Organize your academic schedule with intelligent planning tools, deadline reminders, and study session optimization.",
     color: "#9C27B0",
     category: "Planning",
-    benefits: ["Auto Scheduling", "Deadline Tracking", "Study Optimization"]
+    benefits: ["Auto Scheduling", "Deadline Tracking", "Study Optimization"],
   },
   {
     icon: Group,
@@ -70,7 +65,7 @@ const features = [
       "Connect with classmates, form study groups, share notes, and collaborate on assignments in a secure academic environment.",
     color: "#E91E63",
     category: "Collaboration",
-    benefits: ["Study Groups", "Note Sharing", "Peer Support"]
+    benefits: ["Study Groups", "Note Sharing", "Peer Support"],
   },
   {
     icon: EmojiEvents,
@@ -79,7 +74,7 @@ const features = [
       "Earn badges, track milestones, and celebrate academic achievements with our gamified learning experience.",
     color: "#607D8B",
     category: "Motivation",
-    benefits: ["Achievement Badges", "Progress Milestones", "Leaderboards"]
+    benefits: ["Achievement Badges", "Progress Milestones", "Leaderboards"],
   },
 ];
 
@@ -113,19 +108,27 @@ const Features: React.FC = () => {
               mb: 4,
             }}
           >
-            Discover the comprehensive tools that make learning more engaging, organized, and effective for modern students
+            Discover the comprehensive tools that make learning more engaging,
+            organized, and effective for modern students
           </Typography>
-          
+
           {/* Feature Categories */}
-          <Stack 
-            direction="row" 
-            spacing={2} 
-            justifyContent="center" 
-            flexWrap="wrap" 
+          <Stack
+            direction="row"
+            spacing={2}
+            justifyContent="center"
+            flexWrap="wrap"
             useFlexGap
             sx={{ mb: 4 }}
           >
-            {["Assessment", "Analytics", "Communication", "Planning", "Collaboration", "Motivation"].map((category) => (
+            {[
+              "Assessment",
+              "Analytics",
+              "Communication",
+              "Planning",
+              "Collaboration",
+              "Motivation",
+            ].map((category) => (
               <Chip
                 key={category}
                 label={category}
@@ -135,8 +138,8 @@ const Features: React.FC = () => {
                   color: "primary.main",
                   fontWeight: 500,
                   "&:hover": {
-                    backgroundColor: "primary.50"
-                  }
+                    backgroundColor: "primary.50",
+                  },
                 }}
               />
             ))}
@@ -152,7 +155,7 @@ const Features: React.FC = () => {
               lg: "repeat(3, 1fr)",
             },
             gap: 4,
-            mb: 8
+            mb: 8,
           }}
         >
           {features.map((feature, index) => (
@@ -176,7 +179,12 @@ const Features: React.FC = () => {
             >
               <CardContent sx={{ p: 0 }}>
                 {/* Header */}
-                <Stack direction="row" alignItems="flex-start" spacing={2} mb={3}>
+                <Stack
+                  direction="row"
+                  alignItems="flex-start"
+                  spacing={2}
+                  mb={3}
+                >
                   <Avatar
                     sx={{
                       width: 56,
@@ -226,12 +234,22 @@ const Features: React.FC = () => {
 
                 {/* Benefits */}
                 <Box mb={3}>
-                  <Typography variant="body2" fontWeight={600} mb={1} color="text.primary">
+                  <Typography
+                    variant="body2"
+                    fontWeight={600}
+                    mb={1}
+                    color="text.primary"
+                  >
                     Key Benefits:
                   </Typography>
                   <Stack spacing={1}>
                     {feature.benefits.map((benefit, idx) => (
-                      <Stack key={idx} direction="row" alignItems="center" spacing={1}>
+                      <Stack
+                        key={idx}
+                        direction="row"
+                        alignItems="center"
+                        spacing={1}
+                      >
                         <Box
                           sx={{
                             width: 6,
@@ -283,8 +301,12 @@ const Features: React.FC = () => {
           <Typography variant="h4" fontWeight={700} mb={2}>
             Ready to Transform Your Learning Experience?
           </Typography>
-          <Typography variant="h6" sx={{ opacity: 0.9, mb: 4, maxWidth: "600px", mx: "auto" }}>
-            Join thousands of students who are already using Coligo to excel in their academic journey
+          <Typography
+            variant="h6"
+            sx={{ opacity: 0.9, mb: 4, maxWidth: "600px", mx: "auto" }}
+          >
+            Join thousands of students who are already using Coligo to excel in
+            their academic journey
           </Typography>
           <Stack
             direction={{ xs: "column", sm: "row" }}

@@ -1,26 +1,18 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   Box,
   Typography,
   Button,
   Container,
   Stack,
-  TextField,
-  InputAdornment,
-  Avatar,
   Chip,
   Paper,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import {
-  School,
-  Quiz,
   Assessment,
-  Search,
-  TrendingUp,
   People,
   BookmarkBorder,
-  Language,
   Schedule,
   EmojiEvents,
   PlayArrow,
@@ -28,7 +20,6 @@ import {
 
 const Hero: React.FC = () => {
   const navigate = useNavigate();
-  const [studentId, setStudentId] = useState("");
 
   const academicStats = [
     { value: "95%", label: "Quiz Completion Rate", color: "#4CAF50" },
@@ -131,8 +122,6 @@ const Hero: React.FC = () => {
               Discover your learning patterns, quiz performance, and academic
               progress with comprehensive student analytics
             </Typography>
-
-           
 
             {/* Trusted by section */}
             <Box sx={{ mb: 4 }}>
