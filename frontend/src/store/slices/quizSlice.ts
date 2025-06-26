@@ -107,7 +107,6 @@ const quizSlice = createSlice({
       })
       .addCase(fetchQuizzes.fulfilled, (state, action) => {
         state.loading = false;
-        // Handle different API response formats
         const payload = action.payload as any;
         if (Array.isArray(payload)) {
           state.quizzes = payload;

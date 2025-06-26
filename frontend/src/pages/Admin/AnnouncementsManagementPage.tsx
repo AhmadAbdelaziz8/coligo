@@ -202,10 +202,12 @@ const AnnouncementsManagementPage: React.FC = () => {
       // Refetch announcements to ensure the list is updated
       dispatch(fetchAnnouncements());
       handleCloseDialog();
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const message =
+        error instanceof Error ? error.message : "Operation failed!";
       setSnackbar({
         open: true,
-        message: error.message || "Operation failed!",
+        message: message,
         severity: "error",
       });
     }
@@ -223,10 +225,12 @@ const AnnouncementsManagementPage: React.FC = () => {
           message: "Announcement deleted successfully!",
           severity: "success",
         });
-      } catch (error: any) {
+      } catch (error: unknown) {
+        const message =
+          error instanceof Error ? error.message : "Delete failed!";
         setSnackbar({
           open: true,
-          message: error.message || "Delete failed!",
+          message: message,
           severity: "error",
         });
       }

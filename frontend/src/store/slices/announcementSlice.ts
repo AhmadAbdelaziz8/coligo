@@ -137,7 +137,6 @@ const announcementSlice = createSlice({
       })
       .addCase(fetchAnnouncements.fulfilled, (state, action) => {
         state.loading = false;
-        // Handle different API response formats
         const payload = action.payload as any;
         if (Array.isArray(payload)) {
           state.announcements = payload;
@@ -164,7 +163,7 @@ const announcementSlice = createSlice({
       })
       .addCase(fetchAnnouncementById.fulfilled, (state, action) => {
         state.loading = false;
-        state.currentAnnouncement = action.payload;
+        state.currentAnnouncement = action.payload as Announcement;
         state.error = null;
       })
       .addCase(fetchAnnouncementById.rejected, (state, action) => {
@@ -177,7 +176,7 @@ const announcementSlice = createSlice({
       })
       .addCase(createAnnouncement.fulfilled, (state, action) => {
         state.loading = false;
-        state.announcements.unshift(action.payload);
+        state.announcements.unshift(action.payload as Announcement);
         state.error = null;
       })
       .addCase(createAnnouncement.rejected, (state, action) => {
@@ -190,13 +189,14 @@ const announcementSlice = createSlice({
       })
       .addCase(updateAnnouncement.fulfilled, (state, action) => {
         state.loading = false;
+        const payload = action.payload as Announcement;
         const index = state.announcements.findIndex(
-          (a) => a._id === action.payload._id
+          (a) => a._id === payload._id
         );
         if (index !== -1) {
-          state.announcements[index] = action.payload;
+          state.announcements[index] = payload;
         }
-        state.currentAnnouncement = action.payload;
+        state.currentAnnouncement = payload;
         state.error = null;
       })
       .addCase(updateAnnouncement.rejected, (state, action) => {
