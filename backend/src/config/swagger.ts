@@ -19,6 +19,10 @@ const options: swaggerJSDoc.Options = {
         url: "http://localhost:5001",
         description: "Development server",
       },
+      {
+        url: "https://coligo-backend.vercel.app",
+        description: "Production server",
+      },
     ],
     components: {
       securitySchemes: {
