@@ -57,11 +57,7 @@ const menuItems = [
     icon: Campaign,
     path: "/dashboard/announcements",
   },
-  {
-    text: "Exams",
-    icon: School,
-    path: "/dashboard/exams",
-  },
+
   {
     text: "Quizzes",
     icon: QuizIcon,
