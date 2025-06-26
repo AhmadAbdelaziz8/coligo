@@ -124,7 +124,23 @@ const Sidebar: React.FC<SidebarProps> = ({
       {/* Menu Items */}
       <List sx={{ pt: 2, px: 1, flex: 1 }}>
         {menuItems.map((item, index) => {
-          const isActive = location.pathname.startsWith(item.path);
+          // Fix active state logic to prevent multiple items appearing active
+          const isActive = (() => {
+            // Exact match for home page
+            if (item.path === "/" && location.pathname === "/") {
+              return true;
+            }
+            // For dashboard routes, use exact matching or check if it's the most specific match
+            if (item.path !== "/" && location.pathname !== "/") {
+              // If it's the dashboard base route, only active when exactly on dashboard
+              if (item.path === "/dashboard") {
+                return location.pathname === "/dashboard";
+              }
+              // For other routes, check if pathname matches exactly
+              return location.pathname === item.path;
+            }
+            return false;
+          })();
 
           return (
             <ListItem

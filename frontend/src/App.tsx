@@ -34,6 +34,10 @@ import AnnouncementsManagementPage from "./pages/Admin/AnnouncementsManagementPa
 // API Documentation
 import ApiDocsPage from "./pages/ApiDocsPage";
 
+// Quiz Pages
+import QuizzesListPage from "./pages/QuizzesListPage";
+import QuizTakingPage from "./pages/QuizTakingPage";
+
 // Components
 import ProtectedRoute from "./components/Auth/ProtectedRoute";
 
@@ -93,6 +97,8 @@ const AppContent: React.FC = () => {
           <Route path="schedule" element={<SchedulePage />} />
           <Route path="gradebook" element={<GradebookPage />} />
           <Route path="performance" element={<PerformancePage />} />
+          <Route path="quizzes" element={<QuizzesListPage />} />
+          <Route path="quiz/:quizId" element={<QuizTakingPage />} />
         </Route>
 
         {/* Admin Routes */}

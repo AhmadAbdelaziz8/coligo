@@ -14,6 +14,7 @@ import { fetchAnnouncements } from "../store/slices/announcementSlice";
 import AnnouncementCard from "../components/Announcements/AnnouncementCard";
 
 const AnnouncementsPage: React.FC = () => {
+  // get the announcements from the store
   const dispatch = useAppDispatch();
   const { announcements, loading, error } = useAppSelector(
     (state) => state.announcement

@@ -13,7 +13,7 @@ const TaskCard: React.FC<TaskCardProps> = ({ quiz }) => {
   const navigate = useNavigate();
 
   const handleStartQuiz = () => {
-    navigate(`/quizzes/${_id}`);
+    navigate(`/dashboard/quiz/${_id}`);
   };
 
   return (

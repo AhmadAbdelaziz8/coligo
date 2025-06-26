@@ -1,6 +1,7 @@
 export interface QuizQuestion {
   _id?: string;
-  questionText: string;
+  question: string;
+  questionText?: string; // Keep for backwards compatibility
   type?: "multiple-choice" | "true-false" | "short-answer";
   options: string[];
   correctAnswer: number;
@@ -10,10 +11,14 @@ export interface QuizQuestion {
 export interface Quiz {
   _id: string;
   title: string;
+  description?: string;
   topic: string;
+  subject?: string;
   course: string;
   questions: QuizQuestion[];
-  duration: number; // in minutes
+  duration?: number; // in minutes (keep for backwards compatibility)
+  timeLimit: number; // in minutes
+  difficulty: string;
   totalMarks: number;
   isActive: boolean;
   dueDate: string;

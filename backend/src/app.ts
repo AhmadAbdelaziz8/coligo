@@ -1,7 +1,6 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
-import mongoose from "mongoose";
 import connectDB from "./config/db";
 import swaggerUi from "swagger-ui-express";
 // swagger for documentation
