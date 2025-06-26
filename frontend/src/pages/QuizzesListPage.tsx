@@ -2,20 +2,17 @@ import React, { useEffect } from "react";
 import {
   Box,
   Typography,
-  Grid,
   Card,
   CardContent,
   Button,
   Chip,
   Container,
-  IconButton,
   Stack,
   useTheme,
   useMediaQuery,
 } from "@mui/material";
 import {
   Quiz as QuizIcon,
-  Timer,
   Assignment,
   PlayArrow,
   School,
@@ -113,145 +110,149 @@ const QuizzesListPage: React.FC = () => {
 
       {/* Quizzes Grid */}
       {!loading && !error && (
-        <Grid container spacing={{ xs: 2, md: 3 }}>
+        <Box
+          sx={{
+            display: "grid",
+            gridTemplateColumns: {
+              xs: "1fr",
+              sm: "repeat(2, 1fr)",
+              lg: "repeat(3, 1fr)",
+            },
+            gap: { xs: 2, md: 3 },
+          }}
+        >
           {quizzes.map((quiz) => (
-            <Grid item xs={12} sm={6} lg={4} key={quiz._id}>
-              <Card
-                sx={{
-                  height: "100%",
-                  display: "flex",
-                  flexDirection: "column",
-                  transition: "all 0.3s ease",
-                  "&:hover": {
-                    transform: "translateY(-4px)",
-                    boxShadow: "0 12px 24px rgba(0,0,0,0.15)",
-                  },
-                  border: "1px solid",
-                  borderColor: "divider",
-                }}
-              >
-                <CardContent sx={{ flexGrow: 1, p: { xs: 2, sm: 3 } }}>
-                  {/* Quiz Header */}
-                  <Stack
-                    direction="row"
-                    spacing={2}
-                    alignItems="flex-start"
-                    sx={{ mb: 2 }}
+            <Card
+              key={quiz._id}
+              sx={{
+                height: "100%",
+                display: "flex",
+                flexDirection: "column",
+                transition: "all 0.3s ease",
+                "&:hover": {
+                  transform: "translateY(-4px)",
+                  boxShadow: "0 12px 24px rgba(0,0,0,0.15)",
+                },
+                border: "1px solid",
+                borderColor: "divider",
+              }}
+            >
+              <CardContent sx={{ flexGrow: 1, p: { xs: 2, sm: 3 } }}>
+                {/* Quiz Header */}
+                <Stack
+                  direction="row"
+                  spacing={2}
+                  alignItems="flex-start"
+                  sx={{ mb: 2 }}
+                >
+                  <Box
+                    sx={{
+                      p: 1,
+                      borderRadius: 1.5,
+                      bgcolor: "primary.50",
+                      color: "primary.main",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      minWidth: 40,
+                      height: 40,
+                    }}
                   >
-                    <Box
+                    <Assignment />
+                  </Box>
+                  <Box sx={{ flexGrow: 1, minWidth: 0 }}>
+                    <Typography
+                      variant="h6"
+                      fontWeight={600}
                       sx={{
-                        p: 1,
-                        borderRadius: 1.5,
-                        bgcolor: "primary.50",
-                        color: "primary.main",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        minWidth: 40,
-                        height: 40,
+                        mb: 0.5,
+                        fontSize: { xs: "1.1rem", sm: "1.25rem" },
+                        lineHeight: 1.3,
+                      }}
+                      noWrap
+                    >
+                      {quiz.title}
+                    </Typography>
+                    <Typography
+                      variant="body2"
+                      color="text.secondary"
+                      sx={{
+                        fontSize: { xs: "0.8rem", sm: "0.875rem" },
+                        display: "-webkit-box",
+                        WebkitLineClamp: 2,
+                        WebkitBoxOrient: "vertical",
+                        overflow: "hidden",
                       }}
                     >
-                      <Assignment />
-                    </Box>
-                    <Box sx={{ flexGrow: 1, minWidth: 0 }}>
-                      <Typography
-                        variant="h6"
-                        fontWeight={600}
-                        sx={{
-                          mb: 0.5,
-                          fontSize: { xs: "1.1rem", sm: "1.25rem" },
-                          lineHeight: 1.3,
-                        }}
-                        noWrap
-                      >
-                        {quiz.title}
+                      {quiz.description}
+                    </Typography>
+                  </Box>
+                </Stack>
+
+                {/* Quiz Details */}
+                <Stack spacing={2} sx={{ mb: 3 }}>
+                  <Stack
+                    direction={{ xs: "column", sm: "row" }}
+                    spacing={{ xs: 1, sm: 2 }}
+                    alignItems={{ xs: "flex-start", sm: "center" }}
+                  >
+                    <Stack direction="row" alignItems="center" spacing={1}>
+                      <AccessTime fontSize="small" color="action" />
+                      <Typography variant="body2" color="text.secondary">
+                        {quiz.timeLimit || quiz.duration || 0} minutes
                       </Typography>
-                      <Typography
-                        variant="body2"
-                        color="text.secondary"
-                        sx={{
-                          fontSize: { xs: "0.8rem", sm: "0.875rem" },
-                          display: "-webkit-box",
-                          WebkitLineClamp: 2,
-                          WebkitBoxOrient: "vertical",
-                          overflow: "hidden",
-                        }}
-                      >
-                        {quiz.description}
+                    </Stack>
+                    <Stack direction="row" alignItems="center" spacing={1}>
+                      <School fontSize="small" color="action" />
+                      <Typography variant="body2" color="text.secondary">
+                        {quiz.questions?.length || 0} questions
                       </Typography>
-                    </Box>
+                    </Stack>
                   </Stack>
 
-                  {/* Quiz Details */}
-                  <Stack spacing={2} sx={{ mb: 3 }}>
-                    <Stack
-                      direction={{ xs: "column", sm: "row" }}
-                      spacing={{ xs: 1, sm: 2 }}
-                      alignItems={{ xs: "flex-start", sm: "center" }}
-                    >
-                      <Stack direction="row" alignItems="center" spacing={1}>
-                        <AccessTime fontSize="small" color="action" />
-                        <Typography variant="body2" color="text.secondary">
-                          {quiz.timeLimit || quiz.duration || 0} minutes
-                        </Typography>
-                      </Stack>
-                      <Stack direction="row" alignItems="center" spacing={1}>
-                        <School fontSize="small" color="action" />
-                        <Typography variant="body2" color="text.secondary">
-                          {quiz.questions?.length || 0} questions
-                        </Typography>
-                      </Stack>
-                    </Stack>
-
-                    <Stack
-                      direction="row"
-                      spacing={1}
-                      flexWrap="wrap"
-                      useFlexGap
-                    >
+                  <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
+                    <Chip
+                      label={quiz.difficulty}
+                      color={getDifficultyColor(quiz.difficulty)}
+                      size="small"
+                      sx={{ fontSize: "0.75rem" }}
+                    />
+                    {quiz.subject && (
                       <Chip
-                        label={quiz.difficulty}
-                        color={getDifficultyColor(quiz.difficulty)}
+                        label={quiz.subject}
+                        variant="outlined"
                         size="small"
                         sx={{ fontSize: "0.75rem" }}
                       />
-                      {quiz.subject && (
-                        <Chip
-                          label={quiz.subject}
-                          variant="outlined"
-                          size="small"
-                          sx={{ fontSize: "0.75rem" }}
-                        />
-                      )}
-                    </Stack>
+                    )}
                   </Stack>
+                </Stack>
 
-                  {/* Start Button */}
-                  <Button
-                    variant="contained"
-                    fullWidth
-                    startIcon={<PlayArrow />}
-                    onClick={() => handleStartQuiz(quiz._id)}
-                    sx={{
-                      py: { xs: 1, sm: 1.5 },
-                      borderRadius: 2,
+                {/* Start Button */}
+                <Button
+                  variant="contained"
+                  fullWidth
+                  startIcon={<PlayArrow />}
+                  onClick={() => handleStartQuiz(quiz._id)}
+                  sx={{
+                    py: { xs: 1, sm: 1.5 },
+                    borderRadius: 2,
+                    background:
+                      "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+                    "&:hover": {
                       background:
-                        "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
-                      "&:hover": {
-                        background:
-                          "linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%)",
-                      },
-                      fontSize: { xs: "0.9rem", sm: "1rem" },
-                      fontWeight: 600,
-                    }}
-                  >
-                    Start Quiz
-                  </Button>
-                </CardContent>
-              </Card>
-            </Grid>
+                        "linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%)",
+                    },
+                    fontSize: { xs: "0.9rem", sm: "1rem" },
+                    fontWeight: 600,
+                  }}
+                >
+                  Start Quiz
+                </Button>
+              </CardContent>
+            </Card>
           ))}
-        </Grid>
+        </Box>
       )}
 
       {/* Empty State */}

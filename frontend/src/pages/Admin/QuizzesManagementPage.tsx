@@ -41,36 +41,17 @@ import {
   createQuiz,
   updateQuiz,
   deleteQuiz,
+  type CreateQuizData,
 } from "../../store/slices/quizSlice";
-
-// Define Quiz interface locally to avoid import issues
-interface Quiz {
-  _id: string;
-  title: string;
-  topic: string;
-  course: string;
-  questions: Array<{
-    questionText: string;
-    options: string[];
-    correctAnswer: number;
-    points: number;
-  }>;
-  duration: number;
-  totalMarks: number;
-  isActive: boolean;
-  dueDate?: string;
-  instructions?: string;
-  createdBy: string;
-  createdAt: string;
-  updatedAt: string;
-}
+import type { Quiz } from "../../types/quiz";
 
 interface QuizFormData {
   title: string;
   course: string;
   topic: string;
   dueDate: string;
-  duration: number;
+  timeLimit: number;
+  difficulty: string;
   totalMarks: number;
   instructions: string;
   questions: Array<{
@@ -103,7 +84,8 @@ const QuizzesManagementPage: React.FC = () => {
     course: "",
     topic: "",
     dueDate: "",
-    duration: 30,
+    timeLimit: 30,
+    difficulty: "",
     totalMarks: 100,
     instructions: "",
     questions: [
@@ -128,10 +110,16 @@ const QuizzesManagementPage: React.FC = () => {
         course: quiz.course,
         topic: quiz.topic,
         dueDate: (quiz.dueDate ? quiz.dueDate.split("T")[0] : "") as string, // Format for date input
-        duration: quiz.duration,
+        timeLimit: quiz.timeLimit || quiz.duration || 30,
+        difficulty: quiz.difficulty || "",
         totalMarks: quiz.totalMarks,
         instructions: quiz.instructions || "",
-        questions: quiz.questions,
+        questions: quiz.questions.map((q) => ({
+          questionText: q.question || q.questionText || "",
+          options: q.options,
+          correctAnswer: q.correctAnswer,
+          points: q.points,
+        })),
       });
     } else {
       setEditingQuiz(null);
@@ -140,7 +128,8 @@ const QuizzesManagementPage: React.FC = () => {
         course: "",
         topic: "",
         dueDate: "",
-        duration: 30,
+        timeLimit: 30,
+        difficulty: "",
         totalMarks: 100,
         instructions: "",
         questions: [
@@ -163,9 +152,28 @@ const QuizzesManagementPage: React.FC = () => {
 
   const handleSubmit = async () => {
     try {
+      // Transform form data to match expected CreateQuizData structure
+      const transformedData: CreateQuizData = {
+        title: formData.title,
+        course: formData.course,
+        topic: formData.topic,
+        dueDate: formData.dueDate,
+        timeLimit: formData.timeLimit,
+        difficulty: formData.difficulty,
+        totalMarks: formData.totalMarks,
+        instructions: formData.instructions,
+        questions: formData.questions.map((q) => ({
+          question: q.questionText,
+          questionText: q.questionText, // Keep for backwards compatibility
+          options: q.options,
+          correctAnswer: q.correctAnswer,
+          points: q.points,
+        })),
+      };
+
       if (editingQuiz) {
         await dispatch(
-          updateQuiz({ id: editingQuiz._id, data: formData })
+          updateQuiz({ id: editingQuiz._id, data: transformedData })
         ).unwrap();
         setSnackbar({
           open: true,
@@ -173,7 +181,7 @@ const QuizzesManagementPage: React.FC = () => {
           severity: "success",
         });
       } else {
-        await dispatch(createQuiz(formData)).unwrap();
+        await dispatch(createQuiz(transformedData)).unwrap();
         setSnackbar({
           open: true,
           message: "Quiz created successfully!",
@@ -859,11 +867,11 @@ const QuizzesManagementPage: React.FC = () => {
                   fullWidth
                   label="Duration (minutes)"
                   type="number"
-                  value={formData.duration}
+                  value={formData.timeLimit}
                   onChange={(e) =>
                     setFormData({
                       ...formData,
-                      duration: parseInt(e.target.value),
+                      timeLimit: parseInt(e.target.value),
                     })
                   }
                   variant="outlined"

@@ -119,10 +119,9 @@ const ExamBanner: React.FC = () => {
               width: { md: 250, lg: 300 },
               height: { md: 150, lg: 200 },
               position: "relative",
-              display: "flex",
+              display: { xs: "none", md: "flex" },
               alignItems: "center",
               justifyContent: "center",
-              display: { xs: "none", md: "flex" },
             }}
           >
             {/* Laptop */}

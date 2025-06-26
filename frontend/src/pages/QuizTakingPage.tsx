@@ -12,12 +12,10 @@ import {
   Stack,
   Card,
   CardContent,
-  Chip,
   Dialog,
   DialogTitle,
   DialogContent,
   DialogActions,
-  Grid,
   useTheme,
   useMediaQuery,
   IconButton,
@@ -28,7 +26,6 @@ import {
   NavigateBefore,
   CheckCircle,
   Warning,
-  Quiz as QuizIcon,
   ArrowBack,
 } from "@mui/icons-material";
 import { useParams, useNavigate } from "react-router-dom";
@@ -61,6 +58,11 @@ const QuizTakingPage: React.FC = () => {
     }
   }, [dispatch, quizId]);
 
+  const handleSubmitQuiz = useCallback(() => {
+    console.log("Quiz submitted with answers:", answers);
+    navigate("/dashboard/quizzes");
+  }, [answers, navigate]);
+
   useEffect(() => {
     if (currentQuiz && !quizStarted) {
       setTimeLeft((currentQuiz.timeLimit || currentQuiz.duration || 30) * 60); // Convert minutes to seconds
@@ -75,8 +77,10 @@ const QuizTakingPage: React.FC = () => {
       return () => clearTimeout(timer);
     } else if (timeLeft === 0 && quizStarted) {
       handleSubmitQuiz();
+      return;
     }
-  }, [timeLeft, quizStarted]);
+    return undefined;
+  }, [timeLeft, quizStarted, handleSubmitQuiz]);
 
   const formatTime = (seconds: number) => {
     const hours = Math.floor(seconds / 3600);
@@ -121,11 +125,6 @@ const QuizTakingPage: React.FC = () => {
     }
   };
 
-  const handleSubmitQuiz = useCallback(() => {
-    console.log("Quiz submitted with answers:", answers);
-    navigate("/dashboard/quizzes");
-  }, [answers, navigate]);
-
   const getProgressPercentage = () => {
     if (!currentQuiz) return 0;
     return ((currentQuestion + 1) / currentQuiz.questions.length) * 100;
@@ -167,6 +166,21 @@ const QuizTakingPage: React.FC = () => {
   const isLastQuestion = currentQuestion === currentQuiz.questions.length - 1;
   const answeredCount = getAnsweredQuestionsCount();
   const totalQuestions = currentQuiz.questions.length;
+
+  if (!currentQ) {
+    return (
+      <Container maxWidth="md" sx={{ py: 4, textAlign: "center" }}>
+        <Typography color="error">Question not found</Typography>
+        <Button
+          variant="contained"
+          onClick={() => navigate("/dashboard/quizzes")}
+          sx={{ mt: 2 }}
+        >
+          Back to Quizzes
+        </Button>
+      </Container>
+    );
+  }
 
   return (
     <Container
@@ -284,12 +298,14 @@ const QuizTakingPage: React.FC = () => {
               lineHeight: 1.4,
             }}
           >
-            {currentQ.question}
+            {currentQ.question || currentQ.questionText}
           </Typography>
 
           <RadioGroup
-            value={getSelectedAnswer(currentQ._id)}
-            onChange={(e) => handleAnswerChange(currentQ._id, e.target.value)}
+            value={getSelectedAnswer(currentQ._id || "")}
+            onChange={(e) =>
+              handleAnswerChange(currentQ._id || "", e.target.value)
+            }
           >
             <Stack spacing={1.5}>
               {currentQ.options.map((option, index) => (
@@ -299,7 +315,7 @@ const QuizTakingPage: React.FC = () => {
                   sx={{
                     border: "2px solid",
                     borderColor:
-                      getSelectedAnswer(currentQ._id) === option
+                      getSelectedAnswer(currentQ._id || "") === option
                         ? "primary.main"
                         : "divider",
                     borderRadius: 2,
@@ -309,7 +325,7 @@ const QuizTakingPage: React.FC = () => {
                       bgcolor: "primary.50",
                     },
                     bgcolor:
-                      getSelectedAnswer(currentQ._id) === option
+                      getSelectedAnswer(currentQ._id || "") === option
                         ? "primary.50"
                         : "transparent",
                   }}
@@ -376,7 +392,8 @@ const QuizTakingPage: React.FC = () => {
                   index === currentQuestion
                     ? "primary.main"
                     : answers.some(
-                        (a) => a.questionId === currentQuiz.questions[index]._id
+                        (a) =>
+                          a.questionId === currentQuiz?.questions[index]?._id
                       )
                     ? "success.main"
                     : "divider",
